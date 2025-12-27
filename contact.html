@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - XCC-LOC26</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/contact.css">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html">
+                <img src="images/logo/logo3.svg" alt="XCC-LOC26" width="150" height="80">
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="motorcycles.html">Motorcycles</a></li>
+                    <li><a href="trips.html">Trips</a></li>
+                    <li><a href="contact.html" class="active">Contact</a></li>
+                    <li><a href="booking.html">Booking</a></li>
+                </ul>
+                <button class="mobile-menu-btn">☰</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="page-content">
+        <section class="contact-page">
+            <div class="container">
+                <h1 class="section-title">Get In Touch</h1>
+                <p class="page-description">Ready to start your Moroccan adventure? Contact us for bookings, inquiries,
+                    or custom trip planning.</p>
+
+                <div class="contact-container">
+                    <!-- Contact Information -->
+                    <div class="contact-info">
+                        <h2>Contact Information</h2>
+                        <div class="contact-items">
+                            <div class="contact-item">
+                                <div class="contact-icon">📍</div>
+                                <div class="contact-details">
+                                    <h3>Address</h3>
+                                    <p>123 Avenue Mohammed VI<br>Marrakech 40000, Morocco</p>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">📞</div>
+                                <div class="contact-details">
+                                    <h3>Phone</h3>
+                                    <p>+212 5 24 44 55 66</p>
+                                    <p>+212 6 12 34 56 78 (Mobile)</p>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">✉️</div>
+                                <div class="contact-details">
+                                    <h3>Email</h3>
+                                    <p>info@XCC-LOC26.com</p>
+                                    <p>bookings@XCC-LOC26.com</p>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">🕒</div>
+                                <div class="contact-details">
+                                    <h3>Opening Hours</h3>
+                                    <p>Monday - Sunday: 8:00 AM - 8:00 PM</p>
+                                    <p>Emergency support: 24/7</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contact-item-social">
+                            <h3>Follow Us</h3>
+                            <div class="social-icons">
+                                <a href="https://www.facebook.com/xcc_loc26" class="social-icon">
+                                    <img src="images/logo/fb.png" alt="Facebook" width="52" height="52">
+                                </a>
+                                <a href="https://www.instagram.com/xcc_loc26/" class="social-icon">
+                                    <img src="images/logo/in.png" alt="Instagram" width="52" height="52">
+                                </a>
+                                <a href="https://wa.me/212612345678" class="social-icon">
+                                    <img src="images/logo/wh.png" alt="WhatsApp" width="36" height="36">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div class="contact-form-container">
+                        <h2>Send us a Message</h2>
+                        <form id="contact-form" class="contact-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="name" class="form-label">Full Name *</label>
+                                    <input type="text" id="name" name="name" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email" class="form-label">Email Address *</label>
+                                    <input type="email" id="email" name="email" class="form-input" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="subject" class="form-label">Subject *</label>
+                                    <select id="subject" name="subject" class="form-select" required>
+                                        <option value="">Select a subject</option>
+                                        <option value="booking">Motorcycle Booking</option>
+                                        <option value="trip-planning">Trip Planning</option>
+                                        <option value="general">General Inquiry</option>
+                                        <option value="support">Technical Support</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="motorcycle" class="form-label">Motorcycle Interest (Optional)</label>
+                                <select id="motorcycle" name="motorcycle" class="form-select">
+                                    <option value="">Not specified</option>
+                                    <option value="bmw-r1250gs">BMW R1250GS Adventure</option>
+                                    <option value="honda-africa-twin">Honda Africa Twin</option>
+                                    <option value="yamaha-tenere-700">Yamaha Ténéré 700</option>
+                                    <option value="vespa-primavera">Vespa Primavera 125</option>
+                                    <option value="harley-davidson-street-bob">Harley-Davidson Street Bob</option>
+                                    <option value="ducati-panigale-v4">Ducati Panigale V4</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="message" class="form-label">Message *</label>
+                                <textarea id="message" name="message" class="form-input" rows="6" required
+                                    placeholder="Tell us about your motorcycle adventure plans..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-submit">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Map Section -->
+        <!-- <section class="map-section">
+            <div class="container">
+                <h2 class="section-title">Find Us</h2>
+                <div class="map-container">
+                    <div class="map-placeholder">
+                        <div class="map-content">
+                            <h3>📍 Our Location</h3>
+                            <p>123 Avenue Mohammed VI, Marrakech</p>
+                            <p>Easy to find in the city center, near the main square</p>
+                            <div class="map-features">
+                                <div class="map-feature">
+                                    <strong>Free Parking</strong>
+                                    <span>Available for customers</span>
+                                </div>
+                                <div class="map-feature">
+                                    <strong>Test Rides</strong>
+                                    <span>Schedule a test ride</span>
+                                </div>
+                                <div class="map-feature">
+                                    <strong>Gear Rental</strong>
+                                    <span>Helmets and equipment</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section> -->
+        <section class="map-section">
+            <div class="container">
+                <h2 class="section-title">Find Us</h2>
+                <div class="map-container">
+                    <div class="location-info">
+                        <h3>Our Location</h3>
+                        <div class="address">
+                            <p><strong>123 Avenue Mohammed VI, Marrakech</strong></p>
+                            <!-- <p>Easy to find in the city center, near the main square</p> -->
+                        </div>
+
+                        <div class="location-features">
+                            <div class="feature-grid">
+                                <div class="feature-item">
+                                    <div class="feature-icon">🅿️</div>
+                                    <div class="feature-content">
+                                        <h4>Free Parking</h4>
+                                        <p>Available for customers</p>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">🏍️</div>
+                                    <div class="feature-content">
+                                        <h4>Test Rides</h4>
+                                        <p>Schedule a test ride</p>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">🛡️</div>
+                                    <div class="feature-content">
+                                        <h4>Gear Rental</h4>
+                                        <p>Helmets and equipment</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="business-hours">
+                            <h4>Business Hours</h4>
+                            <div class="hours-list">
+                                <div class="hour-item">
+                                    <span>Monday - Sunday:</span>
+                                    <span>8:00 AM - 8:00 PM</span>
+                                </div>
+                                <div class="hour-item">
+                                    <span>Emergency Support:</span>
+                                    <span>24/7</span>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+
+                    <div class="map-wrapper">
+                        <div class="map-iframe-container">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4028.034104191997!2d-8.041494023897098!3d31.667997739832778!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdafeda94138adc7%3A0x2c4b4ed6a63ce3!2sXcc-Loc26!5e1!3m2!1sfr!2sma!4v1764066619431!5m2!1sfr!2sma"
+                                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade" width="100%" height="100%" style="border:0;"
+                                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <div class="container">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            What documents do I need to rent a motorcycle?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>You'll need a valid motorcycle license from your country, a passport, and an
+                                international driving permit if your license is not in French or Arabic. We also require
+                                a security deposit which is fully refundable upon safe return of the motorcycle.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Do you offer insurance?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes, comprehensive insurance is included with all our rentals. This covers third-party
+                                liability, theft, and damage to the motorcycle. Additional personal accident insurance
+                                is available as an option.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Can I take the motorcycle to other cities?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Absolutely! Our motorcycles are perfect for exploring all of Morocco. We provide route
+                                suggestions and can help plan multi-day trips. There are no additional fees for
+                                traveling to other cities.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            What happens if I have mechanical issues during my trip?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>We provide 24/7 roadside assistance throughout Morocco. In case of mechanical issues,
+                                call our emergency number and we'll coordinate assistance, whether it's minor repairs
+                                on-site or providing a replacement motorcycle if needed.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Do you provide riding gear?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes, we offer helmet rental (included in the price) and have riding jackets, gloves, and
+                                other protective gear available for rent. We recommend bringing your own riding boots
+                                for the best fit and comfort.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-container">
+            <div class="footer-about">
+                <div class="footer-logo">XCC-LOC26</div>
+                <p>Your trusted partner for motorcycle rentals in Marrakech. Explore the beauty of Morocco on two
+                    wheels.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="motorcycles.html">Motorcycles</a></li>
+                    <li><a href="trips.html">Trips</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>Motorcycles</h3>
+                <ul>
+                    <li><a href="motorcycles.html">Adventure Bikes</a></li>
+                    <li><a href="motorcycles.html">Scooters</a></li>
+                    <li><a href="motorcycles.html">Cruisers</a></li>
+                    <a href="motorcycles.html">Sport Bikes</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>Follow Us</h3>
+                <ul>
+                    <li><a href="https://www.facebook.com/xcc_loc26">Facebook</a></li>
+                    <li><a href="https://www.instagram.com/xcc_loc26/">Instagram</a></li>
+                    <li><a href="https://wa.me/212612345678">WhatsApp</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <p>&copy; 2023 RideMarrakech. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/contact.js"></script>
+    <script>
+        emailjs.init("q77q6xfg5kKCVfzcH"); // your public key
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,279 @@
+
+
+.view-more-container {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+/* Hero Slider */
+.hero-slider {
+    position: relative;
+    /* height: 80vh */
+    height: 100vh;
+
+    overflow: hidden;
+}
+
+.slider-container {
+    position: relative;
+    height: 100%;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+    z-index: 1;
+}
+
+.slide.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.slide-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    max-width: 800px;
+    width: 90%;
+}
+
+.slide-content h1 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.slide-content p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.slider-controls {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    padding: 0 2rem;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.slider-prev,
+.slider-next {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+.slider-prev:hover,
+.slider-next:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.slider-dots {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+}
+
+.slider-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.slider-dot.active {
+    background: white;
+}
+
+/* Featured Motorcycles */
+.motorcycles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.motorcycle-card {
+    background-color: rgba(31, 41, 55, 0.8);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.motorcycle-card:hover {
+    transform: translateY(-10px);
+}
+
+.motorcycle-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.motorcycle-content {
+    padding: 1.5rem;
+}
+
+.motorcycle-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.motorcycle-type {
+    display: inline-block;
+    background-color: var(--brand-red);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.motorcycle-specs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.spec-item {
+    text-align: center;
+}
+
+.spec-label {
+    font-size: 0.875rem;
+    color: var(--brand-silver);
+}
+
+.spec-value {
+    font-weight: 700;
+}
+
+.motorcycle-price {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--brand-red);
+    margin-bottom: 1rem;
+}
+
+.view-all-container {
+    text-align: center;
+}
+
+/* Testimonials */
+.testimonials {
+    background-color: rgba(31, 41, 55, 0.5);
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.testimonial-card {
+    background-color: rgba(17, 24, 39, 0.8);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    position: relative;
+}
+
+.testimonial-card::before {
+    content: '"';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 4rem;
+    color: var(--brand-red);
+    opacity: 0.3;
+    line-height: 1;
+}
+
+.testimonial-text {
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.author-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.author-info {
+    flex: 1;
+}
+
+.author-name {
+    font-weight: 700;
+}
+
+.author-rating {
+    color: gold;
+}
+
+@media (max-width: 768px) {
+    .slide-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .slider-controls {
+        padding: 0 1rem;
+    }
+    
+    .slider-prev,
+    .slider-next {
+        width: 40px;
+        height: 40px;
+        font-size: 1.25rem;
+    }
+}

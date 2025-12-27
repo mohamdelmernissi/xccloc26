@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XCC-LOC26 - Motorcycle Rental</title>
+    <link rel="icon" type="image/x-icon" href="image/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/home.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html">
+                <img src="images/logo/logo3.svg" alt="XCC-LOC26" width="150" height="80">
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="motorcycles.html">Motorcycles</a></li>
+                    <li><a href="trips.html">Trips</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="booking.html">Booking</a></li>
+                </ul>
+                <button class="mobile-menu-btn">☰</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Slider -->
+    <section class="hero-slider">
+        <div class="slider-container">
+            <div class="slide active">
+                <img src="images/slider/moto.jpg" alt="Adventure Riding">
+                <div class="slide-content">
+                    <h1>Explore Morocco on Two Wheels</h1>
+                    <p>Discover the breathtaking landscapes of Marrakech and beyond with our premium motorcycles</p>
+                    <a href="motorcycles.html" class="btn">View Our Bikes</a>
+
+                </div>
+            </div>
+            <div class="slide">
+                <img src="images/slider/moto1.jpg" alt="City Riding">
+                <div class="slide-content">
+                    <h1>Urban Exploration</h1>
+                    <p>Navigate the vibrant streets of Marrakech with our easy-to-ride scooters</p>
+                    <a href="booking.html" class="btn">Rent a Scooter</a>
+
+                </div>
+            </div>
+            <div class="slide">
+                <img src="images/slider/moto0.jpg" alt="Mountain Roads">
+                <div class="slide-content">
+                    <h1>Adventure Awaits</h1>
+                    <p>Ride through the majestic Atlas Mountains and experience Morocco like never before</p>
+                   <a href="trips.html" class="btn">Explore Trips</a>
+
+                </div>
+            </div>
+        </div>
+        <div class="slider-controls">
+            <button class="slider-prev">‹</button>
+            <button class="slider-next">›</button>
+        </div>
+        <div class="slider-dots"></div>
+    </section>
+
+    <!-- Featured Motorcycles -->
+    <section id="featured-motorcycles">
+        <div class="container">
+            <h2 class="section-title">Our Motorcycles</h2>
+            <div class="motorcycles-grid" id="featured-motorcycles-container">
+                <!-- Featured motorcycles will be dynamically inserted here -->
+            </div>
+            <div class="view-all-container">
+                <a href="motorcycles.html" class="btn btn-outline">View All Motorcycles</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">What Our Customers Say</h2>
+            <div class="testimonials-grid" id="testimonials-container">
+                <!-- Testimonials will be dynamically inserted here -->
+            </div>
+            <div class="view-more-container">
+                <a href="https://g.page/r/CeM8ptZOSywAEBM/review" class="btn btn-outline" target="_blank"
+                    rel="noopener noreferrer">Read More Testimonials</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-container">
+            <div class="footer-about">
+                <div class="footer-logo">XCC-LOC26</div>
+                <p>Your trusted partner for motorcycle rentals in Marrakech. Explore the beauty of Morocco on two
+                    wheels.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="motorcycles.html">Motorcycles</a></li>
+                    <li><a href="trips.html">Trips</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>Motorcycles</h3>
+                <ul>
+                    <li><a href="motorcycles.html">Adventure Bikes</a></li>
+                    <li><a href="motorcycles.html">Scooters</a></li>
+                    <li><a href="motorcycles.html">Cruisers</a></li>
+                    <li><a href="motorcycles.html">Sport Bikes</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>Follow Us</h3>
+                <ul>
+                    <li><a href="https://www.facebook.com/xcc_loc26">Facebook</a></li>
+                    <li><a href="https://www.instagram.com/xcc_loc26/">Instagram</a></li>
+                    <li><a href="https://wa.me/212612345678">WhatsApp</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <p>&copy; 2023 RideMarrakech. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/home.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Ride - XCC-LOC26</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/booking.css">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html">
+                <img src="images/logo/logo3.svg" alt="XCC-LOC26" width="150" height="80">
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="motorcycles.html">Motorcycles</a></li>
+                    <li><a href="trips.html">Trips</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="booking.html" class="active">Booking</a></li>
+                </ul>
+                <button class="mobile-menu-btn">☰</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="page-content">
+        <section class="booking-page">
+            <div class="container">
+                <h1 class="section-title">Book Your Motorcycle</h1>
+                <p class="page-description">Reserve your perfect motorcycle for an unforgettable Moroccan adventure</p>
+                
+                <div class="booking-container">
+                    <!-- Booking Steps -->
+                    <div class="booking-steps">
+                        <div class="step active" data-step="1">
+                            <div class="step-number">1</div>
+                            <div class="step-info">
+                                <div class="step-title">Choose Motorcycle</div>
+                                <div class="step-subtitle">Select your ride</div>
+                            </div>
+                        </div>
+                        <div class="step" data-step="2">
+                            <div class="step-number">2</div>
+                            <div class="step-info">
+                                <div class="step-title">Rental Details</div>
+                                <div class="step-subtitle">Dates & Options</div>
+                            </div>
+                        </div>
+                        <div class="step" data-step="3">
+                            <div class="step-number">3</div>
+                            <div class="step-info">
+                                <div class="step-title">Personal Info</div>
+                                <div class="step-subtitle">Your details</div>
+                            </div>
+                        </div>
+                        <div class="step" data-step="4">
+                            <div class="step-number">4</div>
+                            <div class="step-info">
+                                <div class="step-title">Confirmation</div>
+                                <div class="step-subtitle">Review & Book</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Booking Form -->
+                    <form id="booking-form" class="booking-form">
+                        <!-- Step 1: Motorcycle Selection -->
+                        <div class="form-step active" data-step="1">
+                            <h2>Choose Your Motorcycle</h2>
+                            <div class="motorcycle-selection">
+                                <div class="motorcycle-options" id="motorcycle-options">
+                                    <!-- Motorcycles will be dynamically inserted here -->
+                                </div>
+                            </div>
+                            <!-- <div class="step-actions">
+                                <button type="button" class="btn btn-next" data-next="2">Next: Rental Details</button>
+                            </div> -->
+                        </div>
+
+                        <!-- Step 2: Rental Details -->
+                        <div class="form-step" data-step="2">
+                            <h2>Rental Details</h2>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="pickup-date" class="form-label">Pickup Date *</label>
+                                    <input type="date" id="pickup-date" name="pickup-date" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="return-date" class="form-label">Return Date *</label>
+                                    <input type="date" id="return-date" name="return-date" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pickup-time" class="form-label">Pickup Time *</label>
+                                    <select id="pickup-time" name="pickup-time" class="form-select" required>
+                                        <option value="">Select time</option>
+                                        <option value="08:00">8:00 AM</option>
+                                        <option value="09:00">9:00 AM</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="11:00">11:00 AM</option>
+                                        <option value="12:00">12:00 PM</option>
+                                        <option value="13:00">1:00 PM</option>
+                                        <option value="14:00">2:00 PM</option>
+                                        <option value="15:00">3:00 PM</option>
+                                        <option value="16:00">4:00 PM</option>
+                                        <option value="17:00">5:00 PM</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="return-time" class="form-label">Return Time *</label>
+                                    <select id="return-time" name="return-time" class="form-select" required>
+                                        <option value="">Select time</option>
+                                        <option value="08:00">8:00 AM</option>
+                                        <option value="09:00">9:00 AM</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="11:00">11:00 AM</option>
+                                        <option value="12:00">12:00 PM</option>
+                                        <option value="13:00">1:00 PM</option>
+                                        <option value="14:00">2:00 PM</option>
+                                        <option value="15:00">3:00 PM</option>
+                                        <option value="16:00">4:00 PM</option>
+                                        <option value="17:00">5:00 PM</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="rental-options">
+                                <h3>Additional Options</h3>
+                                <div class="options-grid">
+                                    <label class="option-checkbox">
+                                        <input type="checkbox" name="helmet" value="0">
+                                        <span class="checkmark"></span>
+                                        <div class="option-info">
+                                            <div class="option-title">Helmet Rental</div>
+                                            <div class="option-price">Free</div>
+                                            <div class="option-description">High-quality helmet</div>
+                                        </div>
+                                    </label>
+                                    <label class="option-checkbox">
+                                        <input type="checkbox" name="Gloves" value="0">
+                                        <span class="checkmark"></span>
+                                        <div class="option-info">
+                                            <div class="option-title">Gloves Rental</div>
+                                            <div class="option-price">Free</div>
+                                            <div class="option-description">High-quality gloves</div>
+                                        </div>
+                                    </label>
+                                    <label class="option-checkbox">
+                                        <input type="checkbox" name="side-cases" value="200">
+                                        <span class="checkmark"></span>
+                                        <div class="option-info">
+                                            <div class="option-title">Side Cases</div>
+                                            <div class="option-price">200 DH per rental</div>
+                                            <div class="option-description">Waterproof luggage cases for your belongings</div>
+                                        </div>
+                                    </label>
+                                    <label class="option-checkbox">
+                                        <input type="checkbox" name="insurance" value="250">
+                                        <span class="checkmark"></span>
+                                        <div class="option-info">
+                                            <div class="option-title">Extra Insurance</div>
+                                            <div class="option-price">250 DH per day</div>
+                                            <div class="option-description">Comprehensive coverage with zero deductible</div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="step-actions">
+                                <button type="button" class="btn btn-outline btn-prev" data-prev="1">Previous</button>
+                                <button type="button" class="btn btn-next" data-next="3">Next: Personal Info</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Personal Information -->
+                        <div class="form-step" data-step="3">
+                            <h2>Personal Information</h2>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="first-name" class="form-label">First Name *</label>
+                                    <input type="text" id="first-name" name="first-name" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="last-name" class="form-label">Last Name *</label>
+                                    <input type="text" id="last-name" name="last-name" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email" class="form-label">Email Address *</label>
+                                    <input type="email" id="email" name="email" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone" class="form-label">Phone Number *</label>
+                                    <input type="tel" id="phone" name="phone" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="country" class="form-label">Country *</label>
+                                    <select id="country" name="country" class="form-select" required>
+                                        <option value="">Select country</option>
+                                        <option value="US">United States</option>
+                                        <option value="UK">United Kingdom</option>
+                                        <option value="FR">France</option>
+                                        <option value="DE">Germany</option>
+                                        <option value="ES">Spain</option>
+                                        <option value="IT">Italy</option>
+                                        <option value="MA">Morocco</option>
+                                        <option value="OTHER">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="license-number" class="form-label">Driver's License Number *</label>
+                                    <input type="text" id="license-number" name="license-number" class="form-input" required>
+                                </div>
+                            </div>
+                            
+                            <div class="license-info">
+                                <h3>License Requirements</h3>
+                                <div class="requirements">
+                                    <div class="requirement">
+                                        <div class="requirement-icon">✅</div>
+                                        <div class="requirement-text">Valid motorcycle license from your country</div>
+                                    </div>
+                                    <div class="requirement">
+                                        <div class="requirement-icon">✅</div>
+                                        <div class="requirement-text">International Driving Permit (if license not in French/Arabic)</div>
+                                    </div>
+                                    <div class="requirement">
+                                        <div class="requirement-icon">✅</div>
+                                        <div class="requirement-text">Minimum 2 years riding experience</div>
+                                    </div>
+                                    <div class="requirement">
+                                        <div class="requirement-icon">✅</div>
+                                        <div class="requirement-text">Must be 21 years or older</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="step-actions">
+                                <button type="button" class="btn btn-outline btn-prev" data-prev="2">Previous</button>
+                                <button type="button" class="btn btn-next" data-next="4">Next: Review & Book</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Confirmation -->
+                        <div class="form-step" data-step="4">
+                            <h2>Review Your Booking</h2>
+                            <div class="booking-summary">
+                                <div class="summary-section">
+                                    <h3>Motorcycle</h3>
+                                    <div id="summary-motorcycle" class="summary-content">
+                                        <!-- Motorcycle summary will be inserted here -->
+                                    </div>
+                                </div>
+                                <div class="summary-section">
+                                    <h3>Rental Period</h3>
+                                    <div id="summary-dates" class="summary-content">
+                                        <!-- Dates summary will be inserted here -->
+                                    </div>
+                                </div>
+                                <div class="summary-section">
+                                    <h3>Additional Options</h3>
+                                    <div id="summary-options" class="summary-content">
+                                        <!-- Options summary will be inserted here -->
+                                    </div>
+                                </div>
+                                <div class="summary-section">
+                                    <h3>Personal Information</h3>
+                                    <div id="summary-personal" class="summary-content">
+                                        <!-- Personal info summary will be inserted here -->
+                                    </div>
+                                </div>
+                                <div class="summary-total">
+                                    <h3>Total Cost</h3>
+                                    <div id="summary-total" class="total-amount">
+                                        <!-- Total cost will be inserted here -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="terms-agreement">
+                                <label class="terms-checkbox">
+                                    <input type="checkbox" id="agree-terms" name="agree-terms" required>
+                                    <span class="checkmark">
+                                        <span class="checkmark-icon">
+                                            ✓
+                                        </span>
+                                    </span>
+                                    I agree to the 
+                                    <a href="#" class="terms-link" id="show-terms-link">Terms & Conditions</a> and 
+                                    <a href="#" class="terms-link" id="show-terms-link2">Rental Agreement</a> *
+                                </label>
+                                <!-- Terms Modal/Card -->
+                                <div class="Information-policy-terms" id="Information-policy-terms" style="display: none;">
+                                    <button type="button" id="close-terms-btn" >&times;</button>
+                                    <h4 style="margin-top:0;">Terms &amp; Conditions</h4>
+                                    <p>By booking with XCC-LOC26, you agree to abide by our terms and conditions. Please read them carefully before confirming your booking.</p>
+                                    <p>If you have any questions or concerns, please contact our support team.</p>
+                                    <p>Thank you for choosing XCC-LOC26!</p>
+                                </div>
+                            </div>
+                            
+                            <div class="step-actions">
+                                <button type="button" class="btn btn-outline btn-prev" data-prev="3">Previous</button>
+                                <button type="submit" class="btn btn-confirm">Confirm Booking</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Booking Summary Sidebar -->
+                    <div class="booking-summary-sidebar">
+                        <div class="summary-card">
+                            <h3>Booking Summary</h3>
+                            <div class="summary-details">
+                                <div class="summary-item" id="sidebar-motorcycle">
+                                    <span>Motorcycle:</span>
+                                    <span class="value">Not selected</span>
+                                </div>
+                                <div class="summary-item" id="sidebar-duration">
+                                    <span>Duration:</span>
+                                    <span class="value">-</span>
+                                </div>
+                                <div class="summary-item" id="sidebar-base-price">
+                                    <span>Base price:</span>
+                                    <span class="value">-</span>
+                                </div>
+                                <div class="summary-item" id="sidebar-options">
+                                    <span>Options:</span>
+                                    <span class="value">0 DH</span>
+                                </div>
+                                <div class="summary-total">
+                                    <span>Total:</span>
+                                    <span class="value" id="sidebar-total">0 DH</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="support-info">
+                            <h4>Need Help?</h4>
+                            <p>Our team is here to assist you with your booking</p>
+                            <div class="support-contact">
+                                <div class="contact-item">
+                                    <span class="contact-icon">📞</span>
+                                    <span>+212 5 24 44 55 66</span>
+                                </div>
+                                <div class="contact-item">
+                                    <span class="contact-icon">✉️</span>
+                                    <span>bookings@ridemarrakech.com</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-container">
+            <div class="footer-about">
+                <div class="footer-logo">XCC-LOC26</div>
+                <p>Your trusted partner for motorcycle rentals in Marrakech. Explore the beauty of Morocco on two wheels.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="motorcycles.html">Motorcycles</a></li>
+                    <li><a href="booking.html">Booking</a></li>
+                    <li><a href="trips.html">Trips</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>Motorcycles</h3>
+                <ul>
+                    <li><a href="motorcycles.html">Adventure Bikes</a></li>
+                    <li><a href="motorcycles.html">Scooters</a></li>
+                    <li><a href="motorcycles.html">Cruisers</a></li>
+                    <li><a href="motorcycles.html">Sport Bikes</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>Follow Us</h3>
+                <ul>
+                    <li><a href="#https://www.facebook.com/xcc_loc26">Facebook</a></li>
+                    <li><a href="#https://www.instagram.com/xcc_loc26/">Instagram</a></li>
+                    <li><a href="#https://wa.me/212612345678">WhatsApp</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <p>&copy; 2023 RideMarrakech. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/booking.js"></script>
+    <script>
+        emailjs.init("-UFsTHVPWq-s9kd9g"); // your public key
+    </script>
+    <script src="js/EmailJs.js" ></script>
+
+
+
+</body>
+</html>

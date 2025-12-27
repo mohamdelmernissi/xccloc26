@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📋 NOUVELLE RÉSERVATION - XCC-LOC26</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .email-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e40af, #3730a3);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            margin: 0;
+            font-weight: normal;
+        }
+
+        .alert-badge {
+            background: #dc2626;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .content {
+            padding: 25px;
+        }
+
+        .section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .section-title {
+            color: #1e40af;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            background: #f1f5f9;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border-left: 4px solid #1e40af;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .info-card {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .info-card h3 {
+            color: #1e40af;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .detail-item {
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #475569;
+            font-size: 13px;
+        }
+
+        .detail-value {
+            color: #1e293b;
+            text-align: right;
+            font-size: 13px;
+        }
+
+        .highlight {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-left: 4px solid #f97316;
+        }
+
+        .total-section {
+            background: #1e40af;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .action-btn {
+            display: inline-block;
+            background: #dc2626;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 0 5px;
+            font-size: 14px;
+        }
+
+        .footer {
+            background: #1e293b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">🏍️ XCC-LOC26 - NOUVELLE RÉSERVATION</div>
+            <h1>Nouvelle Réservation Reçue</h1>
+            <div class="alert-badge">ACTION REQUISE</div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Résumé rapide -->
+            <div class="section highlight">
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>📋 RÉSUMÉ RAPIDE</h3>
+                        <div class="detail-item">
+                            <span class="detail-label">Client:</span>
+                            <span class="detail-value">{{first_name}} {{last_name}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Moto:</span>
+                            <span class="detail-value">{{motorcycle_name}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Période:</span>
+                            <span class="detail-value">{{rental_days}} jours</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Total:</span>
+                            <span class="detail-value">{{total_amount}}</span>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <h3>📞 COORDONNÉS CLIENT</h3>
+                        <div class="detail-item">
+                            <span class="detail-label">Téléphone:</span>
+                            <span class="detail-value">{{phone}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Email:</span>
+                            <span class="detail-value">{{email}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Permis:</span>
+                            <span class="detail-value">{{license_number}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Détails de la réservation -->
+            <div class="section" id="section-id">
+                <h2 class="section-title">📅 DÉTAILS DE LA RÉSERVATION</h2>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>🛵 VÉHICULE</h3>
+                        <div class="detail-item">
+                            <span class="detail-label">Modèle:</span>
+                            <span class="detail-value">{{motorcycle_name}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Type:</span>
+                            <span class="detail-value">{{motorcycle_type}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Prix/jour:</span>
+                            <span class="detail-value">{{daily_price}}</span>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <h3>📅 PÉRIODE</h3>
+                        <div class="detail-item">
+                            <span class="detail-label">Début:</span>
+                            <span class="detail-value">{{pickup_date}} {{pickup_time}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Fin:</span>
+                            <span class="detail-value">{{return_date}} {{return_time}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Durée:</span>
+                            <span class="detail-value">{{rental_days}} jours</span>
+                        </div>
+                    </div>
+                </div>
+                {{{options_html}}}
+            </div>
+
+  
+
+            <!-- Total -->
+            <div class="total-section">
+                <div class="total-row">
+                    <span>MONTANT TOTAL:</span>
+                    <span>{{total_amount}}</span>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="action-buttons">
+                <a href="mailto:{{email}}?subject=Confirmation Réservation #{{booking_number}}&body=Bonjour {{first_name}}," class="action-btn">✉️ Contacter Client</a>
+                <a href="tel:{{phone}}" class="action-btn" style="background: #059669;">📞 Appeler Client</a>
+                <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Réservation {{motorcycle_name}} - {{first_name}} {{last_name}}&dates={{calendar_start}}/{{calendar_end}}&details=Client: {{first_name}} {{last_name}}%0ATéléphone: {{phone}}%0AMoto: {{motorcycle_name}}%0APrix: {{total_amount}}" class="action-btn" style="background: #7c3aed;">📅 Ajouter Calendar</a>
+            </div>
+
+            <!-- Informations supplémentaires -->
+            <div class="section">
+                <h2 class="section-title">📝 INFORMATIONS SUPPLÉMENTAIRES</h2>
+                <div class="info-card">
+                    <div class="detail-item">
+                        <span class="detail-label">Numéro réservation:</span>
+                        <span class="detail-value">#{{booking_number}}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Date réservation:</span>
+                        <span class="detail-value">{{booking_date}}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Pays client:</span>
+                        <span class="detail-value">{{country}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>📧 Cet email a été généré automatiquement par le système de réservation XCC-LOC26</p>
+            <p>🕒 Reçu le: {{current_timestamp}}</p>
+        </div>
+    </div>
+    <script src="test.js"></script>
+</body>
+</html>

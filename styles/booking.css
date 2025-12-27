@@ -1,0 +1,690 @@
+/* Booking Page */
+.booking-page {
+    padding: 3rem 0;
+}
+
+.terms-checkbox .checkmark-icon { display: none; }
+.terms-checkbox input[type="checkbox"]:checked + .checkmark .checkmark-icon { display: block; }
+
+.page-description {
+    text-align: center;
+    font-size: 1.125rem;
+    color: var(--brand-silver);
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.booking-container {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 3rem;
+    align-items: start;
+}
+
+/* Booking Steps */
+.booking-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 3rem;
+    grid-column: 1 / -1;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(31, 41, 55, 0.5);
+    border-radius: 0.5rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.step.active {
+    border-color: var(--brand-red);
+    background: rgba(220, 38, 38, 0.1);
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background: var(--brand-silver);
+    color: var(--brand-dark);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.125rem;
+    transition: all 0.3s ease;
+}
+
+.step.active .step-number {
+    background: var(--brand-red);
+    color: white;
+}
+
+.step-info {
+    flex: 1;
+}
+
+.step-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.step-subtitle {
+    font-size: 0.875rem;
+    color: var(--brand-silver);
+}
+
+/* Booking Form */
+.booking-form {
+    background: rgba(31, 41, 55, 0.8);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-step {
+    display: none;
+}
+
+.form-step.active {
+    display: block;
+}
+
+.form-step h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--brand-red);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 0;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--brand-light);
+}
+
+.form-input,
+.form-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(17, 24, 39, 0.8);
+    color: var(--brand-light);
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--brand-red);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+/* Motorcycle Selection */
+.motorcycle-selection {
+    margin-bottom: 2rem;
+}
+
+.motorcycle-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.motorcycle-option {
+    background: rgba(17, 24, 39, 0.8);
+    border: 2px solid transparent;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.motorcycle-option:hover {
+    border-color: rgba(220, 38, 38, 0.5);
+    transform: translateY(-2px);
+}
+
+.motorcycle-option.selected {
+    border-color: var(--brand-red);
+    background: rgba(220, 38, 38, 0.1);
+}
+
+.motorcycle-option.selected::before {
+    content: '✓';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 30px;
+    height: 30px;
+    background: var(--brand-red);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.option-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 0.375rem;
+    margin-bottom: 1rem;
+}
+
+.option-name {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.option-type {
+    display: inline-block;
+    background: var(--brand-red);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.option-specs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.option-spec {
+    text-align: center;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 0.25rem;
+}
+
+.spec-label {
+    font-size: 0.75rem;
+    color: var(--brand-silver);
+    margin-bottom: 0.25rem;
+}
+
+.spec-value {
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.option-price {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: var(--brand-red);
+    text-align: center;
+}
+
+/* Rental Options */
+.rental-options {
+    margin-bottom: 2rem;
+}
+
+.rental-options h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.option-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(17, 24, 39, 0.5);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.option-checkbox:hover {
+    border-color: var(--brand-red);
+}
+
+.option-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--brand-silver);
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.25rem;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.option-checkbox input[type="checkbox"]:checked + .checkmark {
+    background: var(--brand-red);
+    border-color: var(--brand-red);
+}
+
+.option-checkbox input[type="checkbox"]:checked + .checkmark::after {
+    content: '✓';
+    color: white;
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+.option-info {
+    flex: 1;
+}
+
+.option-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.option-price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--brand-red);
+    margin-bottom: 0.25rem;
+}
+
+.option-description {
+    font-size: 0.875rem;
+    color: var(--brand-silver);
+}
+
+/* License Info */
+.license-info {
+    background: rgba(17, 24, 39, 0.5);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.license-info h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.requirements {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.requirement {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.requirement-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.requirement-text {
+    font-size: 0.875rem;
+    color: var(--brand-silver);
+}
+
+/* Step Actions */
+.step-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-prev,
+.btn-next,
+.btn-confirm {
+    min-width: 150px;
+}
+
+/* Booking Summary */
+.booking-summary {
+    background: rgba(17, 24, 39, 0.5);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.summary-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.summary-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.summary-section h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--brand-red);
+}
+
+.summary-content {
+    color: var(--brand-silver);
+    line-height: 1.6;
+}
+
+.summary-total {
+    background: rgba(220, 38, 38, 0.1);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+}
+
+.summary-total h3 {
+    margin-bottom: 1rem;
+}
+
+.total-amount {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--brand-red);
+}
+
+/* Terms Agreement */
+.terms-agreement {
+    margin-bottom: 2rem;
+}
+
+.terms-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+.terms-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.terms-checkbox .checkmark {
+    margin-top: 0.1rem;
+}
+
+.terms-link {
+    color: var(--brand-red);
+    text-decoration: underline;
+}
+
+.terms-link:hover {
+    color: #b91c1c;
+}
+
+/* Booking Summary Sidebar */
+.booking-summary-sidebar {
+    position: sticky;
+    top: 2rem;
+}
+
+.summary-card {
+    background: rgba(31, 41, 55, 0.8);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.summary-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--brand-red);
+}
+
+.summary-details {
+    space-y: 1rem;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.summary-item .value {
+    font-weight: 600;
+    text-align: right;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    margin-top: 1rem;
+    border-top: 2px solid var(--brand-red);
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+.summary-total .value {
+    font-size: 1.5rem;
+    color: var(--brand-red);
+}
+
+/* Support Info */
+.support-info {
+    background: rgba(31, 41, 55, 0.8);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.support-info h4 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--brand-red);
+}
+
+.support-info p {
+    color: var(--brand-silver);
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+.support-contact {
+    space-y: 0.5rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--brand-silver);
+}
+
+.contact-icon {
+    font-size: 1rem;
+}
+
+/* Floating Terms Card/Modal */
+#Information-policy-terms {
+    position: fixed !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 320px;
+    max-width: 90vw;
+    width: 400px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    z-index: 100;
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    display: none;
+    transition: opacity 0.2s;
+    color: #222;
+}
+#Information-policy-terms[style*="display: block"] {
+    display: block;
+    opacity: 1;
+}
+#Information-policy-terms button#close-terms-btn {
+    z-index: 101;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #888;
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    padding: 0;
+    line-height: 1;
+}
+#Information-policy-terms h4 {
+    margin-top: 0;
+    color: var(--brand-red, #dc2626);
+}
+#Information-policy-terms p {
+    color: #333;
+    margin-bottom: 1em;
+    font-size: 1rem;
+}
+#Information-policy-terms::-webkit-scrollbar {
+    width: 8px;
+    background: #eee;
+}
+#Information-policy-terms::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+/* Optional: darken background behind modal */
+body:has(#Information-policy-terms[style*="display: block"])::after {
+    content: "";
+    position: fixed;
+    z-index: 99;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.25);
+    pointer-events: none;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .booking-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .booking-summary-sidebar {
+        position: static;
+        order: -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .booking-steps {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .motorcycle-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .options-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .requirements {
+        grid-template-columns: 1fr;
+    }
+    
+    .step-actions {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .btn-prev,
+    .btn-next,
+    .btn-confirm {
+        width: 100%;
+    }
+}
+
+
+/* Floating Terms Card/Modal */
+#Information-policy-terms {
+    position: fixed !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 320px;
+    max-width: 90vw;
+    width: 400px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    z-index: 10;
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    display: none;
+    transition: opacity 0.2s;
+}
+#Information-policy-terms:target,
+#Information-policy-terms[style*="display: block"] {
+    display: block;
+    opacity: 1;
+}
+#Information-policy-terms button#close-terms-btn {
+    z-index: 11;
+}

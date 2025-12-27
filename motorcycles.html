@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Motorcycles - XCC-LOC26</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/motorcycles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html">
+                <img src="images/logo/logo3.svg" alt="XCC-LOC26" width="150" height="80">
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="motorcycles.html" class="active">Motorcycles</a></li>
+                    <li><a href="trips.html">Trips</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="booking.html">Booking</a></li>
+                </ul>
+                <button class="mobile-menu-btn">☰</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="page-content">
+        <section class="motorcycles-page">
+            <div class="container">
+                <h1 class="section-title">Our Motorcycle Fleet</h1>
+                <p class="page-description">Choose from our premium selection of motorcycles for every type of adventure in Morocco.</p>
+                
+                <!-- Filter Buttons -->
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All Bikes</button>
+                    <button class="filter-btn" data-filter="Adventure">Adventure</button>
+                    <button class="filter-btn" data-filter="Scooter">Scooters</button>
+                    <button class="filter-btn" data-filter="Cruiser">Cruisers</button>
+                    <button class="filter-btn" data-filter="Sport">Sport Bikes</button>
+                    <button class="filter-btn" data-filter="Buggy">Buggy</button>
+                </div>
+
+                <!-- Motorcycles Grid -->
+                <div class="motorcycles-grid" id="motorcycles-container">
+                    <!-- Motorcycles will be dynamically inserted here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking CTA -->
+        <section class="booking-cta">
+            <div class="container">
+                <div class="cta-content">
+                    <h2>Ready to Ride?</h2>
+                    <p>Book your motorcycle today and start your Moroccan adventure</p>
+                    <a href="booking.html" class="btn">Book Now</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-container">
+            <div class="footer-about">
+                <div class="footer-logo">XCC-LOC26</div>
+                <p>Your trusted partner for motorcycle rentals in Marrakech. Explore the beauty of Morocco on two wheels.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="motorcycles.html">Motorcycles</a></li>
+                    <li><a href="trips.html">Trips</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>Motorcycles</h3>
+                <ul>
+                    <li><a href="motorcycles.html">Adventure Bikes</a></li>
+                    <li><a href="motorcycles.html">Scooters</a></li>
+                    <li><a href="motorcycles.html">Cruisers</a></li>
+                    <li><a href="motorcycles.html">Sport Bikes</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>Follow Us</h3>
+                <ul>
+                    <li><a href="https://www.facebook.com/xcc_loc26">Facebook</a></li>
+                    <li><a href="https://www.instagram.com/xcc_loc26/">Instagram</a></li>
+                    <li><a href="https://wa.me/212612345678">WhatsApp</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <p>&copy; 2023 RideMarrakech. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/motorcycles.js"></script>
+</body>
+</html>
