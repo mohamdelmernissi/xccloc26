@@ -10,6 +10,7 @@ const MOTORCYCLES = [
             engine: '799 cc',
             power: '95 ch',
             seatHeight: '825 mm',
+            weight: '220 kg',
         },
     },
     {
@@ -22,6 +23,7 @@ const MOTORCYCLES = [
             engine: '799 cc',
             power: '95 ch',
             seatHeight: '915 mm',
+            weight: '213 kg',
         },
     },
     {
@@ -34,6 +36,7 @@ const MOTORCYCLES = [
             engine: '449 cc',
             power: '43.5 ch',
             seatHeight: '820 mm',
+            weight: '190 kg',
         },
     },
     {
@@ -46,6 +49,7 @@ const MOTORCYCLES = [
             engine: '452 cc',
             power: '40 ch',
             seatHeight: '825 mm',
+            weight: '199 kg',
         },
     },{
         id: 'Kove-450-Rally',
@@ -57,6 +61,7 @@ const MOTORCYCLES = [
             engine: '449 cc',
             power: '42 ch',
             seatHeight: '960 mm',
+            weight: '187 kg',
         },
     },
     {
@@ -69,6 +74,7 @@ const MOTORCYCLES = [
             engine: '1 254 cc',
             power: '136 ch',
             seatHeight: '890 mm',
+            weight: '249 kg',
         },
     },
     {
@@ -81,6 +87,7 @@ const MOTORCYCLES = [
             engine: '1 084 cc',
             power: '102 ch',
             seatHeight: '850 mm',
+            weight: '226 kg',
         },
     },
     {
@@ -93,6 +100,7 @@ const MOTORCYCLES = [
             engine: '689 cc',
             power: '72 ch',
             seatHeight: '875 mm',
+            weight: '204 kg',
         },
     },
     {
@@ -105,6 +113,7 @@ const MOTORCYCLES = [
             engine: '745 cc',
             power: '58.6 ch',
             seatHeight: '820 mm',
+            weight: '226 kg',
         },
     },
     {
@@ -117,6 +126,7 @@ const MOTORCYCLES = [
             engine: '562 cc',
             power: '48 ch',
             seatHeight: '800 mm',
+            weight: '218 kg',
         },
     },
     {
@@ -129,6 +139,7 @@ const MOTORCYCLES = [
             engine: '1 089 cc',
             power: '120 ch',
             seatHeight: '~800 mm',
+            weight: '235 kg',
         },
     },
     {
@@ -141,6 +152,7 @@ const MOTORCYCLES = [
             engine: '49 cc',
             power: '3.2 ch',
             seatHeight: '790 mm',
+            weight: '130 kg',
         },
     },
     {
@@ -153,6 +165,7 @@ const MOTORCYCLES = [
             engine: '976 cc',
             power: '154 ch',
             seatHeight: '-',
+            weight: '790 kg',
         },
     },
 ];

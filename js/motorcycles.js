@@ -32,6 +32,10 @@ function renderAllMotorcycles() {
                         <div class="spec-value">${motorcycle.specs.power}</div>
                     </div>
                     <div class="spec-item">
+                        <div class="spec-label">Weight</div>
+                        <div class="spec-value">${motorcycle.specs.weight}</div>
+                    </div>
+                    <div class="spec-item">
                         <div class="spec-label">Seat Height</div>
                         <div class="spec-value">${motorcycle.specs.seatHeight}</div>
                     </div>
@@ -91,6 +95,10 @@ function showMotorcycleDetails(motorcycleId) {
                                 <div class="spec-row">
                                     <span class="spec-label">Power:</span>
                                     <span class="spec-value">${motorcycle.specs.power}</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span class="spec-label">Weight:</span>
+                                    <span class="spec-value">${motorcycle.specs.weight}</span>
                                 </div>
                                 <div class="spec-row">
                                     <span class="spec-label">Seat Height:</span>

@@ -662,29 +662,49 @@ body:has(#Information-policy-terms[style*="display: block"])::after {
     }
 }
 
+/* Add these styles for promo code section */
 
-/* Floating Terms Card/Modal */
-#Information-policy-terms {
-    position: fixed !important;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    min-width: 320px;
-    max-width: 90vw;
-    width: 400px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-    z-index: 10;
-    padding: 2rem 1.5rem 1.5rem 1.5rem;
-    display: none;
-    transition: opacity 0.2s;
+.promo-code-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 0.5rem;
 }
-#Information-policy-terms:target,
-#Information-policy-terms[style*="display: block"] {
-    display: block;
-    opacity: 1;
+
+.promo-code-section h3 {
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
 }
-#Information-policy-terms button#close-terms-btn {
-    z-index: 11;
+
+.promo-code-input-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.promo-code-input-group input {
+    flex: 1;
+    min-width: 200px;
+}
+
+.btn-apply-promo,
+.btn-remove-promo {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+.promo-message {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+    .promo-code-input-group {
+        flex-direction: column;
+    }
+    
+    .promo-code-input-group input {
+        width: 100%;
+    }
 }

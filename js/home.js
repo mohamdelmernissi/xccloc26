@@ -151,6 +151,10 @@ function renderFeaturedMotorcycles() {
                         <div class="spec-value">${motorcycle.specs.power}</div>
                     </div>
                     <div class="spec-item">
+                        <div class="spec-label">Weight</div>
+                        <div class="spec-value">${motorcycle.specs.weight}</div>
+                    </div>
+                    <div class="spec-item">
                         <div class="spec-label">Seat Height</div>
                         <div class="spec-value">${motorcycle.specs.seatHeight}</div>
                     </div>

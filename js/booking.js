@@ -136,6 +136,8 @@ let bookingState = {
   options: {},
   personalInfo: {},
   totalCost: 0,
+  promoCode: null,
+  discount: 0,
 };
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -185,6 +187,10 @@ async function sendBookingConfirmationEmail(bookingData) {
     has_options: Object.keys(bookingData.options).length > 0,
     options: formatOrderOptions(bookingData.options),
     base_price: formatCurrency(calculateBasePrice()),
+    promo_code: bookingData.promoCode || 'AUCUN',
+    discount_percent: bookingData.discount || 0,
+    discount_amount: formatCurrency(calculateDiscountAmount()),
+    has_promo: bookingData.promoCode ? true : false,
     total_amount: formatCurrency(bookingData.totalCost),
     calendar_start: formatCalendarDate(
       bookingData.pickupDate,
@@ -197,30 +203,34 @@ async function sendBookingConfirmationEmail(bookingData) {
     options_html: buildEmailHTMLOption(bookingData),
   };
 
-      const clientEmailParams = {
-        first_name: bookingData.personalInfo['first-name'],
-        last_name: bookingData.personalInfo['last-name'],
-        email: bookingData.personalInfo.email,
-        phone: bookingData.personalInfo.phone,
-        booking_number: generateBookingNumber(),
-        booking_date: new Date().toLocaleDateString('fr-FR'),
-        motorcycle_name: bookingData.motorcycle.name,
-        motorcycle_type: bookingData.motorcycle.type,
-        motorcycle_engine: bookingData.motorcycle.specs.engine,
-        motorcycle_power: bookingData.motorcycle.specs.power,
-        motorcycle_image: bookingData.motorcycle.imageUrl,
-        pickup_date: formatDate(bookingData.pickupDate),
-        pickup_time: bookingData.pickupTime,
-        return_date: formatDate(bookingData.returnDate),
-        return_time: bookingData.returnTime,
-        rental_days: calculateRentalDays(),
-        has_options: Object.keys(bookingData.options).length > 0,
-        options: formatOptions(bookingData.options),
-        base_price: formatCurrency(calculateBasePrice()),
-        options_total: formatCurrency(calculateOptionsTotal()),
-        total_amount: formatCurrency(bookingData.totalCost),
-        payment_details_html : buildEmailHTMLOption(bookingData),
-    };
+  const clientEmailParams = {
+    first_name: bookingData.personalInfo['first-name'],
+    last_name: bookingData.personalInfo['last-name'],
+    email: bookingData.personalInfo.email,
+    phone: bookingData.personalInfo.phone,
+    booking_number: generateBookingNumber(),
+    booking_date: new Date().toLocaleDateString('fr-FR'),
+    motorcycle_name: bookingData.motorcycle.name,
+    motorcycle_type: bookingData.motorcycle.type,
+    motorcycle_engine: bookingData.motorcycle.specs.engine,
+    motorcycle_power: bookingData.motorcycle.specs.power,
+    motorcycle_image: bookingData.motorcycle.imageUrl,
+    pickup_date: formatDate(bookingData.pickupDate),
+    pickup_time: bookingData.pickupTime,
+    return_date: formatDate(bookingData.returnDate),
+    return_time: bookingData.returnTime,
+    rental_days: calculateRentalDays(),
+    has_options: Object.keys(bookingData.options).length > 0,
+    options: formatOptions(bookingData.options),
+    base_price: formatCurrency(calculateBasePrice()),
+    options_total: formatCurrency(calculateOptionsTotal()),
+    promo_code: bookingData.promoCode || 'AUCUN',
+    discount_percent: bookingData.discount || 0,
+    discount_amount: formatCurrency(calculateDiscountAmount()),
+    has_promo: bookingData.promoCode ? true : false,
+    total_amount: formatCurrency(bookingData.totalCost),
+    payment_details_html : buildEmailHTMLOption(bookingData),
+  };
 
   const token = "-UFsTHVPWq-s9kd9g"; // Your EmailJS public key
 
@@ -287,7 +297,6 @@ function renderMotorcycleOptions() {
     const option = document.createElement("div");
     option.className = "motorcycle-option";
     option.dataset.id = motorcycle.id; // Ajouter l'ID de données
-    // ... reste du code inchangé
     option.innerHTML = `
             <img src="${motorcycle.imageUrl}" alt="${motorcycle.name}" class="option-image">
             <div class="option-name">${motorcycle.name}</div>
@@ -300,6 +309,10 @@ function renderMotorcycleOptions() {
                 <div class="option-spec">
                     <div class="spec-label">Power</div>
                     <div class="spec-value">${motorcycle.specs.power}</div>
+                </div>
+                <div class="option-spec">
+                    <div class="spec-label">Weight</div>
+                    <div class="spec-value">${motorcycle.specs.weight}</div>
                 </div>
                 <div class="option-spec">
                     <div class="spec-label">Seat Height</div>
@@ -380,6 +393,29 @@ function setupDateInputs() {
       updateSidebarSummary();
     });
   });
+  
+  // Setup promo code button
+  const promoButton = document.querySelector('.btn-apply-promo');
+  if (promoButton) {
+    promoButton.addEventListener('click', applyPromoCode);
+  }
+  
+  // Setup promo code input (Enter key)
+  const promoInput = document.getElementById('promo-code');
+  if (promoInput) {
+    promoInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        applyPromoCode();
+      }
+    });
+  }
+  
+  // Setup remove promo button
+  const removePromoButton = document.querySelector('.btn-remove-promo');
+  if (removePromoButton) {
+    removePromoButton.addEventListener('click', removePromoCode);
+  }
 }
 
 function setupStepNavigation() {
@@ -641,6 +677,19 @@ function updateSidebarSummary() {
     const valueElement = optionsElement.querySelector(".value");
     valueElement.textContent = `${optionsTotal} DH`;
   }
+  
+  // Discount
+  const discountElement = document.getElementById("sidebar-discount");
+  if (discountElement) {
+    const discountAmount = calculateDiscountAmount();
+    if (discountAmount > 0) {
+      discountElement.style.display = 'flex';
+      const valueElement = discountElement.querySelector(".value");
+      valueElement.textContent = `-${discountAmount} DH`;
+    } else {
+      discountElement.style.display = 'none';
+    }
+  }
 
   // Total
   const totalElement = document.getElementById("sidebar-total");
@@ -690,8 +739,27 @@ function calculateTotalCost() {
   const days = calculateRentalDays();
   const basePrice = days * bookingState.motorcycle.pricePerDay;
   const optionsTotal = calculateOptionsTotal();
+  const subtotal = basePrice + optionsTotal;
+  
+  // Apply discount if promo code is active
+  const discountAmount = bookingState.discount > 0 
+    ? (subtotal * bookingState.discount) / 100 
+    : 0;
+  
+  return Math.round(subtotal - discountAmount);
+}
 
-  return basePrice + optionsTotal;
+function calculateDiscountAmount() {
+  if (!bookingState.discount || bookingState.discount === 0) {
+    return 0;
+  }
+  
+  const days = calculateRentalDays();
+  const basePrice = days * (bookingState.motorcycle?.pricePerDay || 0);
+  const optionsTotal = calculateOptionsTotal();
+  const subtotal = basePrice + optionsTotal;
+  
+  return Math.round((subtotal * bookingState.discount) / 100);
 }
 
 function updateBookingSummary() {
@@ -747,6 +815,21 @@ function updateBookingSummary() {
             Phone: ${bookingState.personalInfo.phone}<br>
             License: ${bookingState.personalInfo["license-number"]}
         `;
+  }
+  
+  // Promo code summary
+  const promoSummary = document.getElementById("summary-promo");
+  if (promoSummary) {
+    if (bookingState.promoCode && bookingState.discount > 0) {
+      const discountAmount = calculateDiscountAmount();
+      promoSummary.innerHTML = `
+        <strong>Promo Code: ${bookingState.promoCode}</strong><br>
+        Discount: ${bookingState.discount}% (-${discountAmount} DH)
+      `;
+      promoSummary.style.display = 'block';
+    } else {
+      promoSummary.style.display = 'none';
+    }
   }
 
   // Total summary
@@ -843,6 +926,101 @@ function showNotification(message, type) {
         notification.remove();
       }
     }, 300);
+  }, 5000);
+}
+
+// Add promo code validation
+const PROMO_CODES = {
+  'XCCLOC5': { discount: 5, description: '5% discount' },
+  'XCCLOC10': { discount: 10, description: '10% discount' },
+  'XCCLOC15': { discount: 15, description: '15% discount' }
+};
+
+function validatePromoCode(code) {
+  const upperCode = code.toUpperCase().trim();
+  return PROMO_CODES[upperCode] || null;
+}
+
+function applyPromoCode() {
+  const promoInput = document.getElementById('promo-code');
+  const promoButton = document.querySelector('.btn-apply-promo');
+  const removePromoButton = document.querySelector('.btn-remove-promo');
+  
+  if (!promoInput || !promoInput.value.trim()) {
+    showPromoMessage('Please enter a promo code', 'error');
+    return;
+  }
+  
+  const promoData = validatePromoCode(promoInput.value);
+  
+  if (promoData) {
+    bookingState.promoCode = promoInput.value.toUpperCase().trim();
+    bookingState.discount = promoData.discount;
+    
+    // Disable input and apply button, show remove button
+    promoInput.disabled = true;
+    if (promoButton) {
+      promoButton.style.display = 'none';
+    }
+    if (removePromoButton) {
+      removePromoButton.style.display = 'inline-block';
+    }
+    
+    showPromoMessage(`✓ Promo code applied: ${promoData.description}`, 'success');
+    updateSidebarSummary();
+  } else {
+    bookingState.promoCode = null;
+    bookingState.discount = 0;
+    showPromoMessage('✗ Invalid promo code', 'error');
+  }
+}
+
+function removePromoCode() {
+  const promoInput = document.getElementById('promo-code');
+  const promoButton = document.querySelector('.btn-apply-promo');
+  const removePromoButton = document.querySelector('.btn-remove-promo');
+  
+  bookingState.promoCode = null;
+  bookingState.discount = 0;
+  
+  if (promoInput) {
+    promoInput.value = '';
+    promoInput.disabled = false;
+  }
+  
+  if (promoButton) {
+    promoButton.style.display = 'inline-block';
+  }
+  
+  if (removePromoButton) {
+    removePromoButton.style.display = 'none';
+  }
+  
+  showPromoMessage('Promo code removed', 'info');
+  updateSidebarSummary();
+}
+
+function showPromoMessage(message, type) {
+  const promoMessage = document.getElementById('promo-message');
+  if (!promoMessage) return;
+  
+  const colors = {
+    'success': '#10b981',
+    'error': '#ef4444',
+    'info': '#3b82f6'
+  };
+  
+  promoMessage.textContent = message;
+  promoMessage.style.color = colors[type] || '#ffffff';
+  promoMessage.style.backgroundColor = colors[type] ? colors[type] + '20' : 'rgba(255,255,255,0.1)';
+  promoMessage.style.padding = '0.5rem';
+  promoMessage.style.borderRadius = '0.25rem';
+  promoMessage.style.marginTop = '0.5rem';
+  promoMessage.style.fontSize = '0.875rem';
+  promoMessage.style.display = 'block';
+  
+  setTimeout(() => {
+    promoMessage.style.display = 'none';
   }, 5000);
 }
 
