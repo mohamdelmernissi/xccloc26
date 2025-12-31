@@ -37,6 +37,29 @@ const MOTORCYCLES = [
         },
     },
     {
+        id: 'Royal-Enfield-Himalayan-450',
+        name: 'Royal Enfield Himalayan 450',
+        type: 'Adventure',
+        pricePerDay: 700,
+        imageUrl: '/images/logo/motocycles/himalayan.webp',
+        specs: {
+            engine: '452 cc',
+            power: '40 ch',
+            seatHeight: '825 mm',
+        },
+    },{
+        id: 'Kove-450-Rally',
+        name: 'Kove 450 Rally',
+        type: 'Adventure',
+        pricePerDay: 1000,
+        imageUrl: '/images/logo/motocycles/kove.webp',
+        specs: {
+            engine: '449 cc',
+            power: '42 ch',
+            seatHeight: '960 mm',
+        },
+    },
+    {
         id: 'bmw-r1250gs',
         name: 'BMW R1250GS Adventure',
         type: 'Adventure',
@@ -412,3 +435,4 @@ function clearPreSelectedMotorcycle() {
     localStorage.removeItem('preSelectedMotorcycle');
 
 }
+
