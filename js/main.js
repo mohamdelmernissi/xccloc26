@@ -4,12 +4,12 @@ const MOTORCYCLES = [
         id: 'CFMOTO800MT',
         name: 'CF MOTO 800 MT Explorer',
         type: 'Adventure',
-        pricePerDay: 1500,
+        pricePerDay: 900,
         imageUrl: '/images/logo/motocycles/CF MOTO 800 MT Explorer.webp',
         specs: {
             engine: '799 cc',
             power: '95 ch',
-            seatHeight: '825-855 mm',
+            seatHeight: '825 mm',
         },
     },
     {
@@ -40,31 +40,31 @@ const MOTORCYCLES = [
         id: 'bmw-r1250gs',
         name: 'BMW R1250GS Adventure',
         type: 'Adventure',
-        pricePerDay: 2000,
+        pricePerDay: 1700,
         imageUrl: '/images/logo/motocycles/BMW R1250GS Adventure.webp',
         specs: {
             engine: '1 254 cc',
             power: '136 ch',
-            seatHeight: '890-910 mm',
+            seatHeight: '890 mm',
         },
     },
     {
         id: 'honda-africa-twin',
         name: 'Honda Africa Twin (CRF1100L)',
         type: 'Adventure',
-        pricePerDay: 1800,
+        pricePerDay: 1500,
         imageUrl: '/images/logo/motocycles/Honda Africa Twin (CRF1100L).webp',
         specs: {
             engine: '1 084 cc',
             power: '102 ch',
-            seatHeight: '850-870 mm',
+            seatHeight: '850 mm',
         },
     },
     {
         id: 'yamaha-tenere-700',
         name: 'Yamaha Ténéré 700',
         type: 'Adventure',
-        pricePerDay: 1300,
+        pricePerDay: 1200,
         imageUrl: '/images/logo/motocycles/Yamaha Ténéré 700.webp',
         specs: {
             engine: '689 cc',
@@ -76,7 +76,7 @@ const MOTORCYCLES = [
         id: 'Hondaxadv750',
         name: 'Honda X-ADV 750',
         type: 'Scooter',
-        pricePerDay: 1500,
+        pricePerDay: 1000,
         imageUrl: '/images/logo/motocycles/Honda X-ADV 750.webp',
         specs: {
             engine: '745 cc',
@@ -88,7 +88,7 @@ const MOTORCYCLES = [
         id: 'yamaha-tmax',
         name: 'Yamaha TMAX',
         type: 'Scooter',
-        pricePerDay: 1500,
+        pricePerDay: 900,
         imageUrl: '/images/logo/motocycles/Yamaha TMAX.webp',
         specs: {
             engine: '562 cc',
@@ -104,7 +104,7 @@ const MOTORCYCLES = [
         imageUrl: '/images/logo/motocycles/Kawasaki Z 1100.webp',
         specs: {
             engine: '1 089 cc',
-            power: '100-120 ch',
+            power: '120 ch',
             seatHeight: '~800 mm',
         },
     },
@@ -112,7 +112,7 @@ const MOTORCYCLES = [
         id: 'vespa-primavera-50',
         name: 'Vespa Primavera 50',
         type: 'Scooter',
-        pricePerDay: 300,
+        pricePerDay: 200,
         imageUrl: '/images/logo/motocycles/Vespa Primavera 50.webp',
         specs: {
             engine: '49 cc',
@@ -410,4 +410,5 @@ function getPreSelectedMotorcycle() {
 
 function clearPreSelectedMotorcycle() {
     localStorage.removeItem('preSelectedMotorcycle');
+
 }
