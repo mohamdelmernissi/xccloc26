@@ -144,14 +144,15 @@ const MOTORCYCLES = [
         },
     },
     {
-        id: 'cf-moto-zforce-z10',
-        name: 'CF Moto ZForce Z10',
+        id: 'Can-Am-XRS',
+        name: 'Can-Am XRS',
         type: 'Buggy',
         pricePerDay: 2500,
-        imageUrl: '/images/logo/motocycles/cf moto zforce z10.webp',
+        imageUrl: '/images/logo/motocycles/can-am.webp',
         specs: {
-            engine: '998 cc',
-            power: '143 ch',
+            engine: '976 cc',
+            power: '154 ch',
+            seatHeight: '-',
             seatHeight: '-',
         },
     },
@@ -435,4 +436,5 @@ function clearPreSelectedMotorcycle() {
     localStorage.removeItem('preSelectedMotorcycle');
 
 }
+
 
