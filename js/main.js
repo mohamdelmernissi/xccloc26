@@ -153,7 +153,6 @@ const MOTORCYCLES = [
             engine: '976 cc',
             power: '154 ch',
             seatHeight: '-',
-            seatHeight: '-',
         },
     },
 ];
@@ -164,7 +163,7 @@ const TRIPS = [
         title: 'High Atlas Mountains Expedition',
         description: 'A breathtaking journey through the winding roads and stunning vistas of the Atlas Mountains. Perfect for adventure bikes.',
         distance: 'Approx. 350km loop',
-        recommendedBike: 'CF MOTO 800 MT explorer',
+        recommendedBike: 'Voge 800 Rally',
         imageUrl: '/images/trip/atlas-mountains.jpg',
     },
     {
@@ -172,7 +171,7 @@ const TRIPS = [
         title: 'Coastal Ride to Essaouira',
         description: 'Enjoy the ocean breeze on this scenic route to the historic and vibrant coastal city of Essaouira.',
         distance: 'Approx. 190km one-way',
-        recommendedBike: 'Any bike or scooter',
+        recommendedBike: 'Any adventure bike',
         imageUrl: '/images/trip/essaouira-coast.jpg',
     },
     {
@@ -436,5 +435,6 @@ function clearPreSelectedMotorcycle() {
     localStorage.removeItem('preSelectedMotorcycle');
 
 }
+
 
 
