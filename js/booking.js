@@ -138,6 +138,7 @@ let bookingState = {
   totalCost: 0,
   promoCode: null,
   discount: 0,
+  originalPrice: 0,
 };
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -201,6 +202,7 @@ async function sendBookingConfirmationEmail(bookingData) {
       bookingData.returnTime
     ),
     options_html: buildEmailHTMLOption(bookingData),
+    original_amount: formatCurrency(bookingData.originalPrice || calculateBasePrice() + calculateOptionsTotal()),
   };
 
   const clientEmailParams = {
@@ -230,6 +232,7 @@ async function sendBookingConfirmationEmail(bookingData) {
     has_promo: bookingData.promoCode ? true : false,
     total_amount: formatCurrency(bookingData.totalCost),
     payment_details_html : buildEmailHTMLOption(bookingData),
+    original_amount: formatCurrency(bookingData.originalPrice || calculateBasePrice() + calculateOptionsTotal()),
   };
 
   const token = "-UFsTHVPWq-s9kd9g"; // Your EmailJS public key
@@ -741,6 +744,11 @@ function calculateTotalCost() {
   const optionsTotal = calculateOptionsTotal();
   const subtotal = basePrice + optionsTotal;
   
+  // Store original price before discount
+  if (!bookingState.originalPrice || bookingState.discount === 0) {
+    bookingState.originalPrice = subtotal;
+  }
+  
   // Apply discount if promo code is active
   const discountAmount = bookingState.discount > 0 
     ? (subtotal * bookingState.discount) / 100 
@@ -982,6 +990,7 @@ function removePromoCode() {
   
   bookingState.promoCode = null;
   bookingState.discount = 0;
+  bookingState.originalPrice = 0; // Reset original price
   
   if (promoInput) {
     promoInput.value = '';

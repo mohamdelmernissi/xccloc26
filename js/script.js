@@ -21,7 +21,10 @@ function sendBookingEmails(bookingData) {
         options: formatOptions(bookingData.options),
         base_price: formatCurrency(calculateBasePrice()),
         options_total: formatCurrency(calculateOptionsTotal()),
-        total_amount: formatCurrency(bookingData.totalCost)
+        total_amount: formatCurrency(bookingData.totalCost),
+        promo_code: bookingData.promoCode || '',
+        discount_amount: formatCurrency(bookingData.discountAmount || ''),
+        original_price: formatCurrency(bookingData.originalPrice || ''),
     };
 
     // Email pour vous (ordre de réservation)
@@ -48,7 +51,10 @@ function sendBookingEmails(bookingData) {
         base_price: formatCurrency(calculateBasePrice()),
         total_amount: formatCurrency(bookingData.totalCost),
         calendar_start: formatCalendarDate(bookingData.pickupDate, bookingData.pickupTime),
-        calendar_end: formatCalendarDate(bookingData.returnDate, bookingData.returnTime)
+        calendar_end: formatCalendarDate(bookingData.returnDate, bookingData.returnTime),
+        promo_code: bookingData.promoCode || '',
+        discount_amount: formatCurrency(bookingData.discountAmount || ''),
+        original_price: formatCurrency(bookingData.originalPrice || ''),
     };
 
     // Envoyer email au client
