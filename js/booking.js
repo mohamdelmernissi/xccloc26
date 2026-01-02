@@ -235,18 +235,18 @@ async function sendBookingConfirmationEmail(bookingData) {
     original_amount: formatCurrency(bookingData.originalPrice || calculateBasePrice() + calculateOptionsTotal()),
   };
 
-  const token = "-UFsTHVPWq-s9kd9g"; // Your EmailJS public key
+  const token = "qhZMIa_2FyGjlrAgM"; // Your EmailJS public key
 
   try {
     const response = await emailjs.send(
-      "service_1kqs29a", // your service ID
-      "template_z38q12q", // your template ID
+      "service_6meqbya", // your service ID
+      "template_rfe6jjg", // your template ID
       orderEmailParams,
       token
     );
     const response2 = await emailjs.send(
-        "service_1kqs29a", // your service ID
-        "template_wj6wbzs", // your template ID
+        "service_6meqbya", // your service ID
+        "template_ys9xpw9", // your template ID
         clientEmailParams,
         token
     );
@@ -1035,3 +1035,4 @@ function showPromoMessage(message, type) {
 
 // Initialize booking page when DOM is loaded
 document.addEventListener("DOMContentLoaded", initBookingPage);
+
