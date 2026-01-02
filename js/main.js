@@ -55,7 +55,7 @@ const MOTORCYCLES = [
         id: 'Kove-450-Rally',
         name: 'Kove 450 Rally',
         type: 'Adventure',
-        pricePerDay: 1000,
+        pricePerDay: 1200,
         imageUrl: '/images/logo/motocycles/kove.webp',
         specs: {
             engine: '449 cc',
@@ -159,7 +159,7 @@ const MOTORCYCLES = [
         id: 'Can-Am-XRS',
         name: 'Can-Am XRS',
         type: 'Buggy',
-        pricePerDay: 2500,
+        pricePerDay: 4000,
         imageUrl: '/images/logo/motocycles/can-am.webp',
         specs: {
             engine: '976 cc',
@@ -448,6 +448,7 @@ function clearPreSelectedMotorcycle() {
     localStorage.removeItem('preSelectedMotorcycle');
 
 }
+
 
 
 
