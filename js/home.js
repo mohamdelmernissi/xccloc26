@@ -190,4 +190,125 @@ function renderTestimonials() {
 }
 
 // Initialize home page when DOM is loaded
+
 document.addEventListener('DOMContentLoaded', initHomePage);
+function initAdventuresGallery() {
+    const adventureCards = document.querySelectorAll('.adventure-card');
+    
+    adventureCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const imgSrc = this.querySelector('img').src;
+            const title = this.querySelector('h3').textContent;
+            const description = this.querySelector('p').textContent;
+            
+            openAdventureModal(imgSrc, title, description);
+        });
+        
+        // Keyboard navigation
+        card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+        
+        // Make cards focusable
+        card.setAttribute('tabindex', '0');
+    });
+}
+
+function openAdventureModal(imgSrc, title, description) {
+    const modalHtml = `
+        <div class="adventure-modal" style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+        ">
+            <div class="modal-content" style="
+                background: var(--brand-dark);
+                max-width: 800px;
+                width: 100%;
+                border-radius: 1rem;
+                overflow: hidden;
+                position: relative;
+            ">
+                <button class="modal-close" style="
+                    position: absolute;
+                    top: 1rem;
+                    right: 1rem;
+                    background: var(--brand-red);
+                    border: none;
+                    color: white;
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    font-size: 1.5rem;
+                    cursor: pointer;
+                    z-index: 1001;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                ">×</button>
+                
+                <img src="${imgSrc}" alt="${title}" style="
+                    width: 100%;
+                    height: 400px;
+                    object-fit: cover;
+                ">
+                
+                <div style="padding: 2rem;">
+                    <h3 style="color: white; font-size: 1.5rem; margin-bottom: 0.5rem;">${title}</h3>
+                    <p style="color: var(--brand-silver); margin-bottom: 1.5rem;">${description}</p>
+                    
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn" style="background: var(--brand-red); color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; cursor: pointer;">
+                            📸 Share on Instagram
+                        </button>
+                        <button class="btn btn-outline" style="background: transparent; color: var(--brand-red); padding: 0.75rem 1.5rem; border: 2px solid var(--brand-red); border-radius: 0.5rem; cursor: pointer;">
+                            🏍️ Book This Adventure
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    
+    const modal = document.querySelector('.adventure-modal');
+    const closeBtn = modal.querySelector('.modal-close');
+    
+    closeBtn.addEventListener('click', () => {
+        modal.remove();
+    });
+    
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    });
+    
+    // Close on Escape key
+    document.addEventListener('keydown', function closeOnEscape(e) {
+        if (e.key === 'Escape') {
+            modal.remove();
+            document.removeEventListener('keydown', closeOnEscape);
+        }
+    });
+}
+
+// Mettre à jour la fonction initHomePage
+function initHomePage() {
+    initSlider();
+    renderFeaturedMotorcycles();
+    renderTestimonials();
+    initAdventuresGallery(); // Nouvelle ligne
+}
