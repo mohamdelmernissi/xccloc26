@@ -51,7 +51,8 @@ const MOTORCYCLES = [
             seatHeight: '825 mm',
             weight: '199 kg',
         },
-    },{
+    },
+    {
         id: 'Kove-450-Rally',
         name: 'Kove 450 Rally',
         type: 'Adventure',
@@ -61,7 +62,20 @@ const MOTORCYCLES = [
             engine: '449 cc',
             power: '42 ch',
             seatHeight: '960 mm',
-            weight: '187 kg',
+            weight: '150 kg',
+        },
+    },
+    {
+        id: 'Kove-800-Rally',
+        name: 'Kove 800 Rally',
+        type: 'Adventure',
+        pricePerDay: 1500,
+        imageUrl: '/images/logo/motocycles/kove800.webp',
+        specs: {
+            engine: '799 cc',
+            power: '95 ch',
+            seatHeight: '895 mm',
+            weight: '176 kg',
         },
     },
     {
@@ -160,7 +174,7 @@ const MOTORCYCLES = [
         name: 'Can-Am XRS',
         type: 'Buggy',
         pricePerDay: 4000,
-        imageUrl: '/images/logo/motocycles/can-am.webp',
+        imageUrl: '/images/logo/motocycles/can-am-xrs.webp',
         specs: {
             engine: '976 cc',
             power: '154 ch',
@@ -448,6 +462,7 @@ function clearPreSelectedMotorcycle() {
     localStorage.removeItem('preSelectedMotorcycle');
 
 }
+
 
 
 
