@@ -1,5 +1,3 @@
-
-
 .view-more-container {
     text-align: center;
     margin-top: 1.5rem;
@@ -11,6 +9,7 @@
     height: 100vh;
 
     overflow: hidden;
+    background: var(--brand-dark);
 }
 
 .slider-container {
@@ -204,6 +203,7 @@
 /* Testimonials */
 .testimonials {
     background-color: rgba(31, 41, 55, 0.5);
+    background: linear-gradient(to bottom, rgba(31, 41, 55, 0.9) 0%, rgba(17, 24, 39, 0.95) 100%);
 }
 
 .testimonials-grid {
@@ -400,6 +400,7 @@
 .our-team {
     padding: 5rem 0;
     background: rgba(17, 24, 39, 0.95);
+    background: linear-gradient(to bottom, rgba(31, 41, 55, 0.9) 0%, rgba(17, 24, 39, 0.95) 100%);
 }
 
 .team-grid {
@@ -528,7 +529,7 @@
 }
 
 .team-cta h3 {
-    font-size: 2rem;
+    /* font-size: 2rem; */
     margin-bottom: 1rem;
     color: var(--brand-light);
 }
@@ -536,15 +537,15 @@
 .team-cta p {
     color: var(--brand-silver);
     margin-bottom: 2rem;
-    font-size: 1.125rem;
+    /* font-size: 1.125rem; */
 }
 
 .team-cta .btn {
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 1rem 2rem;
-    font-size: 1.125rem;
+    /* padding: 1rem 2rem; */
+    /* font-size: 1.125rem; */
 }
 
 .team-cta .btn:hover .btn-icon {
@@ -595,4 +596,84 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Alternating Section Colors - More Pronounced */
+.hero-slider {
+    background: linear-gradient(135deg, rgba(17, 24, 39, 1) 0%, rgba(31, 41, 55, 0.95) 100%);
+}
+
+#featured-motorcycles {
+    background: linear-gradient(to bottom, rgba(31, 41, 55, 0.98) 0%, rgba(17, 24, 39, 0.95) 100%);
+    position: relative;
+    padding: 5rem 0;
+}
+
+#featured-motorcycles::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at top right, rgba(220, 38, 38, 0.08), transparent 50%);
+    pointer-events: none;
+}
+
+.testimonials {
+    background: linear-gradient(to bottom, rgba(17, 24, 39, 1) 0%, rgba(31, 41, 55, 0.98) 100%);
+    position: relative;
+    padding: 5rem 0;
+}
+
+.testimonials::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at bottom left, rgba(220, 38, 38, 0.06), transparent 50%);
+    pointer-events: none;
+}
+
+.adventures-captured {
+    background: linear-gradient(to bottom, rgba(31, 41, 55, 0.98) 0%, rgba(17, 24, 39, 0.95) 100%);
+    position: relative;
+}
+
+.adventures-captured::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(220, 38, 38, 0.08), transparent 60%);
+    pointer-events: none;
+}
+
+.our-team {
+    background: linear-gradient(to bottom, rgba(17, 24, 39, 1) 0%, rgba(31, 41, 55, 0.98) 100%);
+    position: relative;
+}
+
+.our-team::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at top left, rgba(220, 38, 38, 0.06), transparent 50%);
+    pointer-events: none;
+}
+
+/* Ensure content is above overlay */
+.adventures-captured > .container,
+.our-team > .container,
+.testimonials > .container,
+#featured-motorcycles > .container {
+    position: relative;
+    z-index: 1;
 }
