@@ -69,7 +69,7 @@ const MOTORCYCLES = [
         id: 'Kove-800-Rally',
         name: 'Kove 800 Rally',
         type: 'Adventure',
-        pricePerDay: 1500,
+        pricePerDay: 1200,
         imageUrl: '/images/logo/motocycles/kove800.webp',
         specs: {
             engine: '799 cc',
@@ -462,6 +462,7 @@ function clearPreSelectedMotorcycle() {
     localStorage.removeItem('preSelectedMotorcycle');
 
 }
+
 
 
 
