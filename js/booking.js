@@ -939,7 +939,7 @@ function showNotification(message, type) {
 
 // Add promo code validation
 const PROMO_CODES = {
-  'XCCLOC5': { discount: 5, description: '5% discount' },
+  'XCCLOC20': { discount: 20, description: '20% discount' },
   'XCCLOC10': { discount: 10, description: '10% discount' },
   'XCCLOC15': { discount: 15, description: '15% discount' }
 };
@@ -1035,4 +1035,5 @@ function showPromoMessage(message, type) {
 
 // Initialize booking page when DOM is loaded
 document.addEventListener("DOMContentLoaded", initBookingPage);
+
 
