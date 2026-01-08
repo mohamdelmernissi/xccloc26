@@ -273,7 +273,7 @@ function openAdventureModal(imgSrc, title, description) {
                     //         📸 Share on Instagram
                     //     </button>
                     <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                        <a href="INSTAGRAM_POST_URL"
+                        <a href="https://www.instagram.com/"
                            target="_blank"
                            rel="noopener noreferrer"
                            style="text-decoration: none;">
@@ -324,5 +324,6 @@ function initHomePage() {
     renderTestimonials();
     initAdventuresGallery(); // Nouvelle ligne
 }
+
 
 
