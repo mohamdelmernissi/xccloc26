@@ -4,7 +4,7 @@ const MOTORCYCLES = [
         id: 'CFMOTO800MT',
         name: 'CF MOTO 800 MT Explorer',
         type: 'Adventure',
-        pricePerDay: 900,
+        pricePerDay: 1000,
         imageUrl: '/images/logo/motocycles/CF MOTO 800 MT Explorer.webp',
         specs: {
             engine: '799 cc',
@@ -118,6 +118,44 @@ const MOTORCYCLES = [
         },
     },
     {
+        id: 'suzuki-drz-400',
+        name: 'Suzuki DRZ 400',
+        type: 'Adventure',
+        pricePerDay: 700,
+        imageUrl: '/images/logo/motocycles/drz.webp',
+        specs: {
+            engine: '399 cc',
+            power: '42 ch',
+            seatHeight: '960 mm',
+            weight: '204 kg',
+        },
+    },{
+        id: 'kawasaki-kle-500',
+        name: 'Kawasaki KLE 500',
+        type: 'Adventure',
+        pricePerDay: 800,
+        imageUrl: '/images/logo/motocycles/kle.webp',
+        specs: {
+            engine: '499 cc',
+            power: '52 ch',
+            seatHeight: '875 mm',
+            weight: '173 kg',
+        },
+    },
+    {
+        id: 'kawasaki-z-1100',
+        name: 'Kawasaki Z 1100',
+        type: 'Sport',
+        pricePerDay: 1500,
+        imageUrl: '/images/logo/motocycles/Kawasaki Z 1100.webp',
+        specs: {
+            engine: '1 089 cc',
+            power: '120 ch',
+            seatHeight: '~800 mm',
+            weight: '235 kg',
+        },
+    },
+    {
         id: 'Hondaxadv750',
         name: 'Honda X-ADV 750',
         type: 'Scooter',
@@ -141,19 +179,6 @@ const MOTORCYCLES = [
             power: '48 ch',
             seatHeight: '800 mm',
             weight: '218 kg',
-        },
-    },
-    {
-        id: 'kawasaki-z-1100',
-        name: 'Kawasaki Z 1100',
-        type: 'Sport',
-        pricePerDay: 1500,
-        imageUrl: '/images/logo/motocycles/Kawasaki Z 1100.webp',
-        specs: {
-            engine: '1 089 cc',
-            power: '120 ch',
-            seatHeight: '~800 mm',
-            weight: '235 kg',
         },
     },
     {
@@ -462,6 +487,7 @@ function clearPreSelectedMotorcycle() {
     localStorage.removeItem('preSelectedMotorcycle');
 
 }
+
 
 
 
