@@ -268,10 +268,6 @@ function openAdventureModal(imgSrc, title, description) {
                     <h3 style="color: white; font-size: 1.5rem; margin-bottom: 0.5rem;">${title}</h3>
                     <p style="color: var(--brand-silver); margin-bottom: 1.5rem;">${description}</p>
                     
-                    // <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    //     <button class="btn" style="background: var(--brand-red); color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; cursor: pointer;">
-                    //         📸 Share on Instagram
-                    //     </button>
                     <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
                         <a href="https://www.instagram.com/"
                            target="_blank"
@@ -324,6 +320,7 @@ function initHomePage() {
     renderTestimonials();
     initAdventuresGallery(); // Nouvelle ligne
 }
+
 
 
 
