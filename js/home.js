@@ -272,7 +272,7 @@ function openAdventureModal(imgSrc, title, description) {
                         <button class="btn" style="background: var(--brand-red); color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; cursor: pointer;">
                             📸 Share on Instagram
                         </button>
-                        <button class="btn btn-outline" style="background: transparent; color: var(--brand-red); padding: 0.75rem 1.5rem; border: 2px solid var(--brand-red); border-radius: 0.5rem; cursor: pointer;">
+                        <button class="btn btn-outline" href="contact.html" style="background: transparent; color: var(--brand-red); padding: 0.75rem 1.5rem; border: 2px solid var(--brand-red); border-radius: 0.5rem; cursor: pointer;">
                             🏍️ Book This Adventure
                         </button>
                     </div>
@@ -312,3 +312,4 @@ function initHomePage() {
     renderTestimonials();
     initAdventuresGallery(); // Nouvelle ligne
 }
+
