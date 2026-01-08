@@ -136,10 +136,10 @@ const MOTORCYCLES = [
         pricePerDay: 800,
         imageUrl: '/images/logo/motocycles/kle.webp',
         specs: {
-            engine: '499 cc',
+            engine: '498 cc',
             power: '52 ch',
-            seatHeight: '875 mm',
-            weight: '173 kg',
+            seatHeight: '850 mm',
+            weight: '181 kg',
         },
     },
     {
@@ -487,6 +487,7 @@ function clearPreSelectedMotorcycle() {
     localStorage.removeItem('preSelectedMotorcycle');
 
 }
+
 
 
 
