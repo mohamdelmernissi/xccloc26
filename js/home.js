@@ -279,6 +279,9 @@ function openAdventureModal(imgSrc, title, description) {
                             </button>
                         </a>
                         <a href="contact.html"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style="text-decoration: none;">
                             <button class="btn btn-outline" href="contact.html" style="background: transparent; color: var(--brand-red); padding: 0.75rem 1.5rem; border: 2px solid var(--brand-red); border-radius: 0.5rem; cursor: pointer;">
                                 🏍️ Book This Adventure
                             </button>
@@ -320,6 +323,7 @@ function initHomePage() {
     renderTestimonials();
     initAdventuresGallery(); // Nouvelle ligne
 }
+
 
 
 
