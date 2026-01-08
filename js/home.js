@@ -267,18 +267,17 @@ function openAdventureModal(imgSrc, title, description) {
                 <div style="padding: 2rem;">
                     <h3 style="color: white; font-size: 1.5rem; margin-bottom: 0.5rem;">${title}</h3>
                     <p style="color: var(--brand-silver); margin-bottom: 1.5rem;">${description}</p>
+
                     
                     <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
                         <a href="https://www.instagram.com/"
                            target="_blank"
                            rel="noopener noreferrer"
                            style="text-decoration: none;">
-                            <button class="btn"
-                                style="background: var(--brand-red); color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; cursor: pointer;">
+                            <button class="btn" style="background: var(--brand-red); color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; cursor: pointer;">
                                 📸 Share on Instagram
                             </button>
                         </a>
-                    </div>
 
                         <button class="btn btn-outline" href="contact.html" style="background: transparent; color: var(--brand-red); padding: 0.75rem 1.5rem; border: 2px solid var(--brand-red); border-radius: 0.5rem; cursor: pointer;">
                             🏍️ Book This Adventure
