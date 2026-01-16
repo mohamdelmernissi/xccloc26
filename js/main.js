@@ -40,6 +40,19 @@ const MOTORCYCLES = [
         },
     },
     {
+        id: 'KTM390AdventureR',
+        name: 'KTM 390 Adventure R',
+        type: 'Adventure',
+        pricePerDay: 800,
+        imageUrl: '/images/logo/motocycles/ktm.webp',
+        specs: {
+            engine: '449 cc',
+            power: '43.5 ch',
+            seatHeight: '820 mm',
+            weight: '190 kg',
+        },
+    },
+    {
         id: 'Royal-Enfield-Himalayan-450',
         name: 'Royal Enfield Himalayan 450',
         type: 'Adventure',
@@ -487,6 +500,7 @@ function clearPreSelectedMotorcycle() {
     localStorage.removeItem('preSelectedMotorcycle');
 
 }
+
 
 
 
