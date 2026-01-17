@@ -46,10 +46,10 @@ const MOTORCYCLES = [
         pricePerDay: 800,
         imageUrl: '/images/logo/motocycles/ktm.webp',
         specs: {
-            engine: '449 cc',
-            power: '43.5 ch',
-            seatHeight: '820 mm',
-            weight: '190 kg',
+            engine: ' 399 cc',
+            power: '45 ch',
+            seatHeight: '870 mm',
+            weight: '176 kg',
         },
     },
     {
@@ -500,6 +500,7 @@ function clearPreSelectedMotorcycle() {
     localStorage.removeItem('preSelectedMotorcycle');
 
 }
+
 
 
 
