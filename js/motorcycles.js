@@ -40,7 +40,7 @@ function renderAllMotorcycles() {
                         <div class="spec-value">${motorcycle.specs.seatHeight}</div>
                     </div>
                 </div>
-                <div class="motorcycle-price">${motorcycle.pricePerDay} DH/day</div>
+                <div class="motorcycle-price">${motorcycle.pricePerDay} €/day</div>
                 <div class="motorcycle-actions">
                     <button class="btn btn-details" onclick="showMotorcycleDetails('${motorcycle.id}')">View Details</button>
                     <a href="booking.html" class="btn btn-book" onclick="setMotorcyclePreference('${motorcycle.id}')">Book Now</a>
@@ -105,7 +105,7 @@ function showMotorcycleDetails(motorcycleId) {
                                     <span class="spec-value">${motorcycle.specs.seatHeight}</span>
                                 </div>
                             </div>
-                            <div class="modal-price">${motorcycle.pricePerDay} DH per day</div>
+                            <div class="modal-price">${motorcycle.pricePerDay} € per day</div>
                             <p class="modal-description">Perfect for ${getMotorcycleDescription(motorcycle.type)} adventures in Morocco.</p>
                             <a href="booking.html" class="btn" onclick="setMotorcyclePreference('${motorcycle.id}')">Book This Motorcycle</a>
                         </div>
@@ -227,4 +227,5 @@ function getMotorcycleDescription(type) {
 }
 
 // Initialize motorcycles page when DOM is loaded
+
 document.addEventListener('DOMContentLoaded', initMotorcyclesPage);
