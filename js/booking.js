@@ -709,7 +709,7 @@ function calculateRentalDays() {
   const pickup = new Date(bookingState.pickupDate);
   const returnDate = new Date(bookingState.returnDate);
   const timeDiff = returnDate.getTime() - pickup.getTime();
-  const days = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  const days = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
 
   return days > 0 ? days : 0;
 }
@@ -1036,6 +1036,7 @@ function showPromoMessage(message, type) {
 
 // Initialize booking page when DOM is loaded
 document.addEventListener("DOMContentLoaded", initBookingPage);
+
 
 
 
