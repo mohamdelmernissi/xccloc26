@@ -322,7 +322,7 @@ function renderMotorcycleOptions() {
                     <div class="spec-value">${motorcycle.specs.seatHeight}</div>
                 </div>
             </div>
-            <div class="option-price">${motorcycle.pricePerDay} DH/day</div>
+            <div class="option-price">${motorcycle.pricePerDay} €/day</div>
         `;
 
     option.addEventListener("click", () => {
@@ -670,7 +670,7 @@ function updateSidebarSummary() {
     const days = calculateRentalDays();
     const basePrice = days * bookingState.motorcycle.pricePerDay;
     const valueElement = basePriceElement.querySelector(".value");
-    valueElement.textContent = `${basePrice} DH`;
+    valueElement.textContent = `${basePrice} €`;
   }
 
   // Options
@@ -678,7 +678,7 @@ function updateSidebarSummary() {
   if (optionsElement) {
     const optionsTotal = calculateOptionsTotal();
     const valueElement = optionsElement.querySelector(".value");
-    valueElement.textContent = `${optionsTotal} DH`;
+    valueElement.textContent = `${optionsTotal} €`;
   }
   
   // Discount
@@ -688,7 +688,7 @@ function updateSidebarSummary() {
     if (discountAmount > 0) {
       discountElement.style.display = 'flex';
       const valueElement = discountElement.querySelector(".value");
-      valueElement.textContent = `-${discountAmount} DH`;
+      valueElement.textContent = `-${discountAmount} €`;
     } else {
       discountElement.style.display = 'none';
     }
@@ -698,7 +698,7 @@ function updateSidebarSummary() {
   const totalElement = document.getElementById("sidebar-total");
   if (totalElement) {
     const total = calculateTotalCost();
-    totalElement.textContent = `${total} DH`;
+    totalElement.textContent = `${total} €`;
     bookingState.totalCost = total;
   }
 }
@@ -807,7 +807,7 @@ function updateBookingSummary() {
       Object.keys(bookingState.options).forEach((option) => {
         const price = bookingState.options[option];
         const optionName = getOptionDisplayName(option);
-        optionsHtml += `${optionName}: ${price} DH<br>`;
+        optionsHtml += `${optionName}: ${price} €<br>`;
       });
     }
 
@@ -832,7 +832,7 @@ function updateBookingSummary() {
       const discountAmount = calculateDiscountAmount();
       promoSummary.innerHTML = `
         <strong>Promo Code: ${bookingState.promoCode}</strong><br>
-        Discount: ${bookingState.discount}% (-${discountAmount} DH)
+        Discount: ${bookingState.discount}% (-${discountAmount} €)
       `;
       promoSummary.style.display = 'block';
     } else {
@@ -843,7 +843,7 @@ function updateBookingSummary() {
   // Total summary
   const totalSummary = document.getElementById("summary-total");
   if (totalSummary) {
-    totalSummary.textContent = `${bookingState.totalCost} DH`;
+    totalSummary.textContent = `${bookingState.totalCost} €`;
   }
 }
 
@@ -1039,6 +1039,7 @@ function showPromoMessage(message, type) {
 
 // Initialize booking page when DOM is loaded
 document.addEventListener("DOMContentLoaded", initBookingPage);
+
 
 
 
