@@ -38,11 +38,11 @@ function generateBookingNumber() {
 }
 
 function formatCurrency(amount) {
-    // Normalizes input and formats using French locale, suffix with DH
+    // Normalizes input and formats using French locale, suffix with €
     const num = Number(String(amount).replace(/[^\d.-]+/g, '')) || 0;
     // Use up to 2 decimal places but drop decimals for whole numbers
     const formatted = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(num);
-    return formatted + ' DH';
+    return formatted + ' €';
 }
 
 function formatDate(dateString) {
@@ -76,7 +76,7 @@ function buildEmailHTMLOption(data) {
       (opt) => `
         <div class="detail-item">
             <span class="detail-label">${opt.name} </span>
-            <span class="detail-value">${opt.price} DH</span>
+            <span class="detail-value">${opt.price} €</span>
         </div>
     `
     )
@@ -112,7 +112,7 @@ function buildEmailHTMLOption(data) {
 
                     <div class="detail-item">
                         <span class="detail-label">Location:</span>
-                        <span class="detail-value">${data.motorcycle.pricePerDay} DH</span>
+                        <span class="detail-value">${data.motorcycle.pricePerDay} €</span>
                     </div>
 
                     ${priceHTML} 
@@ -777,7 +777,7 @@ function updateBookingSummary() {
     motorcycleSummary.innerHTML = `
             <strong>${bookingState.motorcycle.name}</strong><br>
             ${bookingState.motorcycle.type} • ${bookingState.motorcycle.specs.engine}<br>
-            ${bookingState.motorcycle.pricePerDay} DH per day
+            ${bookingState.motorcycle.pricePerDay} € per day
         `;
   }
 
@@ -1039,6 +1039,7 @@ function showPromoMessage(message, type) {
 
 // Initialize booking page when DOM is loaded
 document.addEventListener("DOMContentLoaded", initBookingPage);
+
 
 
 
