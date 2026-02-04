@@ -159,7 +159,7 @@ function renderFeaturedMotorcycles() {
                         <div class="spec-value">${motorcycle.specs.seatHeight}</div>
                     </div>
                 </div>
-                <div class="motorcycle-price">${motorcycle.pricePerDay} DH/day</div>
+                <div class="motorcycle-price">${motorcycle.pricePerDay} €/day</div>
                 <a href="motorcycles.html" class="btn">View Details</a>
             </div>
         `;
@@ -323,6 +323,7 @@ function initHomePage() {
     renderTestimonials();
     initAdventuresGallery(); // Nouvelle ligne
 }
+
 
 
 
