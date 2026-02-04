@@ -4,7 +4,7 @@ const MOTORCYCLES = [
         id: 'CFMOTO800MT',
         name: 'CF MOTO 800 MT Explorer',
         type: 'Adventure',
-        pricePerDay: 1000,
+        pricePerDay: 100,
         imageUrl: '/images/logo/motocycles/CF MOTO 800 MT Explorer.webp',
         specs: {
             engine: '799 cc',
@@ -17,7 +17,7 @@ const MOTORCYCLES = [
         id: 'voge800Rally',
         name: 'Voge 800 Rally',
         type: 'Adventure',
-        pricePerDay: 1000,
+        pricePerDay: 100,
         imageUrl: '/images/logo/motocycles/Voge 800 Rally.webp',
         specs: {
             engine: '799 cc',
@@ -30,7 +30,7 @@ const MOTORCYCLES = [
         id: 'CFMOTO450MT',
         name: 'CF MOTO 450 MT',
         type: 'Adventure',
-        pricePerDay: 700,
+        pricePerDay: 70,
         imageUrl: '/images/logo/motocycles/CF MOTO 450 MT.webp',
         specs: {
             engine: '449 cc',
@@ -43,7 +43,7 @@ const MOTORCYCLES = [
         id: 'KTM390AdventureR',
         name: 'KTM 390 Adventure R',
         type: 'Adventure',
-        pricePerDay: 800,
+        pricePerDay: 80,
         imageUrl: '/images/logo/motocycles/ktm.webp',
         specs: {
             engine: ' 399 cc',
@@ -56,7 +56,7 @@ const MOTORCYCLES = [
         id: 'Royal-Enfield-Himalayan-450',
         name: 'Royal Enfield Himalayan 450',
         type: 'Adventure',
-        pricePerDay: 700,
+        pricePerDay: 70,
         imageUrl: '/images/logo/motocycles/himalayan.webp',
         specs: {
             engine: '452 cc',
@@ -69,7 +69,7 @@ const MOTORCYCLES = [
         id: 'Kove-450-Rally',
         name: 'Kove 450 Rally',
         type: 'Adventure',
-        pricePerDay: 1200,
+        pricePerDay: 120,
         imageUrl: '/images/logo/motocycles/kove.webp',
         specs: {
             engine: '449 cc',
@@ -82,7 +82,7 @@ const MOTORCYCLES = [
         id: 'Kove-800-Rally',
         name: 'Kove 800 Rally',
         type: 'Adventure',
-        pricePerDay: 1200,
+        pricePerDay: 120,
         imageUrl: '/images/logo/motocycles/kove800.webp',
         specs: {
             engine: '799 cc',
@@ -95,7 +95,7 @@ const MOTORCYCLES = [
         id: 'bmw-r1250gs',
         name: 'BMW R1250GS Adventure',
         type: 'Adventure',
-        pricePerDay: 1700,
+        pricePerDay: 170,
         imageUrl: '/images/logo/motocycles/BMW R1250GS Adventure.webp',
         specs: {
             engine: '1 254 cc',
@@ -108,7 +108,7 @@ const MOTORCYCLES = [
         id: 'honda-africa-twin',
         name: 'Honda Africa Twin (CRF1100L)',
         type: 'Adventure',
-        pricePerDay: 1500,
+        pricePerDay: 150,
         imageUrl: '/images/logo/motocycles/Honda Africa Twin (CRF1100L).webp',
         specs: {
             engine: '1 084 cc',
@@ -121,7 +121,7 @@ const MOTORCYCLES = [
         id: 'yamaha-tenere-700',
         name: 'Yamaha Ténéré 700',
         type: 'Adventure',
-        pricePerDay: 1200,
+        pricePerDay: 120,
         imageUrl: '/images/logo/motocycles/Yamaha Ténéré 700.webp',
         specs: {
             engine: '689 cc',
@@ -134,7 +134,7 @@ const MOTORCYCLES = [
         id: 'suzuki-drz-400',
         name: 'Suzuki DRZ 400',
         type: 'Adventure',
-        pricePerDay: 700,
+        pricePerDay: 70,
         imageUrl: '/images/logo/motocycles/drz.webp',
         specs: {
             engine: '399 cc',
@@ -146,7 +146,7 @@ const MOTORCYCLES = [
         id: 'kawasaki-kle-500',
         name: 'Kawasaki KLE 500',
         type: 'Adventure',
-        pricePerDay: 800,
+        pricePerDay: 80,
         imageUrl: '/images/logo/motocycles/kle.webp',
         specs: {
             engine: '498 cc',
@@ -159,7 +159,7 @@ const MOTORCYCLES = [
         id: 'kawasaki-z-1100',
         name: 'Kawasaki Z 1100',
         type: 'Sport',
-        pricePerDay: 1500,
+        pricePerDay: 150,
         imageUrl: '/images/logo/motocycles/Kawasaki Z 1100.webp',
         specs: {
             engine: '1 089 cc',
@@ -172,7 +172,7 @@ const MOTORCYCLES = [
         id: 'Hondaxadv750',
         name: 'Honda X-ADV 750',
         type: 'Scooter',
-        pricePerDay: 1000,
+        pricePerDay: 100,
         imageUrl: '/images/logo/motocycles/Honda X-ADV 750.webp',
         specs: {
             engine: '745 cc',
@@ -185,7 +185,7 @@ const MOTORCYCLES = [
         id: 'yamaha-tmax',
         name: 'Yamaha TMAX',
         type: 'Scooter',
-        pricePerDay: 900,
+        pricePerDay: 90,
         imageUrl: '/images/logo/motocycles/Yamaha TMAX.webp',
         specs: {
             engine: '562 cc',
@@ -198,7 +198,7 @@ const MOTORCYCLES = [
         id: 'vespa-primavera-50',
         name: 'Vespa Primavera 50',
         type: 'Scooter',
-        pricePerDay: 200,
+        pricePerDay: 20,
         imageUrl: '/images/logo/motocycles/Vespa Primavera 50.webp',
         specs: {
             engine: '49 cc',
@@ -211,7 +211,7 @@ const MOTORCYCLES = [
         id: 'Can-Am-XRS',
         name: 'Can-Am XRS',
         type: 'Buggy',
-        pricePerDay: 4000,
+        pricePerDay: 400,
         imageUrl: '/images/logo/motocycles/can-am-xrs.webp',
         specs: {
             engine: '976 cc',
@@ -500,6 +500,7 @@ function clearPreSelectedMotorcycle() {
     localStorage.removeItem('preSelectedMotorcycle');
 
 }
+
 
 
 
