@@ -12,7 +12,7 @@ function renderAllTrips() {
         card.className = 'trip-card';
         
         card.innerHTML = `
-            <div class="coming-soon-badge">Coming Soon</div>
+            <div class="coming-soon-badge">${trip.state}</div>
             <img src="${trip.imageUrl}" alt="${trip.title}" class="trip-image">
             <div class="trip-content">
                 <h3 class="trip-title">${trip.title}</h3>

@@ -230,6 +230,7 @@ const TRIPS = [
         distance: 'Approx. 350km loop',
         recommendedBike: 'Voge 800 Rally',
         imageUrl: '/images/trip/atlas-mountains.jpg',
+        state:'Coming Soon'
     },
     {
         id: 'essaouira-coast',
@@ -238,6 +239,7 @@ const TRIPS = [
         distance: 'Approx. 190km one-way',
         recommendedBike: 'Any adventure bike',
         imageUrl: '/images/trip/essaouira-coast.jpg',
+        state:'Coming Soon'
     },
     {
         id: 'ourika-valley',
@@ -246,6 +248,7 @@ const TRIPS = [
         distance: 'Approx. 60km one-way',
         recommendedBike: 'Any bike or scooter',
         imageUrl:'/images/trip/ourika-valley.jpg',
+        state:'1850 Dh'
     },
     {
         id: 'zagora-desert',
@@ -254,6 +257,7 @@ const TRIPS = [
         distance: 'Approx. 350km one-way',
         recommendedBike: 'Yamaha Ténéré 700',
         imageUrl: '/images/trip/zagora-desert.jpg',
+        state:'Coming Soon'
     },
 ];
 
