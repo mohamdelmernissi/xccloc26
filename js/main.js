@@ -248,7 +248,7 @@ const TRIPS = [
         distance: 'Approx. 60km one-way',
         recommendedBike: 'Any bike or scooter',
         imageUrl:'/images/trip/ourika-valley.jpg',
-        state:'1850 Dh'
+        state:'180 €'
     },
     {
         id: 'zagora-desert',
@@ -504,6 +504,7 @@ function clearPreSelectedMotorcycle() {
     localStorage.removeItem('preSelectedMotorcycle');
 
 }
+
 
 
 
