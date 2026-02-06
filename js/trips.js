@@ -28,6 +28,13 @@ function renderAllTrips() {
     });
 }
 
+function bookViaWhatsApp(tripTitle) {
+  const phone = "212650874287"; // no +
+  const message = `Hello, I want to book this trip: ${tripTitle}`;
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank");
+}
+
 function showTripDetails(tripId) {
     const trip = TRIPS.find(t => t.id === tripId);
     if (trip) {
@@ -65,19 +72,9 @@ function showTripDetails(tripId) {
                                 </ul>
                             </div>
                             // <a href="contact.html" class="btn">Book This Trip</a>
-                            <a href="#" class="btn" onclick="bookViaWhatsApp()">
+                            <a href="#" class="btn" onclick="bookViaWhatsApp('${trip.title}')">
                               Book This Trip
                             </a>
-                            
-                            <script>
-                              function bookViaWhatsApp() {
-                                const phone = "212650874287"; // no +
-                                const message = "Hello, I want to book this trip ${trip.title}";
-                                const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-                                window.open(url, "_blank");
-                              }
-                            </script>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -251,3 +248,4 @@ function getTripHighlights(tripId) {
 // Initialize trips page when DOM is loaded
 
 document.addEventListener('DOMContentLoaded', initTripsPage);
+
