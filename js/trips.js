@@ -29,7 +29,7 @@ function renderAllTrips() {
 }
 
 function bookViaWhatsApp(tripTitle) {
-  const phone = "212650874287"; // no +
+  const phone = "212601284670"; // no +
   const message = `Hello, I want to book this trip: ${tripTitle}`;
   const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
   window.open(url, "_blank");
@@ -247,5 +247,6 @@ function getTripHighlights(tripId) {
 // Initialize trips page when DOM is loaded
 
 document.addEventListener('DOMContentLoaded', initTripsPage);
+
 
 
