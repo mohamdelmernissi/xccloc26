@@ -64,7 +64,19 @@ function showTripDetails(tripId) {
                                     ${getTripHighlights(trip.id)}
                                 </ul>
                             </div>
-                            <a href="contact.html" class="btn">Book This Trip</a>
+                            // <a href="contact.html" class="btn">Book This Trip</a>
+                            <a href="#" class="btn" onclick="bookViaWhatsApp()">
+                              Book This Trip
+                            </a>
+                            
+                            <script>
+                              function bookViaWhatsApp() {
+                                const phone = "212650874287"; // no +
+                                const message = "Hello, I want to book this trip ${trip.title}";
+                                const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+                                window.open(url, "_blank");
+                              }
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -237,4 +249,5 @@ function getTripHighlights(tripId) {
 }
 
 // Initialize trips page when DOM is loaded
+
 document.addEventListener('DOMContentLoaded', initTripsPage);
