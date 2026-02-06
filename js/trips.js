@@ -71,7 +71,6 @@ function showTripDetails(tripId) {
                                     ${getTripHighlights(trip.id)}
                                 </ul>
                             </div>
-                            // <a href="contact.html" class="btn">Book This Trip</a>
                             <a href="#" class="btn" onclick="bookViaWhatsApp('${trip.title}')">
                               Book This Trip
                             </a>
@@ -248,4 +247,5 @@ function getTripHighlights(tripId) {
 // Initialize trips page when DOM is loaded
 
 document.addEventListener('DOMContentLoaded', initTripsPage);
+
 
