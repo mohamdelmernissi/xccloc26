@@ -719,11 +719,23 @@ function calculateRentalDays() {
     
     const pickup = new Date(bookingState.pickupDate);
     const returnDate = new Date(bookingState.returnDate);
+    
+    // Calculate difference in milliseconds
     const timeDiff = returnDate.getTime() - pickup.getTime();
     
-    // If less than 24 hours, charge for 1 day; otherwise charge for 2 days
-    const hours = timeDiff / (1000 * 3600);
-    const days = hours < 24 ? 1 : 2;
+    // Convert to hours
+    const hoursDiff = timeDiff / (1000 * 60 * 60);
+    
+    // If less than 24 hours, count as 1 day, otherwise count as 2 days
+    // Using Math.ceil to round up partial days properly
+    let days;
+    if (hoursDiff <= 0) {
+        days = 0; // Return date is before pickup date
+    } else if (hoursDiff < 24) {
+        days = 1;
+    } else {
+        days = 2; // Or use Math.ceil(hoursDiff / 24) for more than 2 days
+    }
     
     return days;
 }
@@ -1053,6 +1065,7 @@ function showPromoMessage(message, type) {
 
 // Initialize booking page when DOM is loaded
 document.addEventListener("DOMContentLoaded", initBookingPage);
+
 
 
 
