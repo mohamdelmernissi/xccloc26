@@ -703,36 +703,30 @@ function updateSidebarSummary() {
   }
 }
 
-function calculateRentalDays() {
-  if (!bookingState.pickupDate || !bookingState.returnDate) return 0;
-
-  const pickup = new Date(bookingState.pickupDate);
-  const returnDate = new Date(bookingState.returnDate);
-  const timeDiff = returnDate.getTime() - pickup.getTime();
-  const days = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
-
-  return days > 0 ? days : 0;
-}
-
 // function calculateRentalDays() {
 //   if (!bookingState.pickupDate || !bookingState.returnDate) return 0;
 
 //   const pickup = new Date(bookingState.pickupDate);
 //   const returnDate = new Date(bookingState.returnDate);
-
 //   const timeDiff = returnDate.getTime() - pickup.getTime();
-//   const oneDayMs = 1000 * 3600 * 24;
+//   const days = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
 
-//   let days = 0;
-
-//   if (timeDiff > 0 && timeDiff < oneDayMs) {
-//     days = 1;
-//   } else if (timeDiff >= oneDayMs) {
-//     days = 2;
-//   }
-
-//   return days;
+//   return days > 0 ? days : 0;
 // }
+
+function calculateRentalDays() {
+    if (!bookingState.pickupDate || !bookingState.returnDate) return 0;
+    
+    const pickup = new Date(bookingState.pickupDate);
+    const returnDate = new Date(bookingState.returnDate);
+    const timeDiff = returnDate.getTime() - pickup.getTime();
+    
+    // If less than 24 hours, charge for 1 day; otherwise charge for 2 days
+    const hours = timeDiff / (1000 * 3600);
+    const days = hours < 24 ? 1 : 2;
+    
+    return days;
+}
 
 function calculateOptionsTotal() {
   let total = 0;
@@ -1059,6 +1053,7 @@ function showPromoMessage(message, type) {
 
 // Initialize booking page when DOM is loaded
 document.addEventListener("DOMContentLoaded", initBookingPage);
+
 
 
 
