@@ -724,7 +724,7 @@ function calculateRentalDays() {
     const hoursDiff = timeDiff / (1000 * 60 * 60);
     
     // Less than 24 hours = 1 day, otherwise round up to full days
-    if (hoursDiff <= 0) return 0;
+    if (hoursDiff <= 0) return 1;
     // if (hoursDiff <= 24) return 1;
     if (hoursDiff > 24) return 2;
     
@@ -1056,6 +1056,7 @@ function showPromoMessage(message, type) {
 
 // Initialize booking page when DOM is loaded
 document.addEventListener("DOMContentLoaded", initBookingPage);
+
 
 
 
