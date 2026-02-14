@@ -703,48 +703,16 @@ function updateSidebarSummary() {
   }
 }
 
-// function calculateRentalDays() {
-//   if (!bookingState.pickupDate || !bookingState.returnDate) return 0;
-
-//   const pickup = new Date(bookingState.pickupDate);
-//   const returnDate = new Date(bookingState.returnDate);
-//   const timeDiff = returnDate.getTime() - pickup.getTime();
-//   const days = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
-
-//   return days > 0 ? days : 0;
-// }
-
 function calculateRentalDays() {
-    if (!bookingState.pickupDate || !bookingState.returnDate) return 0;
+  if (!bookingState.pickupDate || !bookingState.returnDate) return 0;
 
-    const pickup = new Date(bookingState.pickupDate);
-    const returnDate = new Date(bookingState.returnDate);
+  const pickup = new Date(bookingState.pickupDate);
+  const returnDate = new Date(bookingState.returnDate);
+  const timeDiff = returnDate.getTime() - pickup.getTime();
+  const days = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
 
-    const timeDiff = returnDate.getTime() - pickup.getTime();
-
-    if (timeDiff <= 0) return 1;
-
-    const hoursDiff = timeDiff / (1000 * 60 * 60);
-
-    return Math.ceil(hoursDiff / 24);
+  return days > 0 ? days : 0;
 }
-
-// function calculateRentalDays() {
-//     if (!bookingState.pickupDate || !bookingState.returnDate) return 0;
-    
-//     const pickup = new Date(bookingState.pickupDate);
-//     const returnDate = new Date(bookingState.returnDate);
-    
-//     const timeDiff = returnDate.getTime() - pickup.getTime();
-//     const hoursDiff = timeDiff / (1000 * 60 * 60);
-    
-//     // Less than 24 hours = 1 day, otherwise round up to full days
-//     if (hoursDiff <= 0) return 1;
-//     // if (hoursDiff <= 24) return 1;
-//     if (hoursDiff > 24) return 2;
-    
-//     return Math.ceil(hoursDiff / 24);
-// }
 
 function calculateOptionsTotal() {
   let total = 0;
@@ -1071,6 +1039,7 @@ function showPromoMessage(message, type) {
 
 // Initialize booking page when DOM is loaded
 document.addEventListener("DOMContentLoaded", initBookingPage);
+
 
 
 
