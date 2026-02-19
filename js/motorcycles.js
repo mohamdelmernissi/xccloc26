@@ -40,7 +40,7 @@ function renderAllMotorcycles() {
                         <div class="spec-value">${motorcycle.specs.seatHeight}</div>
                     </div>
                 </div>
-                <div class="motorcycle-price">${motorcycle.pricePerDay} €/day</div>
+                <div class="motorcycle-price">from ${motorcycle.pricePerDay} €/day</div>
                 <div class="motorcycle-actions">
                     <button class="btn btn-details" onclick="showMotorcycleDetails('${motorcycle.id}')">View Details</button>
                     <a href="booking.html" class="btn btn-book" onclick="setMotorcyclePreference('${motorcycle.id}')">Book Now</a>
@@ -229,3 +229,4 @@ function getMotorcycleDescription(type) {
 // Initialize motorcycles page when DOM is loaded
 
 document.addEventListener('DOMContentLoaded', initMotorcyclesPage);
+
