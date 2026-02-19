@@ -95,7 +95,7 @@ const MOTORCYCLES = [
         id: 'bmw-r1250gs',
         name: 'BMW R1250GS Adventure',
         type: 'Adventure',
-        pricePerDay: 170,
+        pricePerDay: 109,
         imageUrl: '/images/logo/motocycles/BMW R1250GS Adventure.webp',
         specs: {
             engine: '1 254 cc',
@@ -453,6 +453,7 @@ function clearPreSelectedMotorcycle() {
     localStorage.removeItem('preSelectedMotorcycle');
 
 }
+
 
 
 
