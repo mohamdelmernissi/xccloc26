@@ -1,29 +1,16 @@
 // Data from constants.ts
 const MOTORCYCLES = [
     {
-        id: 'CFMOTO800MT',
-        name: 'CF MOTO 800 MT Explorer',
+        id: 'KTM390AdventureR',
+        name: 'KTM 390 Adventure R',
         type: 'Adventure',
-        pricePerDay: 99,
-        imageUrl: '/images/logo/motocycles/CF MOTO 800 MT Explorer.webp',
+        pricePerDay: 79,
+        imageUrl: '/images/logo/motocycles/ktm.webp',
         specs: {
-            engine: '799 cc',
-            power: '95 ch',
-            seatHeight: '825 mm',
-            weight: '220 kg',
-        },
-    },
-    {
-        id: 'voge800Rally',
-        name: 'Voge 800 Rally',
-        type: 'Adventure',
-        pricePerDay: 99,
-        imageUrl: '/images/logo/motocycles/Voge 800 Rally.webp',
-        specs: {
-            engine: '799 cc',
-            power: '95 ch',
-            seatHeight: '915 mm',
-            weight: '213 kg',
+            engine: ' 399 cc',
+            power: '45 ch',
+            seatHeight: '870 mm',
+            weight: '176 kg',
         },
     },
     {
@@ -37,19 +24,6 @@ const MOTORCYCLES = [
             power: '43.5 ch',
             seatHeight: '820 mm',
             weight: '190 kg',
-        },
-    },
-    {
-        id: 'KTM390AdventureR',
-        name: 'KTM 390 Adventure R',
-        type: 'Adventure',
-        pricePerDay: 79,
-        imageUrl: '/images/logo/motocycles/ktm.webp',
-        specs: {
-            engine: ' 399 cc',
-            power: '45 ch',
-            seatHeight: '870 mm',
-            weight: '176 kg',
         },
     },
     {
@@ -76,6 +50,32 @@ const MOTORCYCLES = [
             power: '42 ch',
             seatHeight: '960 mm',
             weight: '150 kg',
+        },
+    },
+    {
+        id: 'CFMOTO800MT',
+        name: 'CF MOTO 800 MT Explorer',
+        type: 'Adventure',
+        pricePerDay: 99,
+        imageUrl: '/images/logo/motocycles/CF MOTO 800 MT Explorer.webp',
+        specs: {
+            engine: '799 cc',
+            power: '95 ch',
+            seatHeight: '825 mm',
+            weight: '220 kg',
+        },
+    },
+    {
+        id: 'voge800Rally',
+        name: 'Voge 800 Rally',
+        type: 'Adventure',
+        pricePerDay: 99,
+        imageUrl: '/images/logo/motocycles/Voge 800 Rally.webp',
+        specs: {
+            engine: '799 cc',
+            power: '95 ch',
+            seatHeight: '915 mm',
+            weight: '213 kg',
         },
     },
     {
@@ -453,6 +453,7 @@ function clearPreSelectedMotorcycle() {
     localStorage.removeItem('preSelectedMotorcycle');
 
 }
+
 
 
 
