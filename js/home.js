@@ -1,9 +1,3 @@
-function initHomePage() {
-    initSlider();
-    renderFeaturedMotorcycles();
-    renderTestimonials();
-}
-
 function initSlider() {
     const slides = document.querySelectorAll('.slide');
     const dotsContainer = document.querySelector('.slider-dots');
@@ -190,8 +184,8 @@ function renderTestimonials() {
 }
 
 // Initialize home page when DOM is loaded
-
 document.addEventListener('DOMContentLoaded', initHomePage);
+
 function initAdventuresGallery() {
     const adventureCards = document.querySelectorAll('.adventure-card');
     
@@ -316,12 +310,12 @@ function openAdventureModal(imgSrc, title, description) {
     });
 }
 
-// Mettre à jour la fonction initHomePage
+// Initialize home page when DOM is loaded
 function initHomePage() {
     initSlider();
     renderFeaturedMotorcycles();
     renderTestimonials();
-    initAdventuresGallery(); // Nouvelle ligne
+    initAdventuresGallery();
 }
 
 

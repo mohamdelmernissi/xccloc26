@@ -54,11 +54,12 @@ function formatDate(dateString) {
 
 function calculateBasePrice() {
     // Uses bookingState to compute base price (days * pricePerDay)
-    if (!bookingState.motorcycle || !bookingState.pickupDate || !bookingState.returnDate) {
+    const vehicle = bookingState.vehicle || bookingState.motorcycle;
+    if (!vehicle || !bookingState.pickupDate || !bookingState.returnDate) {
         return 0;
     }
     const days = calculateRentalDays();
-    const pricePerDay = Number(bookingState.motorcycle.pricePerDay) || 0;
+    const pricePerDay = Number(vehicle.pricePerDay) || 0;
     return days * pricePerDay;
 }
 
@@ -101,6 +102,7 @@ function buildEmailHTMLOption(data) {
             </div>
         `;
 
+  const vehicle = data.vehicle || data.motorcycle;
   // Final HTML
   return `
         <div class="section">
@@ -112,7 +114,7 @@ function buildEmailHTMLOption(data) {
 
                     <div class="detail-item">
                         <span class="detail-label">Location:</span>
-                        <span class="detail-value">${data.motorcycle.pricePerDay} €</span>
+                        <span class="detail-value">${vehicle.pricePerDay} €</span>
                     </div>
 
                     ${priceHTML} 
@@ -128,7 +130,8 @@ function buildEmailHTMLOption(data) {
 }
 
 let bookingState = {
-  motorcycle: null,
+  vehicle: null,
+  vehicleType: 'motorcycle', // 'motorcycle' or 'car'
   pickupDate: "",
   returnDate: "",
   pickupTime: "",
@@ -167,6 +170,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function sendBookingConfirmationEmail(bookingData) {
+  const vehicle = bookingData.vehicle || bookingData.motorcycle;
+  
   const orderEmailParams = {
     first_name: bookingData.personalInfo["first-name"],
     last_name: bookingData.personalInfo["last-name"],
@@ -177,9 +182,9 @@ async function sendBookingConfirmationEmail(bookingData) {
     booking_number: generateBookingNumber(),
     booking_date: new Date().toLocaleDateString("fr-FR"),
     current_timestamp: new Date().toLocaleString("fr-FR"),
-    motorcycle_name: bookingData.motorcycle.name,
-    motorcycle_type: bookingData.motorcycle.type,
-    daily_price: formatCurrency(bookingData.motorcycle.pricePerDay),
+    motorcycle_name: vehicle.name,
+    motorcycle_type: vehicle.type,
+    daily_price: formatCurrency(vehicle.pricePerDay),
     pickup_date: formatDate(bookingData.pickupDate),
     pickup_time: bookingData.pickupTime,
     return_date: formatDate(bookingData.returnDate),
@@ -212,11 +217,11 @@ async function sendBookingConfirmationEmail(bookingData) {
     phone: bookingData.personalInfo.phone,
     booking_number: generateBookingNumber(),
     booking_date: new Date().toLocaleDateString('fr-FR'),
-    motorcycle_name: bookingData.motorcycle.name,
-    motorcycle_type: bookingData.motorcycle.type,
-    motorcycle_engine: bookingData.motorcycle.specs.engine,
-    motorcycle_power: bookingData.motorcycle.specs.power,
-    motorcycle_image: bookingData.motorcycle.imageUrl,
+    motorcycle_name: vehicle.name,
+    motorcycle_type: vehicle.type,
+    motorcycle_engine: vehicle.specs?.engine || vehicle.specs?.drive || 'N/A',
+    motorcycle_power: vehicle.specs?.power || vehicle.specs?.seats || 'N/A',
+    motorcycle_image: vehicle.imageUrl,
     pickup_date: formatDate(bookingData.pickupDate),
     pickup_time: bookingData.pickupTime,
     return_date: formatDate(bookingData.returnDate),
@@ -259,21 +264,181 @@ async function sendBookingConfirmationEmail(bookingData) {
   }
 }
 
-// function initBookingPage() {
-//     renderMotorcycleOptions();
-//     setupDateInputs();
-//     setupStepNavigation();
-//     setupFormValidation();
-//     updateSidebarSummary();
-// }
-
 function initBookingPage() {
   renderMotorcycleOptions();
+  renderCarOptions();
+  setupVehicleTypeTabs();
   setupDateInputs();
   setupStepNavigation();
   setupFormValidation();
   updateSidebarSummary();
-  setupPreSelectedMotorcycle(); // Nouvelle fonction
+  setupPreSelectedMotorcycle();
+  
+  // Check for step and vehicleId parameters in URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const stepParam = urlParams.get('step');
+  const vehicleIdParam = urlParams.get('vehicleId');
+  
+  // If vehicleId is provided, switch to car tab and pre-select the vehicle
+  if (vehicleIdParam) {
+    const motorcycleContainer = document.getElementById('motorcycle-options');
+    const carContainer = document.getElementById('car-options');
+    const tabs = document.querySelectorAll('.vehicle-tab');
+    
+    // Update tab active state directly without triggering click handlers
+    tabs.forEach(t => t.classList.remove('active'));
+    const carTab = document.querySelector('.vehicle-tab[data-type="car"]');
+    if (carTab) {
+      carTab.classList.add('active');
+    }
+    
+    // Show/hide appropriate container directly
+    if (motorcycleContainer && carContainer) {
+      motorcycleContainer.style.display = 'none';
+      carContainer.style.display = 'grid';
+      bookingState.vehicleType = 'car';
+    }
+    
+    // Find and select the car option
+    setTimeout(() => {
+      const carOption = document.querySelector(`.car-option[data-id="${vehicleIdParam}"]`);
+      if (carOption) {
+        carOption.click();
+      }
+    }, 100);
+  }
+  
+  // Check for step parameter in URL and navigate to that step
+  if (stepParam) {
+    const stepNumber = parseInt(stepParam);
+    if (stepNumber >= 2 && stepNumber <= 4) {
+      // For step 2 and above, switch to "Cars & 4x4" tab if coming from assistance page
+      if (!vehicleIdParam) {
+        const motorcycleContainer = document.getElementById('motorcycle-options');
+        const carContainer = document.getElementById('car-options');
+        const tabs = document.querySelectorAll('.vehicle-tab');
+        
+        // Update tab active state directly without triggering click handlers
+        tabs.forEach(t => t.classList.remove('active'));
+        const carTab = document.querySelector('.vehicle-tab[data-type="car"]');
+        if (carTab) {
+          carTab.classList.add('active');
+        }
+        
+        // Show/hide appropriate container directly
+        if (motorcycleContainer && carContainer) {
+          motorcycleContainer.style.display = 'none';
+          carContainer.style.display = 'grid';
+          bookingState.vehicleType = 'car';
+        }
+      }
+      
+      // Navigate to the step
+      goToStep(stepNumber);
+    } else if (stepNumber === 1) {
+      goToStep(stepNumber);
+    }
+  }
+}
+
+// Setup vehicle type tabs (Motorcycle/Car toggle)
+function setupVehicleTypeTabs() {
+  const tabs = document.querySelectorAll('.vehicle-tab');
+  const motorcycleContainer = document.getElementById('motorcycle-options');
+  const carContainer = document.getElementById('car-options');
+  
+  if (!tabs.length || !motorcycleContainer || !carContainer) return;
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      const type = this.dataset.type;
+      
+      // Update tab active state
+      tabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Show/hide appropriate container
+      if (type === 'motorcycle') {
+        motorcycleContainer.style.display = 'grid';
+        carContainer.style.display = 'none';
+        bookingState.vehicleType = 'motorcycle';
+      } else {
+        motorcycleContainer.style.display = 'none';
+        carContainer.style.display = 'grid';
+        bookingState.vehicleType = 'car';
+      }
+      
+      // Clear selection when switching tabs
+      bookingState.vehicle = null;
+      bookingState.motorcycle = null;
+      document.querySelectorAll('.motorcycle-option, .car-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      updateSidebarSummary();
+    });
+  });
+}
+
+// Render car/4x4 options from FOURXFOUR data
+function renderCarOptions() {
+  const container = document.getElementById('car-options');
+  if (!container || typeof FOURXFOUR === 'undefined') return;
+  
+  container.innerHTML = '';
+  FOURXFOUR.forEach((car) => {
+    const option = document.createElement('div');
+    option.className = 'car-option';
+    option.dataset.id = car.id;
+    option.innerHTML = `
+      <img src="${car.imageUrl}" alt="${car.name}" class="option-image">
+      <div class="option-name">${car.name}</div>
+      <span class="option-type">${car.type}</span>
+      <div class="option-specs">
+        <div class="option-spec">
+          <div class="spec-label">Engine</div>
+          <div class="spec-value">${car.specs.engine}</div>
+        </div>
+        <div class="option-spec">
+          <div class="spec-label">Drive</div>
+          <div class="spec-value">${car.specs.drive}</div>
+        </div>
+        <div class="option-spec">
+          <div class="spec-label">Seats</div>
+          <div class="spec-value">${car.specs.seats}</div>
+        </div>
+        <div class="option-spec">
+          <div class="spec-label">Fuel</div>
+          <div class="spec-value">${car.specs.fuel}</div>
+        </div>
+      </div>
+      <div class="option-price">${car.pricePerDay} €/day</div>
+    `;
+    
+    option.addEventListener('click', () => {
+      // Remove selected class from all car options
+      document.querySelectorAll('.car-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      // Also remove from motorcycle options
+      document.querySelectorAll('.motorcycle-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      
+      // Add selected class to clicked option
+      option.classList.add('selected');
+      
+      // Store car as vehicle in booking state for calculations
+      bookingState.vehicle = car;
+      bookingState.motorcycle = car; // Store in motorcycle for backward compatibility
+      bookingState.vehicleType = 'car';
+      
+      updateSidebarSummary();
+      // Automatically go to next step (Rental Details)
+      goToStep(2);
+    });
+    
+    container.appendChild(option);
+  });
 }
 
 function setupPreSelectedMotorcycle() {
@@ -284,22 +449,21 @@ function setupPreSelectedMotorcycle() {
       `.motorcycle-option[data-id="${preSelectedId}"]`
     );
     if (motorcycleOption) {
-      motorcycleOption.click(); // Simuler un clic pour la sélectionner
+      motorcycleOption.click();
     }
-    // Effacer la pré-sélection après utilisation
     clearPreSelectedMotorcycle();
   }
 }
 
 function renderMotorcycleOptions() {
   const container = document.getElementById("motorcycle-options");
-  if (!container) return;
+  if (!container || typeof MOTORCYCLES === 'undefined') return;
 
   container.innerHTML = "";
   MOTORCYCLES.forEach((motorcycle) => {
     const option = document.createElement("div");
     option.className = "motorcycle-option";
-    option.dataset.id = motorcycle.id; // Ajouter l'ID de données
+    option.dataset.id = motorcycle.id;
     option.innerHTML = `
             <img src="${motorcycle.imageUrl}" alt="${motorcycle.name}" class="option-image">
             <div class="option-name">${motorcycle.name}</div>
@@ -330,9 +494,15 @@ function renderMotorcycleOptions() {
       document.querySelectorAll(".motorcycle-option").forEach((opt) => {
         opt.classList.remove("selected");
       });
+      // Also remove from car options
+      document.querySelectorAll('.car-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
       // Add selected class to clicked option
       option.classList.add("selected");
       bookingState.motorcycle = motorcycle;
+      bookingState.vehicle = motorcycle;
+      bookingState.vehicleType = 'motorcycle';
       updateSidebarSummary();
       // Automatically go to next step (Rental Details)
       goToStep(2);
@@ -345,6 +515,8 @@ function renderMotorcycleOptions() {
 function setupDateInputs() {
   const pickupDateInput = document.getElementById("pickup-date");
   const returnDateInput = document.getElementById("return-date");
+
+  if (!pickupDateInput || !returnDateInput) return;
 
   // Set minimum date to today
   const today = new Date().toISOString().split("T")[0];
@@ -374,13 +546,17 @@ function setupDateInputs() {
   const pickupTimeInput = document.getElementById("pickup-time");
   const returnTimeInput = document.getElementById("return-time");
 
-  pickupTimeInput.addEventListener("change", function () {
-    bookingState.pickupTime = this.value;
-  });
+  if (pickupTimeInput) {
+    pickupTimeInput.addEventListener("change", function () {
+      bookingState.pickupTime = this.value;
+    });
+  }
 
-  returnTimeInput.addEventListener("change", function () {
-    bookingState.returnTime = this.value;
-  });
+  if (returnTimeInput) {
+    returnTimeInput.addEventListener("change", function () {
+      bookingState.returnTime = this.value;
+    });
+  }
 
   // Setup option checkboxes
   const optionCheckboxes = document.querySelectorAll(
@@ -447,12 +623,14 @@ function setupStepNavigation() {
 
   // Form submission
   const bookingForm = document.getElementById("booking-form");
-  bookingForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    if (validateStep(4)) {
-      submitBooking();
-    }
-  });
+  if (bookingForm) {
+    bookingForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (validateStep(4)) {
+        submitBooking();
+      }
+    });
+  }
 }
 
 function goToStep(stepNumber) {
@@ -503,8 +681,8 @@ function validateStep(stepNumber) {
 
   switch (stepNumber) {
     case 1:
-      if (!bookingState.motorcycle) {
-        showNotification("Please select a motorcycle", "error");
+      if (!bookingState.motorcycle && !bookingState.vehicle) {
+        showNotification("Please select a vehicle", "error");
         isValid = false;
       }
       break;
@@ -642,13 +820,13 @@ function isValidEmail(email) {
 }
 
 function updateSidebarSummary() {
-  // Motorcycle
-  const motorcycleElement = document.getElementById("sidebar-motorcycle");
-  if (motorcycleElement) {
-    const valueElement = motorcycleElement.querySelector(".value");
-    valueElement.textContent = bookingState.motorcycle
-      ? bookingState.motorcycle.name
-      : "Not selected";
+  const vehicle = bookingState.vehicle || bookingState.motorcycle;
+  
+  // Vehicle
+  const vehicleElement = document.getElementById("sidebar-motorcycle");
+  if (vehicleElement) {
+    const valueElement = vehicleElement.querySelector(".value");
+    valueElement.textContent = vehicle ? vehicle.name : "Not selected";
   }
 
   // Duration
@@ -663,12 +841,12 @@ function updateSidebarSummary() {
   const basePriceElement = document.getElementById("sidebar-base-price");
   if (
     basePriceElement &&
-    bookingState.motorcycle &&
+    vehicle &&
     bookingState.pickupDate &&
     bookingState.returnDate
   ) {
     const days = calculateRentalDays();
-    const basePrice = days * bookingState.motorcycle.pricePerDay;
+    const basePrice = days * vehicle.pricePerDay;
     const valueElement = basePriceElement.querySelector(".value");
     valueElement.textContent = `${basePrice} €`;
   }
@@ -706,12 +884,18 @@ function updateSidebarSummary() {
 function calculateRentalDays() {
   if (!bookingState.pickupDate || !bookingState.returnDate) return 0;
 
-  const pickup = new Date(bookingState.pickupDate);
-  const returnDate = new Date(bookingState.returnDate);
-  const timeDiff = returnDate.getTime() - pickup.getTime();
-  const days = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
+  // Parse dates as local dates to avoid timezone issues
+  const pickupParts = bookingState.pickupDate.split('-');
+  const returnParts = bookingState.returnDate.split('-');
+  
+  const pickup = new Date(pickupParts[0], pickupParts[1] - 1, pickupParts[2]);
+  const returnD = new Date(returnParts[0], returnParts[1] - 1, returnParts[2]);
+  
+  const timeDiff = returnD.getTime() - pickup.getTime();
+  const days = Math.ceil(timeDiff / (1000 * 3600 * 24) + 1);
 
-  return days > 0 ? days : 0;
+  // If same day rental, count as 1 day; otherwise count the difference
+  return days >= 1 ? days : 1;
 }
 
 function calculateOptionsTotal() {
@@ -731,8 +915,9 @@ function calculateOptionsTotal() {
 }
 
 function calculateTotalCost() {
+  const vehicle = bookingState.vehicle || bookingState.motorcycle;
   if (
-    !bookingState.motorcycle ||
+    !vehicle ||
     !bookingState.pickupDate ||
     !bookingState.returnDate
   ) {
@@ -740,7 +925,7 @@ function calculateTotalCost() {
   }
 
   const days = calculateRentalDays();
-  const basePrice = days * bookingState.motorcycle.pricePerDay;
+  const basePrice = days * vehicle.pricePerDay;
   const optionsTotal = calculateOptionsTotal();
   const subtotal = basePrice + optionsTotal;
   
@@ -762,8 +947,9 @@ function calculateDiscountAmount() {
     return 0;
   }
   
+  const vehicle = bookingState.vehicle || bookingState.motorcycle;
   const days = calculateRentalDays();
-  const basePrice = days * (bookingState.motorcycle?.pricePerDay || 0);
+  const basePrice = days * (vehicle?.pricePerDay || 0);
   const optionsTotal = calculateOptionsTotal();
   const subtotal = basePrice + optionsTotal;
   
@@ -771,13 +957,17 @@ function calculateDiscountAmount() {
 }
 
 function updateBookingSummary() {
-  // Motorcycle summary
-  const motorcycleSummary = document.getElementById("summary-motorcycle");
-  if (motorcycleSummary && bookingState.motorcycle) {
-    motorcycleSummary.innerHTML = `
-            <strong>${bookingState.motorcycle.name}</strong><br>
-            ${bookingState.motorcycle.type} • ${bookingState.motorcycle.specs.engine}<br>
-            ${bookingState.motorcycle.pricePerDay} € per day
+  const vehicle = bookingState.vehicle || bookingState.motorcycle;
+  
+  // Vehicle summary
+  const vehicleSummary = document.getElementById("summary-motorcycle");
+  if (vehicleSummary && vehicle) {
+    const specs = vehicle.specs;
+    const specValue = specs?.engine || specs?.drive || 'N/A';
+    vehicleSummary.innerHTML = `
+            <strong>${vehicle.name}</strong><br>
+            ${vehicle.type} - ${specValue}<br>
+            ${vehicle.pricePerDay} € per day
         `;
   }
 
@@ -860,6 +1050,8 @@ function getOptionDisplayName(optionKey) {
 
 function submitBooking() {
   const submitBtn = document.querySelector(".btn-confirm");
+  if (!submitBtn) return;
+  
   const originalText = submitBtn.textContent;
 
   // Show loading state
@@ -876,7 +1068,7 @@ function submitBooking() {
         "Failed to send confirmation email. Please try again later.",
         "error"
       );
-    }else {
+    } else {
       showNotification(
         "Booking confirmed! We have sent a confirmation email with all the details.",
         "success"
@@ -884,15 +1076,7 @@ function submitBooking() {
     }
     // Reset form and redirect after delay
     setTimeout(() => {
-      window.location.href = "index.html";const emailHTML = buildEmailHTML(data1);
-      // console.log(emailHTML);
-
-      // append the generated HTML to the body for testing
-      const sectionDiv = document.getElementById("section-id");
-
-      const emailContainer = document.createElement("div");
-      emailContainer.innerHTML = emailHTML;
-      sectionDiv.appendChild(emailContainer);
+      window.location.href = "index.html";
     }, 3000);
   }, 2000);
 }
@@ -994,7 +1178,7 @@ function removePromoCode() {
   
   bookingState.promoCode = null;
   bookingState.discount = 0;
-  bookingState.originalPrice = 0; // Reset original price
+  bookingState.originalPrice = 0;
   
   if (promoInput) {
     promoInput.value = '';
@@ -1039,20 +1223,3 @@ function showPromoMessage(message, type) {
 
 // Initialize booking page when DOM is loaded
 document.addEventListener("DOMContentLoaded", initBookingPage);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

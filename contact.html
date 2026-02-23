@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - XCC-LOC26</title>
+    <link rel="icon" type="image/x-icon" href="images/logo/fv.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
@@ -25,6 +26,7 @@
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="motorcycles.html">Motorcycles</a></li>
+                    <li><a href="assistance.html">Assistance</a></li>
                     <li><a href="trips.html">Trips</a></li>
                     <li><a href="contact.html" class="active">Contact</a></li>
                     <li><a href="booking.html">Booking</a></li>
@@ -120,6 +122,7 @@
                                     <select id="subject" name="subject" class="form-select" required>
                                         <option value="">Select a subject</option>
                                         <option value="booking">Motorcycle Booking</option>
+                                        <option value="4x4-booking">4x4 Vehicle Booking</option>
                                         <option value="trip-planning">Trip Planning</option>
                                         <option value="general">General Inquiry</option>
                                         <option value="support">Technical Support</option>
@@ -128,21 +131,22 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="motorcycle" class="form-label">Motorcycle Interest (Optional)</label>
+                                <label for="motorcycle" class="form-label">Vehicle Interest (Optional)</label>
                                 <select id="motorcycle" name="motorcycle" class="form-select">
                                     <option value="">Not specified</option>
                                     <option value="bmw-r1250gs">BMW R1250GS Adventure</option>
                                     <option value="honda-africa-twin">Honda Africa Twin</option>
                                     <option value="yamaha-tenere-700">Yamaha Ténéré 700</option>
                                     <option value="vespa-primavera">Vespa Primavera 125</option>
-                                    <option value="harley-davidson-street-bob">Harley-Davidson Street Bob</option>
-                                    <option value="ducati-panigale-v4">Ducati Panigale V4</option>
+                                    <option value="dacia-duster">Dacia Duster</option>
+                                    <option value="suzuki-jimny">Suzuki Jimny</option>
+                                    <option value="toyota-hilux">Toyota Hilux</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="message" class="form-label">Message *</label>
                                 <textarea id="message" name="message" class="form-input" rows="6" required
-                                    placeholder="Tell us about your motorcycle adventure plans..."></textarea>
+                                    placeholder="Tell us about your adventure plans..."></textarea>
                             </div>
                             <button type="submit" class="btn btn-submit">Send Message</button>
                         </form>
@@ -152,34 +156,6 @@
         </section>
 
         <!-- Map Section -->
-        <!-- <section class="map-section">
-            <div class="container">
-                <h2 class="section-title">Find Us</h2>
-                <div class="map-container">
-                    <div class="map-placeholder">
-                        <div class="map-content">
-                            <h3>📍 Our Location</h3>
-                            <p>123 Avenue Mohammed VI, Marrakech</p>
-                            <p>Easy to find in the city center, near the main square</p>
-                            <div class="map-features">
-                                <div class="map-feature">
-                                    <strong>Free Parking</strong>
-                                    <span>Available for customers</span>
-                                </div>
-                                <div class="map-feature">
-                                    <strong>Test Rides</strong>
-                                    <span>Schedule a test ride</span>
-                                </div>
-                                <div class="map-feature">
-                                    <strong>Gear Rental</strong>
-                                    <span>Helmets and equipment</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section> -->
         <section class="map-section">
             <div class="container">
                 <h2 class="section-title">Find Us</h2>
@@ -188,7 +164,6 @@
                         <h3>Our Location</h3>
                         <div class="address">
                             <p><strong>Sokoma 1, Nr 1959, Marrakech</strong></p>
-                            <!-- <p>Easy to find in the city center, near the main square</p> -->
                         </div>
 
                         <div class="location-features">
@@ -216,20 +191,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- <div class="business-hours">
-                            <h4>Business Hours</h4>
-                            <div class="hours-list">
-                                <div class="hour-item">
-                                    <span>Monday - Sunday:</span>
-                                    <span>8:00 AM - 8:00 PM</span>
-                                </div>
-                                <div class="hour-item">
-                                    <span>Emergency Support:</span>
-                                    <span>24/7</span>
-                                </div>
-                            </div>
-                        </div> -->
                     </div>
 
                     <div class="map-wrapper">
@@ -253,13 +214,14 @@
                 <div class="faq-container">
                     <div class="faq-item">
                         <button class="faq-question">
-                            What documents do I need to rent a motorcycle?
+                            What documents do I need to rent a vehicle?
                             <span class="faq-toggle">+</span>
                         </button>
                         <div class="faq-answer">
-                            <p>You'll need a valid motorcycle license from your country, a passport, and an
-                                international driving permit if your license is not in French or Arabic. We also require
-                                a security deposit which is fully refundable upon safe return of the motorcycle.</p>
+                            <p>For motorcycles, you'll need a valid motorcycle license from your country, a passport, and an
+                                international driving permit if your license is not in French or Arabic. For 4x4 vehicles,
+                                a valid driver's license is required. We also require a security deposit which is fully refundable
+                                upon safe return of the vehicle.</p>
                         </div>
                     </div>
                     <div class="faq-item">
@@ -269,17 +231,17 @@
                         </button>
                         <div class="faq-answer">
                             <p>Yes, comprehensive insurance is included with all our rentals. This covers third-party
-                                liability, theft, and damage to the motorcycle. Additional personal accident insurance
+                                liability, theft, and damage to the vehicle. Additional personal accident insurance
                                 is available as an option.</p>
                         </div>
                     </div>
                     <div class="faq-item">
                         <button class="faq-question">
-                            Can I take the motorcycle to other cities?
+                            Can I take the vehicle to other cities?
                             <span class="faq-toggle">+</span>
                         </button>
                         <div class="faq-answer">
-                            <p>Absolutely! Our motorcycles are perfect for exploring all of Morocco. We provide route
+                            <p>Absolutely! Our vehicles are perfect for exploring all of Morocco. We provide route
                                 suggestions and can help plan multi-day trips. There are no additional fees for
                                 traveling to other cities.</p>
                         </div>
@@ -292,7 +254,7 @@
                         <div class="faq-answer">
                             <p>We provide 24/7 roadside assistance throughout Morocco. In case of mechanical issues,
                                 call our emergency number and we'll coordinate assistance, whether it's minor repairs
-                                on-site or providing a replacement motorcycle if needed.</p>
+                                on-site or providing a replacement vehicle if needed.</p>
                         </div>
                     </div>
                     <div class="faq-item">
@@ -316,14 +278,14 @@
         <div class="container footer-container">
             <div class="footer-about">
                 <div class="footer-logo">XCC-LOC26</div>
-                <p>Your trusted partner for motorcycle rentals in Marrakech. Explore the beauty of Morocco on two
-                    wheels.</p>
+                <p>Your trusted partner for motorcycle and 4x4 rentals in Marrakech. Explore the beauty of Morocco on two wheels or four.</p>
             </div>
             <div class="footer-links">
                 <h3>Quick Links</h3>
                 <ul>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="motorcycles.html">Motorcycles</a></li>
+                    <li><a href="assistance.html">Assistance</a></li>
                     <li><a href="trips.html">Trips</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
@@ -334,7 +296,15 @@
                     <li><a href="motorcycles.html">Adventure Bikes</a></li>
                     <li><a href="motorcycles.html">Scooters</a></li>
                     <li><a href="motorcycles.html">Cruisers</a></li>
-                    <a href="motorcycles.html">Sport Bikes</a></li>
+                    <li><a href="motorcycles.html">Sport Bikes</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>4x4 Vehicles</h3>
+                <ul>
+                    <li><a href="assistance.html">SUVs</a></li>
+                    <li><a href="assistance.html">Jeeps</a></li>
+                    <li><a href="assistance.html">Pickups</a></li>
                 </ul>
             </div>
             <div class="footer-links">
@@ -362,8 +332,3 @@
 
 
 </html>
-
-
-
-
-

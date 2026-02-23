@@ -3,6 +3,91 @@
     padding: 3rem 0;
 }
 
+/* Vehicle Type Tabs */
+.vehicle-type-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+}
+
+.vehicle-tab {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    background: rgba(17, 24, 39, 0.8);
+    border: 2px solid transparent;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--brand-silver);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.vehicle-tab:hover {
+    border-color: rgba(220, 38, 38, 0.5);
+    transform: translateY(-2px);
+}
+
+.vehicle-tab.active {
+    background: rgba(220, 38, 38, 0.2);
+    border-color: var(--brand-red);
+    color: var(--brand-light);
+}
+
+.vehicle-tab .tab-icon {
+    font-size: 1.5rem;
+}
+
+.vehicle-tab .tab-label {
+    font-size: 1rem;
+}
+
+/* Car Options - Same styling as motorcycle options */
+.car-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.car-option {
+    background: rgba(17, 24, 39, 0.8);
+    border: 2px solid transparent;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.car-option:hover {
+    border-color: rgba(220, 38, 38, 0.5);
+    transform: translateY(-2px);
+}
+
+.car-option.selected {
+    border-color: var(--brand-red);
+    background: rgba(220, 38, 38, 0.1);
+}
+
+.car-option.selected::before {
+    content: '✓';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 30px;
+    height: 30px;
+    background: var(--brand-red);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
 .terms-checkbox .checkmark-icon { display: none; }
 .terms-checkbox input[type="checkbox"]:checked + .checkmark .checkmark-icon { display: block; }
 

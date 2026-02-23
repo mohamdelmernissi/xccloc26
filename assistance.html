@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Motorcycles - XCC-LOC26</title>
+    <title>Our 4x4 Fleet - XCC-LOC26</title>
     <link rel="icon" type="image/x-icon" href="images/logo/fv.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/motorcycles.css">
+    <link rel="stylesheet" href="styles/assistance.css">
 </head>
 <body>
     <!-- Header -->
@@ -21,8 +21,8 @@
             <nav>
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="motorcycles.html" class="active">Motorcycles</a></li>
-                    <li><a href="assistance.html">Assistance</a></li>
+                    <li><a href="motorcycles.html">Motorcycles</a></li>
+                    <li><a href="assistance.html" class="active">Assistance</a></li>
                     <li><a href="trips.html">Trips</a></li>
                     <li><a href="contact.html">Contact</a></li>
                     <li><a href="booking.html">Booking</a></li>
@@ -34,24 +34,24 @@
 
     <!-- Page Content -->
     <main class="page-content">
-        <section class="motorcycles-page">
+        <section class="assistance-page">
             <div class="container">
-                <h1 class="section-title">Our Motorcycle Fleet</h1>
-                <p class="page-description">Choose from our premium selection of motorcycles for every type of adventure in Morocco.</p>
+                <h1 class="section-title">Our 4x4 Fleet</h1>
+                <p class="page-description">Choose from our premium selection of 4x4 vehicles for every type of adventure in Morocco.</p>
                 
                 <!-- Filter Buttons -->
                 <div class="filter-buttons">
-                    <button class="filter-btn active" data-filter="all">All Bikes</button>
-                    <button class="filter-btn" data-filter="Adventure">Adventure</button>
-                    <button class="filter-btn" data-filter="Scooter">Scooters</button>
-                    <button class="filter-btn" data-filter="Cruiser">Cruisers</button>
-                    <button class="filter-btn" data-filter="Sport">Sport Bikes</button>
-                    <button class="filter-btn" data-filter="Buggy">Buggy</button>
+                    <button class="filter-btn active" data-filter="all">All Vehicles</button>
+                    <button class="filter-btn" data-filter="SUV">SUV</button>
+                    <button class="filter-btn" data-filter="Jeep">Jeep</button>
+                    <button class="filter-btn" data-filter="Pickup">Pickup</button>
+                    <button class="filter-btn" data-filter="Hatchback">Hatchback</button>
+                    <button class="filter-btn" data-filter="Sedan">Sedan</button>
                 </div>
 
-                <!-- Motorcycles Grid -->
-                <div class="motorcycles-grid" id="motorcycles-container">
-                    <!-- Motorcycles will be dynamically inserted here -->
+                <!-- 4x4 Vehicles Grid -->
+                <div class="vehicles-grid" id="vehicles-container">
+                    <!-- Vehicles will be dynamically inserted here -->
                 </div>
             </div>
         </section>
@@ -60,8 +60,8 @@
         <section class="booking-cta">
             <div class="container">
                 <div class="cta-content">
-                    <h2>Ready to Ride?</h2>
-                    <p>Book your motorcycle today and start your Moroccan adventure</p>
+                    <h2>Ready to Drive?</h2>
+                    <p>Book your 4x4 vehicle today and start your Moroccan adventure</p>
                     <a href="booking.html" class="btn">Book Now</a>
                 </div>
             </div>
@@ -73,7 +73,7 @@
         <div class="container footer-container">
             <div class="footer-about">
                 <div class="footer-logo">XCC-LOC26</div>
-                <p>Your trusted partner for motorcycle rentals in Marrakech. Explore the beauty of Morocco on two wheels.</p>
+                <p>Your trusted partner for motorcycle and 4x4 rentals in Marrakech. Explore the beauty of Morocco on two wheels or four.</p>
             </div>
             <div class="footer-links">
                 <h3>Quick Links</h3>
@@ -95,6 +95,14 @@
                 </ul>
             </div>
             <div class="footer-links">
+                <h3>4x4 Vehicles</h3>
+                <ul>
+                    <li><a href="assistance.html">SUVs</a></li>
+                    <li><a href="assistance.html">Jeeps</a></li>
+                    <li><a href="assistance.html">Pickups</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
                 <h3>Follow Us</h3>
                 <ul>
                     <li><a href="https://www.facebook.com/share/1CRYNu9xPk/?mibextid=wwXIfr">Facebook</a></li>
@@ -112,7 +120,7 @@
 
     <script src="js/data.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/motorcycles.js"></script>
+    <script src="js/assistance.js"></script>
 </body>
 
 </html>

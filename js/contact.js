@@ -173,9 +173,6 @@ function submitContactForm() {
     const submitBtn = form.querySelector('.btn-submit');
     const originalText = submitBtn.textContent;
     
-    console.log(formData.get('firstName'));
-   
-    
     // Show loading state
     submitBtn.textContent = 'Sending...';
     submitBtn.disabled = true;
@@ -187,13 +184,17 @@ function submitContactForm() {
         formData.forEach((value, key) => {
             formObject[key] = value;
         });
+        
+        // Handle name field - can be single name or first + last
+        const nameParts = formObject.name ? formObject.name.trim().split(' ') : ['', ''];
         const formDataObj = {
-            firstName: formObject.name.split(' ')[0],
-            lastName: formObject.name.split(' ')[1] || '',
-            email: formObject.email,
-            phone: formObject.phone,
-            message: formObject.message
+            firstName: nameParts[0] || '',
+            lastName: nameParts.slice(1).join(' ') || '',
+            email: formObject.email || '',
+            phone: formObject.phone || '',
+            message: formObject.message || ''
         };
+        
         ReachOutEmail(formDataObj);
         console.log('Form submitted:', formObject);
         

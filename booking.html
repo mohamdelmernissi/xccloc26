@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Your Ride - XCC-LOC26</title>
+    <link rel="icon" type="image/x-icon" href="images/logo/fv.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
@@ -23,6 +24,7 @@
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="motorcycles.html">Motorcycles</a></li>
+                    <li><a href="assistance.html">Assistance</a></li>
                     <li><a href="trips.html">Trips</a></li>
                     <li><a href="contact.html">Contact</a></li>
                     <li><a href="booking.html" class="active">Booking</a></li>
@@ -74,12 +76,28 @@
 
                     <!-- Booking Form -->
                     <form id="booking-form" class="booking-form">
-                        <!-- Step 1: Motorcycle Selection -->
+                        <!-- Step 1: Vehicle Selection -->
                         <div class="form-step active" data-step="1">
-                            <h2>Choose Your Motorcycle</h2>
+                            <h2>Choose Your Vehicle</h2>
+                            
+                            <!-- Vehicle Type Tabs -->
+                            <div class="vehicle-type-tabs">
+                                <button type="button" class="vehicle-tab active" data-type="motorcycle">
+                                    <!-- <span class="tab-icon">🏍️</span> -->
+                                    <span class="tab-label">Motorcycles</span>
+                                </button>
+                                <button type="button" class="vehicle-tab" data-type="car">
+                                    <!-- <span class="tab-icon">🚙</span> -->
+                                    <span class="tab-label">Cars & 4x4</span>
+                                </button>
+                            </div>
+                            
                             <div class="motorcycle-selection">
                                 <div class="motorcycle-options" id="motorcycle-options">
                                     <!-- Motorcycles will be dynamically inserted here -->
+                                </div>
+                                <div class="car-options" id="car-options" style="display: none;">
+                                    <!-- Cars will be dynamically inserted here -->
                                 </div>
                             </div>
                             <!-- <div class="step-actions">
@@ -145,8 +163,8 @@
                                             <div class="option-description">High-quality helmet</div>
                                         </div>
                                     </label>
-                                    <label class="option-checkbox">
-                                        <input type="checkbox" name="Gloves" value="0">
+<label class="option-checkbox">
+                                        <input type="checkbox" name="gloves" value="0">
                                         <span class="checkmark"></span>
                                         <div class="option-info">
                                             <div class="option-title">Gloves Rental</div>
@@ -154,8 +172,17 @@
                                             <div class="option-description">High-quality gloves</div>
                                         </div>
                                     </label>
+                                    <!-- <label class="option-checkbox">
+                                        <input type="checkbox" name="gps" value="150">
+                                        <span class="checkmark"></span>
+                                        <div class="option-info">
+                                            <div class="option-title">GPS Navigation</div>
+                                            <div class="option-price">15 € per rental</div>
+                                            <div class="option-description">Portable GPS with preloaded Morocco maps</div>
+                                        </div>
+                                    </label> -->
                                     <label class="option-checkbox">
-                                        <input type="checkbox" name="side-cases" value="200">
+                                        <input type="checkbox" name="side-cases" value="20">
                                         <span class="checkmark"></span>
                                         <div class="option-info">
                                             <div class="option-title">Side Cases</div>
@@ -164,7 +191,7 @@
                                         </div>
                                     </label>
                                     <label class="option-checkbox">
-                                        <input type="checkbox" name="insurance" value="250">
+                                        <input type="checkbox" name="insurance" value="25">
                                         <span class="checkmark"></span>
                                         <div class="option-info">
                                             <div class="option-title">Extra Insurance</div>
@@ -389,14 +416,14 @@
         <div class="container footer-container">
             <div class="footer-about">
                 <div class="footer-logo">XCC-LOC26</div>
-                <p>Your trusted partner for motorcycle rentals in Marrakech. Explore the beauty of Morocco on two wheels.</p>
+                <p>Your trusted partner for motorcycle and 4x4 rentals in Marrakech. Explore the beauty of Morocco on two wheels or four.</p>
             </div>
             <div class="footer-links">
                 <h3>Quick Links</h3>
                 <ul>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="motorcycles.html">Motorcycles</a></li>
-                    <li><a href="booking.html">Booking</a></li>
+                    <li><a href="assistance.html">Assistance</a></li>
                     <li><a href="trips.html">Trips</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
@@ -408,6 +435,14 @@
                     <li><a href="motorcycles.html">Scooters</a></li>
                     <li><a href="motorcycles.html">Cruisers</a></li>
                     <li><a href="motorcycles.html">Sport Bikes</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>4x4 Vehicles</h3>
+                <ul>
+                    <li><a href="assistance.html">SUVs</a></li>
+                    <li><a href="assistance.html">Jeeps</a></li>
+                    <li><a href="assistance.html">Pickups</a></li>
                 </ul>
             </div>
             <div class="footer-links">
@@ -426,18 +461,15 @@
         </div>
     </footer>
 
+    <script src="js/data.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/booking.js"></script>
     <script>
-        emailjs.init("-UFsTHVPWq-s9kd9g"); // your public key
+        emailjs.init("qhZMIa_2FyGjlrAgM"); // Use the correct public key from booking.js
     </script>
-    <script src="js/EmailJs.js" ></script>
+    <script src="js/booking.js"></script>
 
 
 
 </body>
 
 </html>
-
-
-
