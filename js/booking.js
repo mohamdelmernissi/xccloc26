@@ -696,8 +696,10 @@ function validateStep(stepNumber) {
       if (!pickupDate || !returnDate || !pickupTime || !returnTime) {
         showNotification("Please fill all rental details", "error");
         isValid = false;
-      } else if (new Date(returnDate) <= new Date(pickupDate)) {
-        showNotification("Return date must be after pickup date", "error");
+      } 
+      
+      else if (new Date(returnDate) < new Date(pickupDate)) {
+        showNotification("Return date cannot be before pickup date", "error");
         isValid = false;
       }
       break;
