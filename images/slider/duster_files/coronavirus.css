@@ -1,0 +1,561 @@
+::-webkit-scrollbar
+{
+    width: 1rem;
+}
+
+::-webkit-scrollbar-track
+{
+    background: #fafafa;
+}
+
+::-webkit-scrollbar-thumb
+{
+    background: #d8d8d8;
+}
+
+html,
+body
+{
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+}
+
+*
+{
+    box-sizing: border-box;
+}
+
+.px-0
+{
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+
+#coronavirus-widget
+{
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.6rem;
+    line-height: 1;
+
+    margin: auto;
+    padding: 10px;
+
+    color: #444;
+    background: #fff;
+}
+
+@media (min-width: 992px)
+{
+    #coronavirus-widget
+    {
+        max-width: 800px;
+        padding: 0;
+    }
+}
+#coronavirus-widget .container
+{
+    overflow: hidden;
+
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+}
+
+#coronavirus-widget .row
+{
+    display: flex;
+
+    margin-right: -1.5rem;
+    margin-left: -1.5rem;
+    flex-wrap: wrap;
+}
+
+#coronavirus-widget .row > [class^=col-]
+{
+    position: relative;
+
+    width: 100%;
+    min-height: 1px;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+}
+
+@media (min-width: 768px)
+{
+    #coronavirus-widget .row > .col-md-6
+    {
+        max-width: 50%;
+        flex: 0 0 50%;
+    }
+}
+#coronavirus-widget .d-flex,
+#coronavirus-widget .custom-tr
+{
+    display: flex !important;
+}
+
+#coronavirus-widget .d-inline-block
+{
+    display: inline-block !important;
+}
+
+#coronavirus-widget .align-self-center
+{
+    align-self: center !important;
+}
+
+#coronavirus-widget .widget-title
+{
+    font-weight: bold;
+
+    margin-bottom: 1.2rem;
+    padding-top: 1.2rem;
+}
+
+@media (min-width: 768px)
+{
+    #coronavirus-widget .widget-title
+    {
+        font-size: 2rem;
+
+        margin-bottom: 2.4rem;
+        padding-top: 1.8rem;
+    }
+}
+#coronavirus-widget .widget-title > a
+{
+    text-decoration: none;
+
+    color: inherit;
+}
+
+#coronavirus-widget .widget-title > a:hover
+{
+    opacity: .8;
+}
+
+#coronavirus-widget .widget-title:before
+{
+    display: block;
+
+    width: 2.5rem;
+    height: .5rem;
+    margin-bottom: 1rem;
+
+    content: ' ';
+
+    background-color: #d9541e;
+}
+
+#coronavirus-widget #summary-table,
+#coronavirus-widget #detail-table,
+#coronavirus-widget #info-table,
+#coronavirus-widget #subscription-box
+{
+    padding-bottom: 1.1rem;
+}
+
+@media (min-width: 768px)
+{
+    #coronavirus-widget #summary-table,
+    #coronavirus-widget #detail-table,
+    #coronavirus-widget #info-table,
+    #coronavirus-widget #subscription-box
+    {
+        padding-bottom: 1.6rem;
+    }
+}
+#coronavirus-widget #summary-table
+{
+    font-size: 1.8rem;
+
+    text-align: center;
+
+    color: #222;
+}
+
+#coronavirus-widget #summary-table > .figure-grid
+{
+    padding: 1.6rem;
+
+    border: .1rem solid #d4d4d4;
+    border-radius: 1rem 1rem 0 0;
+    background-color: #eee;
+}
+
+@media (min-width: 768px)
+{
+    #coronavirus-widget #summary-table > .figure-grid
+    {
+        padding-top: 3.2rem;
+        padding-bottom: 3.2rem;
+    }
+}
+#coronavirus-widget #summary-table > .figure-grid > div:first-child
+{
+    font-size: 4.5rem;
+    font-weight: bold;
+
+    margin-bottom: .5rem;
+    direction: ltr;
+}
+
+@media (min-width: 768px)
+{
+    #coronavirus-widget #summary-table > .figure-grid > div:first-child
+    {
+        font-size: 5.2rem;
+
+        margin-bottom: 1.6rem;
+    }
+}
+#coronavirus-widget #summary-table .d-flex
+{
+    font-size: 1.4rem;
+
+    border: .1rem solid #d4d4d4;
+    border-top: 0;
+    border-radius: 0 0 1rem 1rem;
+}
+
+@media (min-width: 360px)
+{
+    #coronavirus-widget #summary-table .d-flex
+    {
+        font-size: 1.8rem;
+    }
+}
+#coronavirus-widget #summary-table .d-flex > .figure-grid
+{
+    width: 100%;
+    padding: 1.6rem 1.2rem;
+}
+
+@media (min-width: 360px)
+{
+    #coronavirus-widget #summary-table .d-flex > .figure-grid
+    {
+        padding-right: 1.6rem;
+        padding-left: 1.6rem;
+    }
+}
+@media (min-width: 768px)
+{
+    #coronavirus-widget #summary-table .d-flex > .figure-grid
+    {
+        padding-top: 3.2rem;
+        padding-bottom: 3.2rem;
+    }
+}
+#coronavirus-widget #summary-table .d-flex > .figure-grid > div:first-child
+{
+    font-size: 2.4rem;
+    font-weight: bold;
+
+    margin-bottom: .5rem;
+
+    direction: ltr;
+}
+
+@media (min-width: 768px)
+{
+    #coronavirus-widget #summary-table .d-flex > .figure-grid > div:first-child
+    {
+        font-size: 3.2rem;
+
+        margin-bottom: 1.6rem;
+
+        direction: ltr;
+    }
+}
+#coronavirus-widget #summary-table .d-flex > .figure-grid + div
+{
+    border-left: .1rem solid #d4d4d4;
+}
+
+#coronavirus-widget #detail-table
+{
+    font-size: 1.4rem;
+
+    text-align: center;
+
+    color: #666;
+}
+
+@media (min-width: 360px)
+{
+    #coronavirus-widget #detail-table
+    {
+        font-size: 1.6rem;
+    }
+}
+#coronavirus-widget #detail-table .custom-tr > div
+{
+    font-weight: bold;
+
+    width: 100%;
+}
+
+#coronavirus-widget #detail-table .custom-tr > div:first-child
+{
+    font-weight: normal;
+
+    min-width: 13rem;
+
+    text-align: left;
+}
+
+#coronavirus-widget #detail-table > .custom-thead
+{
+    padding-right: 2rem;
+    padding-bottom: .8rem;
+}
+
+#coronavirus-widget #detail-table > .custom-tbody
+{
+    position: relative;
+
+    padding: .4rem 0;
+
+    border-top: .2rem solid #bbb;
+}
+
+#coronavirus-widget #detail-table > .custom-tbody .custom-tr
+{
+    font-size: 1.4rem;
+    line-height: 1.9rem;
+
+    padding: .6rem 1rem;
+
+    border-bottom: .1rem solid rgba(187, 187, 187, .5);
+}
+
+@media (min-width: 360px)
+{
+    #coronavirus-widget #detail-table > .custom-tbody .custom-tr
+    {
+        font-size: 1.6rem;
+    }
+}
+#coronavirus-widget #detail-table > .custom-tbody .custom-tr > div:not(:first-child)
+{
+    color: #222;
+
+    direction: ltr;
+}
+
+#coronavirus-widget #detail-table > .custom-tbody .scrollable-list
+{
+    position: relative;
+    z-index: 1;
+
+    overflow: auto;
+
+    max-height: 16rem;
+}
+
+@media (min-width: 768px)
+{
+    #coronavirus-widget #detail-table > .custom-tbody .scrollable-list
+    {
+        max-height: 25.6rem;
+    }
+}
+#coronavirus-widget #detail-table > .custom-tbody:after
+{
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    height: 5rem;
+
+    content: '';
+    transition: opacity .5s ease-in-out, height 1s ease-in-out;
+    pointer-events: none;
+
+    opacity: .7;
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 90%);
+}
+
+#coronavirus-widget #detail-table > .custom-tbody.hide:after
+{
+    height: 0;
+
+    opacity: 0;
+}
+
+#coronavirus-widget .widget-footer
+{
+    font-size: 1.2rem;
+    line-height: 1.6rem;
+
+    color: #999;
+}
+
+#coronavirus-widget .widget-footer a
+{
+    text-decoration: none;
+
+    color: inherit;
+}
+
+#coronavirus-widget .widget-footer img.favicon
+{
+    height: 14px;
+    margin-right: 3px;
+}
+
+#coronavirus-widget .widget-footer img.favicon,
+#coronavirus-widget .widget-footer img.favicon + strong
+{
+    display: inline-block;
+
+    vertical-align: middle;
+}
+
+#coronavirus-widget .widget-footer #last-updated strong + strong:before
+{
+    font-weight: normal;
+
+    display: inline-block;
+
+    margin-right: .1rem;
+    margin-left: .1rem;
+
+    content: '/';
+}
+
+#coronavirus-widget .widget-footer #last-updated > a:first-child
+{
+    float: right;
+}
+
+#coronavirus-widget .widget-footer #last-updated > a:first-child + *
+{
+    display: block;
+    overflow: hidden;
+
+    padding-right: .3rem;
+}
+
+#coronavirus-widget .widget-footer #remark
+{
+    margin-top: .3rem;
+}
+
+#coronavirus-widget #subscription-box
+{
+    position: relative;
+}
+
+#coronavirus-widget #subscription-box .subscription__message
+{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    overflow: hidden;
+
+    height: 0;
+
+    transition: opacity .7s ease-in-out;
+    text-align: center;
+
+    opacity: 0;
+    background-color: #fff;
+}
+
+#coronavirus-widget #subscription-box .subscription__message > div
+{
+    width: 100%;
+}
+
+#coronavirus-widget #subscription-box .subscription__message.show
+{
+    height: 4.8rem;
+
+    opacity: 1;
+}
+
+#coronavirus-widget #subscription-box .subscription__message a
+{
+    text-decoration: underline;
+
+    color: #222;
+}
+
+#coronavirus-widget #subscription-box .subscription__message strong
+{
+    font-size: 1.4rem;
+}
+
+#coronavirus-widget #subscription-box .input-group
+{
+    overflow: hidden;
+
+    width: 100%;
+    height: 4.8rem;
+
+    border: .1rem solid #e4e4e4;
+    border-radius: .5rem;
+}
+
+#coronavirus-widget #subscription-box .input-group button,
+#coronavirus-widget #subscription-box .input-group input
+{
+    font-family: inherit;
+    font-size: inherit;
+    font-size: 1.2rem;
+    line-height: inherit;
+    line-height: 1;
+
+    overflow: visible;
+
+    height: 100%;
+    margin: 0;
+    padding: 1rem;
+
+    text-align: center;
+
+    border: none;
+    outline: none;
+}
+
+@media (min-width: 360px)
+{
+    #coronavirus-widget #subscription-box .input-group button,
+    #coronavirus-widget #subscription-box .input-group input
+    {
+        font-size: 1.6rem;
+    }
+}
+#coronavirus-widget #subscription-box .input-group input
+{
+    width: 100%;
+}
+
+#coronavirus-widget #subscription-box .input-group button
+{
+    text-transform: uppercase;
+
+    color: #fff;
+    background-color: #4585fc;
+}
+
+@media (min-width: 992px)
+{
+    #coronavirus-widget #subscription-box .input-group button
+    {
+        min-width: 12rem;
+    }
+}
+#coronavirus-widget #subscription-box .input-group input + button
+{
+    margin-left: -1px;
+}
