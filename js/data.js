@@ -6,7 +6,7 @@ const MOTORCYCLES = [
         id: 'KTM390AdventureR',
         name: 'KTM 390 Adventure R',
         type: 'Adventure',
-        pricePerDay: 90,
+        pricePerDay: 95,
         imageUrl: '/images/logo/motocycles/ktm.webp',
         specs: {
             engine: ' 399 cc',
