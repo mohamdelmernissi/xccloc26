@@ -6,7 +6,7 @@ const MOTORCYCLES = [
         id: 'KTM390AdventureR',
         name: 'KTM 390 Adventure R',
         type: 'Adventure',
-        pricePerDay: 79,
+        pricePerDay: 90,
         imageUrl: '/images/logo/motocycles/ktm.webp',
         specs: {
             engine: ' 399 cc',
@@ -19,7 +19,7 @@ const MOTORCYCLES = [
         id: 'CFMOTO450MT',
         name: 'CF MOTO 450 MT',
         type: 'Adventure',
-        pricePerDay: 75,
+        pricePerDay: 85,
         imageUrl: '/images/logo/motocycles/CF MOTO 450 MT.webp',
         specs: {
             engine: '449 cc',
@@ -32,7 +32,7 @@ const MOTORCYCLES = [
         id: 'Royal-Enfield-Himalayan-450',
         name: 'Royal Enfield Himalayan 450',
         type: 'Adventure',
-        pricePerDay: 75,
+        pricePerDay: 85,
         imageUrl: '/images/logo/motocycles/himalayan.webp',
         specs: {
             engine: '452 cc',
@@ -45,7 +45,7 @@ const MOTORCYCLES = [
         id: 'CFMOTO800MT',
         name: 'CF MOTO 800 MT Explorer',
         type: 'Adventure',
-        pricePerDay: 99,
+        pricePerDay: 109,
         imageUrl: '/images/logo/motocycles/CF MOTO 800 MT Explorer.webp',
         specs: {
             engine: '799 cc',
@@ -71,7 +71,7 @@ const MOTORCYCLES = [
         id: 'voge800Rally',
         name: 'Voge 800 Rally',
         type: 'Adventure',
-        pricePerDay: 99,
+        pricePerDay: 109,
         imageUrl: '/images/logo/motocycles/Voge 800 Rally.webp',
         specs: {
             engine: '799 cc',
@@ -97,7 +97,7 @@ const MOTORCYCLES = [
         id: 'Kove-800-Rally',
         name: 'Kove 800 Rally',
         type: 'Adventure',
-        pricePerDay: 129,
+        pricePerDay: 139,
         imageUrl: '/images/logo/motocycles/kove800.webp',
         specs: {
             engine: '799 cc',
