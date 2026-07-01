@@ -88,6 +88,17 @@
     font-weight: bold;
 }
 
+.car-option.blocked {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(100%);
+}
+
+.car-option.blocked:hover {
+    border-color: transparent;
+    transform: none;
+}
+
 .terms-checkbox .checkmark-icon { display: none; }
 .terms-checkbox input[type="checkbox"]:checked + .checkmark .checkmark-icon { display: block; }
 
@@ -271,6 +282,17 @@
     align-items: center;
     justify-content: center;
     font-weight: bold;
+}
+
+.motorcycle-option.blocked {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(100%);
+}
+
+.motorcycle-option.blocked:hover {
+    border-color: transparent;
+    transform: none;
 }
 
 .option-image {
@@ -792,5 +814,50 @@ body:has(#Information-policy-terms[style*="display: block"])::after {
     .promo-code-input-group input {
         width: 100%;
     }
+}
+
+.block-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.block-popup {
+    background: var(--brand-dark);
+    border: 1px solid var(--brand-red);
+    border-radius: 0.5rem;
+    padding: 2rem;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+}
+
+.block-popup h3 {
+    color: var(--brand-light);
+    margin-bottom: 1rem;
+}
+
+.block-popup p {
+    color: var(--brand-silver);
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.block-popup-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    color: var(--brand-silver);
+    font-size: 1.5rem;
+    cursor: pointer;
 }
 

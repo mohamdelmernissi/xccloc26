@@ -1,9 +1,39 @@
-function initAssistancePage() {
+async function initAssistancePage() {
     console.log('Initializing assistance page...');
+    await fetchCarsFromSupabase();
+    await fetchAvailabilityBlocks();
     console.log('FOURXFOUR:', FOURXFOUR);
     console.log('FOURXFOUR length:', FOURXFOUR ? FOURXFOUR.length : 0);
     renderAllVehicles();
     setupFiltering();
+}
+
+async function fetchCarsFromSupabase() {
+    if (!window.supabase) return;
+    try {
+        const { data, error } = await window.supabase
+            .from('cars')
+            .select('*')
+            .order('id', { ascending: true });
+        if (!error && data && data.length > 0) {
+            const fetched = data.map(row => ({
+                id: row.id,
+                name: row.name,
+                type: row.type,
+                pricePerDay: row.price_per_day,
+                imageUrl: row.image_url,
+                specs: {
+                    engine: row.engine,
+                    drive: row.drive,
+                    seats: row.seats,
+                    fuel: row.fuel
+                }
+            }));
+            FOURXFOUR.splice(0, FOURXFOUR.length, ...fetched);
+        }
+    } catch (e) {
+        console.warn('Failed to fetch cars from Supabase, using fallback', e);
+    }
 }
 
 function setVehiclePreference(vehicleId) {
@@ -29,6 +59,12 @@ function renderAllVehicles() {
         const card = document.createElement('div');
         card.className = 'vehicle-card';
         card.dataset.type = vehicle.type;
+        const blocked = isVehicleBlocked(vehicle.id);
+        if (blocked) {
+            card.classList.add('blocked');
+        }
+        
+        const blockInfo = blocked ? getVehicleBlockInfo(vehicle.id) : null;
         
         card.innerHTML = `
             <img src="${vehicle.imageUrl}" alt="${vehicle.name}" class="vehicle-image">
@@ -53,14 +89,28 @@ function renderAllVehicles() {
                         <div class="spec-value">${vehicle.specs.fuel}</div>
                     </div>
                 </div>
-                <div class="vehicle-price">${vehicle.pricePerDay} €/day</div>
+                <div class="vehicle-price">${getEffectivePrice(vehicle.pricePerDay, new Date().toISOString().split('T')[0])} €/day</div>
                 <div class="vehicle-actions">
                     <button class="btn btn-details" onclick="showVehicleDetails('${vehicle.id}')">View Details</button>
-                    <a href="booking.html?step=2&vehicleId=${vehicle.id}" class="btn btn-book">Book Now</a>
+                    ${blocked 
+                        ? `<button class="btn btn-book book-blocked" data-name="${vehicle.name}" data-reason="${blockInfo.reason}" data-start="${blockInfo.start}" data-end="${blockInfo.end}">Book Now</button>`
+                        : `<a href="booking.html?step=2&vehicleId=${vehicle.id}" class="btn btn-book">Book Now</a>`
+                    }
                 </div>
             </div>
         `;
         container.appendChild(card);
+    });
+    
+    document.querySelectorAll('.book-blocked').forEach(btn => {
+        btn.addEventListener('click', () => {
+            showBlockPopup(
+                btn.dataset.name,
+                btn.dataset.reason,
+                btn.dataset.start,
+                btn.dataset.end
+            );
+        });
     });
 }
 
@@ -118,7 +168,7 @@ function showVehicleDetails(vehicleId) {
                                     <span class="spec-value">${vehicle.specs.fuel}</span>
                                 </div>
                             </div>
-                            <div class="modal-price">${vehicle.pricePerDay} € per day</div>
+                            <div class="modal-price">${getEffectivePrice(vehicle.pricePerDay, new Date().toISOString().split('T')[0])} € per day</div>
                             <p class="modal-description">Perfect for ${getVehicleDescription(vehicle.type)} adventures in Morocco.</p>
                             <a href="booking.html?step=2&vehicleId=${vehicle.id}" class="btn btn-book">Book This Vehicle</a>
                         </div>

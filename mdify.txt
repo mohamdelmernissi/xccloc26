@@ -1,0 +1,81 @@
+    site responsive (check the content) its all good I guess.
+    dashboard responsive fixed
+    calendar responsive fixed
+    (invoices complicated later and also the availability) fixed but the invoices needs to be on the laptop
+//
+
+    the burger not working when im in tablette needs to be fixed like you have to click on dashboard not anywhere (fixed) .
+    and the refresh has to keep you on same page ( fixed ).
+// 
+    when view pricing role / promo code
+//
+    trips conflict saving form / ok  (working on it now) NO ISSUE 
+//
+    testomintasl home check (I see no issue with them now)
+//
+
+
+evening::
+the days booked exactly are fixed
+test price promotion if its active 100%
+fixing the exact date of the booking 
+the vehicule already booked for those days when trying to book
+template request to owner
+template denied ()
+template notes of admin and notes of client not appeared (image appeared but the path should be like in vercel)
+test whatsapp
+template request  image moto + info
+confirmation also image of moto
+note inserted in the accet or deny must sent to email
+new booking not saved in database (fix later)
+test whatsapp message (later)
+(prod // resend and supabase info)
+admin authentication
+check admin note added to the db.
+time counting exact if u can
+the conflict when I book same time only in vercel (needs to be fixed)
+trips and testimonials when vercel changed
+the admin panel is being responsive now (read more in note to be added)
+overbooked appears denied in calendar
+ Invoices & Quotes new document not responsive fix it mobile version
+
+
+ // 
+ 
+ promo code needs to be fixed.
+
+ //
+
+
+ test fase :
+
+
+#dashboard
+
+ test the home page responsivness done.
+ dashboard responsivness is done.
+ view all works in dashboard.
+ Quick actions are working fine
+ booking status works well.
+
+#all bookings
+
+its all responsive done
+the form are clear but not responsive the mobile UI/Ux
+actions works fine
+
+
+#Invoices & Quotes
+
+create invoice in database , 
+dup isnt working except in local storage
+
+
+#booking calendar
+its responsive as a web one.
+new booking works well and all good
+
+
+#availabilty works well ??????????????????????????/
+block vehicule list is hardcoded. I need to make it fetch from the database
+make the vehicule under the maintenane photo in home page grey and when click booking show a pop up with the 

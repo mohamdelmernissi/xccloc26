@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Confirmed</title>
+
+<style>
+body{
+    margin:0;
+    padding:0;
+    background:#f5f7fb;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    color:#111827;
+}
+
+.wrapper{
+    padding:40px 20px;
+}
+
+.container{
+    max-width:640px;
+    margin:0 auto;
+    background:#ffffff;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 10px 35px rgba(0,0,0,.08);
+}
+
+.header{
+    background:linear-gradient(135deg,#0f172a 0%,#1f2937 100%);
+    padding:40px;
+    text-align:center;
+}
+
+.logo{
+    color:#ffffff;
+    font-size:28px;
+    font-weight:700;
+}
+
+.badge{
+    display:inline-block;
+    margin-top:15px;
+    padding:8px 16px;
+    border-radius:999px;
+    background:rgba(34,197,94,.15);
+    border:1px solid rgba(34,197,94,.25);
+    color:#22c55e;
+    font-size:13px;
+    font-weight:600;
+}
+
+.content{
+    padding:45px 40px;
+}
+
+h1{
+    margin:0 0 10px;
+    font-size:30px;
+}
+
+p{
+    margin:0 0 16px;
+    color:#6b7280;
+    line-height:1.7;
+    font-size:15px;
+}
+
+.confirm-box{
+    background:#f0fdf4;
+    border:1px solid #bbf7d0;
+    border-left:4px solid #22c55e;
+    border-radius:14px;
+    padding:20px;
+    margin:25px 0;
+}
+
+.confirm-title{
+    font-weight:700;
+    color:#166534;
+    margin-bottom:8px;
+}
+
+.details{
+    background:#f9fafb;
+    border:1px solid #e5e7eb;
+    border-radius:14px;
+    overflow:hidden;
+    margin-top:25px;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    padding:14px 18px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.row:last-child{
+    border-bottom:none;
+}
+
+.label{
+    color:#6b7280;
+    font-size:14px;
+}
+
+.value{
+    font-weight:600;
+    font-size:14px;
+    color:#111827;
+}
+
+.cta{
+    text-align:center;
+    margin-top:30px;
+}
+
+.button{
+    display:inline-block;
+    padding:14px 28px;
+    background:#111827;
+    color:#ffffff !important;
+    text-decoration:none;
+    border-radius:10px;
+    font-weight:600;
+}
+
+.secondary{
+    margin-top:12px;
+    font-size:13px;
+    color:#9ca3af;
+}
+
+.notice-box{
+    background:#fef2f2;
+    border:1px solid #fecaca;
+    border-left:4px solid #ef4444;
+    border-radius:14px;
+    padding:20px;
+    margin:25px 0;
+}
+
+.notice-title{
+    font-weight:700;
+    color:#991b1b;
+    margin-bottom:8px;
+}
+.footer{
+    text-align:center;
+    padding:25px;
+    font-size:13px;
+    color:#9ca3af;
+    border-top:1px solid #f3f4f6;
+}
+
+.vehicle-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #f9fafb;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+}
+
+.vehicle-section img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.vehicle-section .vehicle-info {
+    flex: 1;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="logo">XCC-LOC26</div>
+        <div class="badge">✔ Booking Confirmed</div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+        <h1>Your booking is confirmed</h1>
+
+        <div class="vehicle-section">
+            <img src="{{vehicle_image_url}}" alt="{{vehicle_name}}" style="width:100%; max-width:200px; border-radius:8px; margin-bottom:20px;" />
+            <p style="margin-top:10px; font-size:12px; color:red; word-break:break-all;">
+                Image URL: {{vehicle_image_url}}
+            </p>
+            <div class="vehicle-info">
+                <p style="margin:0; font-weight:600; color:#111827;">{{vehicle_name}}</p>
+                <p style="margin:0; color:#6b7280;">{{vehicle_type}} – {{vehicle_price_per_day}} € / day</p>
+            </div>
+        </div>
+
+        <p>
+            Great news! Your reservation has been successfully reviewed and confirmed.
+            We're preparing everything to ensure a smooth pickup experience.
+        </p>
+        <div class="confirm-box">
+            <p>{{admin_note}}</p>
+        </div>
+        <!-- BOOKING DETAILS -->
+        <div class="details">
+
+            <div class="row">
+                <span class="label">Booking Reference</span>
+                <span class="value">{{booking_reference}}</span>
+            </div>
+
+            <div class="row">
+                <span class="label">Vehicle</span>
+                <span class="value">{{vehicle_name}}</span>
+            </div>
+
+            <div class="row">
+                <span class="label">Pickup Date</span>
+                <span class="value">{{pickup_date}}</span>
+            </div>
+
+            <div class="row">
+                <span class="label">Return Date</span>
+                <span class="value">{{return_date}}</span>
+            </div>
+
+            <div class="row">
+                <span class="label">Pickup Location</span>
+                <span class="value">{{pickup_location}}</span>
+            </div>
+
+            <div class="row">
+                <span class="label">Total Amount</span>
+                <span class="value">{{total_amount}}</span>
+            </div>
+            
+            <!-- <div class="notice-box">
+                <div class="notice-title">Admin Note</div>
+                <p>{{admin_note}}</p>
+            </div> -->
+
+        </div>
+
+
+        <!-- CTA -->
+        <div class="cta">
+            <a href="{{booking_url}}" class="button">View Your Booking</a>
+            <div class="secondary">Need help? Reply to this email anytime.</div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        Thank you for choosing us. We look forward to serving you.<br>
+        © {{year}} XCC-LOC26
+    </div>
+
+</div>
+</div>
+
+</body>
+
+</html>
+```

@@ -1,0 +1,9 @@
+{
+  "name": "xcc-loc26-api",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "resend": "^3.5.0"
+  }
+}

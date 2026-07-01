@@ -457,15 +457,26 @@
         <div class="container">
             <div class="copyright">
                 <p>&copy; 2023 XCC-LOC26. All rights reserved.</p>
+                <a href="admin.html" style="color: #333; font-size: 11px; text-decoration: none; margin-top: 10px; display: inline-block;">Admin</a>
             </div>
         </div>
     </footer>
 
-    <script src="js/data.js"></script>
-    <script src="js/main.js"></script>
-    <script>
-        emailjs.init("qhZMIa_2FyGjlrAgM"); // Use the correct public key from booking.js
+    <script type="module">
+        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+        import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.client.js";
+        
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        window.supabase = supabase;
+        
+        try {
+            emailjs.init("qhZMIa_2FyGjlrAgM");
+        } catch (e) {
+            console.warn('EmailJS init failed or emailjs not loaded yet', e);
+        }
     </script>
+    <script src="js/main.js"></script>
+    <script src="js/data.js"></script>
     <script src="js/booking.js"></script>
 
 

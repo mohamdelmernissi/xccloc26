@@ -1,6 +1,36 @@
-function initMotorcyclesPage() {
+async function initMotorcyclesPage() {
+    await fetchMotorcyclesFromSupabase();
+    await fetchAvailabilityBlocks();
     renderAllMotorcycles();
     setupFiltering();
+}
+
+async function fetchMotorcyclesFromSupabase() {
+    if (!window.supabase) return;
+    try {
+        const { data, error } = await window.supabase
+            .from('motorcycles')
+            .select('*')
+            .order('id', { ascending: true });
+        if (!error && data && data.length > 0) {
+            const fetched = data.map(row => ({
+                id: row.id,
+                name: row.name,
+                type: row.type,
+                pricePerDay: row.price_per_day,
+                imageUrl: row.image_url,
+                specs: {
+                    engine: row.engine,
+                    power: row.power,
+                    seatHeight: row.seat_height,
+                    weight: row.weight
+                }
+            }));
+            MOTORCYCLES.splice(0, MOTORCYCLES.length, ...fetched);
+        }
+    } catch (e) {
+        console.warn('Failed to fetch motorcycles from Supabase, using fallback', e);
+    }
 }
 
 function setMotorcyclePreference(motorcycleId) {
@@ -16,6 +46,12 @@ function renderAllMotorcycles() {
         const card = document.createElement('div');
         card.className = 'motorcycle-card';
         card.dataset.type = motorcycle.type;
+        const blocked = isVehicleBlocked(motorcycle.id);
+        if (blocked) {
+            card.classList.add('blocked');
+        }
+        
+        const blockInfo = blocked ? getVehicleBlockInfo(motorcycle.id) : null;
         
         card.innerHTML = `
             <img src="${motorcycle.imageUrl}" alt="${motorcycle.name}" class="motorcycle-image">
@@ -40,14 +76,28 @@ function renderAllMotorcycles() {
                         <div class="spec-value">${motorcycle.specs.seatHeight}</div>
                     </div>
                 </div>
-                <div class="motorcycle-price">${motorcycle.pricePerDay} €/day</div>
+                <div class="motorcycle-price">${getEffectivePrice(motorcycle.pricePerDay, new Date().toISOString().split('T')[0])} €/day</div>
                 <div class="motorcycle-actions">
                     <button class="btn btn-details" onclick="showMotorcycleDetails('${motorcycle.id}')">View Details</button>
-                    <a href="booking.html" class="btn btn-book" onclick="setMotorcyclePreference('${motorcycle.id}')">Book Now</a>
+                    ${blocked 
+                        ? `<button class="btn btn-book book-blocked" data-name="${motorcycle.name}" data-reason="${blockInfo.reason}" data-start="${blockInfo.start}" data-end="${blockInfo.end}">Book Now</button>`
+                        : `<a href="booking.html" class="btn btn-book" onclick="setMotorcyclePreference('${motorcycle.id}')">Book Now</a>`
+                    }
                 </div>
             </div>
         `;
         container.appendChild(card);
+    });
+    
+    document.querySelectorAll('.book-blocked').forEach(btn => {
+        btn.addEventListener('click', () => {
+            showBlockPopup(
+                btn.dataset.name,
+                btn.dataset.reason,
+                btn.dataset.start,
+                btn.dataset.end
+            );
+        });
     });
 }
 
@@ -105,7 +155,7 @@ function showMotorcycleDetails(motorcycleId) {
                                     <span class="spec-value">${motorcycle.specs.seatHeight}</span>
                                 </div>
                             </div>
-                            <div class="modal-price">${motorcycle.pricePerDay} € per day</div>
+                            <div class="modal-price">${getEffectivePrice(motorcycle.pricePerDay, new Date().toISOString().split('T')[0])} € per day</div>
                             <p class="modal-description">Perfect for ${getMotorcycleDescription(motorcycle.type)} adventures in Morocco.</p>
                             <a href="booking.html" class="btn" onclick="setMotorcyclePreference('${motorcycle.id}')">Book This Motorcycle</a>
                         </div>

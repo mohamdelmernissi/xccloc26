@@ -1,0 +1,2 @@
+export const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBiZmVvanRwZ3hrYnRuY21za2pvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3MzMxNTYsImV4cCI6MjA5ODMwOTE1Nn0.7uHLFDeRYThBnirk618YezSIfDViShl4ZL9G2Ias06E";
+export const SUPABASE_URL="https://pbfeojtpgxkbtncmskjo.supabase.co"

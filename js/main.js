@@ -1,5 +1,162 @@
 console.log('main.js loaded');
 
+let availabilityBlocks = [];
+
+async function fetchAvailabilityBlocks() {
+    if (!window.supabase) return;
+    try {
+        const { data, error } = await window.supabase
+            .from('availability')
+            .select('*')
+            .order('start_date', { ascending: true });
+        if (!error && data && data.length > 0) {
+            availabilityBlocks = data.map(row => ({
+                id: row.id,
+                vehicleId: row.vehicle_id,
+                start: row.start_date,
+                end: row.end_date,
+                reason: row.reason,
+                note: row.note
+            }));
+        }
+    } catch (e) {
+        console.warn('Failed to fetch availability blocks', e);
+    }
+}
+
+function isVehicleBlocked(vehicleId) {
+    const today = new Date().toISOString().split('T')[0];
+    return availabilityBlocks.some(b => {
+        if (b.vehicleId !== vehicleId) return false;
+        return datesOverlap(new Date(b.start), new Date(b.end), new Date(today), new Date(today));
+    });
+}
+
+function getVehicleBlockInfo(vehicleId) {
+    const today = new Date().toISOString().split('T')[0];
+    return availabilityBlocks.find(b => {
+        if (b.vehicleId !== vehicleId) return false;
+        return datesOverlap(new Date(b.start), new Date(b.end), new Date(today), new Date(today));
+    }) || null;
+}
+
+function showBlockPopup(vehicleName, reason, start, end) {
+    const existing = document.getElementById('vehicle-block-popup');
+    if (existing) existing.remove();
+    
+    if (!document.getElementById('block-popup-styles')) {
+        const style = document.createElement('style');
+        style.id = 'block-popup-styles';
+        style.textContent = `
+            .block-popup-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+            }
+            .block-popup {
+                background: var(--brand-dark);
+                border: 1px solid var(--brand-red);
+                border-radius: 0.5rem;
+                padding: 2rem;
+                max-width: 400px;
+                width: 90%;
+                text-align: center;
+                position: relative;
+            }
+            .block-popup h3 {
+                color: var(--brand-light);
+                margin-bottom: 1rem;
+            }
+            .block-popup p {
+                color: var(--brand-silver);
+                margin-bottom: 0.5rem;
+                font-size: 0.95rem;
+            }
+            .block-popup-close {
+                position: absolute;
+                top: 0.5rem;
+                right: 0.75rem;
+                background: none;
+                border: none;
+                color: var(--brand-silver);
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    const overlay = document.createElement('div');
+    overlay.id = 'vehicle-block-popup';
+    overlay.className = 'block-popup-overlay';
+    overlay.innerHTML = `
+        <div class="block-popup">
+            <button class="block-popup-close" onclick="this.closest('.block-popup-overlay').remove()">&times;</button>
+            <h3>Vehicle Unavailable</h3>
+            <p><strong>${vehicleName}</strong> is currently under <strong>${reason}</strong>.</p>
+            <p>Blocked from <strong>${start}</strong> to <strong>${end}</strong>.</p>
+            <p>Please select another vehicle.</p>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) overlay.remove();
+    });
+}
+
+function datesOverlap(start1, end1, start2, end2) {
+    return (start1 <= end2) && (end1 >= start2);
+}
+
+function getPricingRules() {
+    try {
+        if (typeof PRICING_RULES !== 'undefined' && PRICING_RULES.length > 0) {
+            return PRICING_RULES;
+        }
+    } catch (e) {}
+    try {
+        return JSON.parse(localStorage.getItem('admin_pricing_rules') || '[]');
+    } catch (e) {
+        return [];
+    }
+}
+
+function getEffectivePrice(basePrice, dateStr) {
+    const rules = getPricingRules();
+    if (!rules.length) return basePrice;
+    
+    const d = new Date(dateStr);
+    const date = d.toISOString().split('T')[0];
+    const isWeekend = [0, 5, 6].includes(d.getDay());
+    
+    let adjustment = 0;
+    rules.forEach(rule => {
+        let apply = false;
+        if (rule.type === 'seasonal' && rule.start && rule.end && date >= rule.start && date <= rule.end) {
+            apply = true;
+        } else if (rule.type === 'weekend' && isWeekend) {
+            apply = true;
+        }
+        
+        if (apply) {
+            if (rule.impactType === 'percentage') {
+                adjustment += (basePrice * rule.value) / 100;
+            } else {
+                adjustment += rule.value;
+            }
+        }
+    });
+    
+    return basePrice + adjustment;
+}
+
 // Common functions
 function toggleMobileMenu() {
     const navLinks = document.querySelector('.nav-links');

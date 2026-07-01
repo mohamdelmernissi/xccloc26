@@ -34,54 +34,10 @@
         </div>
     </header>
 
-    <!-- Hero Slider -->
+<!-- Hero Slider -->
     <section class="hero-slider">
         <div class="slider-container">
-            <div class="slide active">
-                <img src="images/slider/22.png" alt="Adventure Riding">
-                <div class="slide-content">
-                    <h1>Beyond a rental, it’s an experience</h1>
-                    <!-- <p>Discover the breathtaking landscapes of Marrakech and beyond with our premium motorcycles</p> -->
-                    <a href="motorcycles.html" class="btn">View Our Bikes</a>
-
-                </div>
-            </div>
-            <div class="slide">
-                <img src="images/slider/11.png" alt="City Riding">
-                <div class="slide-content">
-                    <h1>Urban Exploration</h1>
-                    <p>Navigate the vibrant streets of Marrakech with our easy-to-ride scooters</p>
-                    <a href="booking.html" class="btn">Rent a Scooter</a>
-
-                </div>
-            </div>
-            <div class="slide">
-                <img src="images/slider/33.png" alt="Mountain Roads">
-                <div class="slide-content">
-                    <h1>Adventure Awaits</h1>
-                    <p>Ride through the majestic Atlas Mountains and experience Morocco like never before</p>
-                   <a href="trips.html" class="btn">Explore Trips</a>
-
-                </div>
-            </div>
-            <div class="slide">
-                <img src="images/slider/dacia.webp" alt="Adventure Car Rental">
-                <div class="slide-content">
-                    <h1>Conquer Morocco, One Road at a Time</h1>
-                    <p>Built for mountain roads, trails, and unforgettable road trips in Morocco</p>
-                    <a href="booking.html" class="btn">Book This Car</a>
-
-                </div>
-            </div>
-            <div class="slide">
-                <img src="images/slider/n.webp" alt="Dacia Duster">
-                <div class="slide-content">
-                    <h1>Where the Road Ends, Adventure Begins</h1>
-                    <p>Comfortable and efficient for city drives and long-distance travel</p>
-                    <a href="booking.html" class="btn">Book This Car</a>
-
-                </div>
-            </div>
+            <!-- Slides will be dynamically inserted here -->
         </div>
         <div class="slider-controls">
             <button class="slider-prev">‹</button>
@@ -103,11 +59,12 @@
         </div>
     </section>
 
+
     <!-- Testimonials -->
     <section class="testimonials">
         <div class="container">
             <h2 class="section-title">What Our Customers Say</h2>
-            <div class="testimonials-grid" id="testimonials-container">
+            <div id="testimonials-container">
                 <!-- Testimonials will be dynamically inserted here -->
             </div>
             <div class="view-more-container">
@@ -116,6 +73,9 @@
             </div>
         </div>
     </section>
+
+
+    
     <!-- Adventures Captured -->
 <section class="adventures-captured">
     <div class="container">
@@ -406,10 +366,17 @@
         <div class="container">
             <div class="copyright">
                 <p>&copy; 2023 XCC-LOC26. All rights reserved.</p>
+                <a href="admin.html" style="color: #333; font-size: 11px; text-decoration: none; margin-top: 10px; display: inline-block;">Admin</a>
             </div>
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "/config.client.js";
+window.supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
     <script src="js/data.js"></script>
     <script src="js/main.js"></script>
     <script src="js/home.js"></script>

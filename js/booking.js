@@ -1,4 +1,103 @@
+
 // Global booking state
+async function fetchFleetFromSupabase() {
+    if (!window.supabase) return;
+    try {
+        const [motoRes, carRes, optionsRes, pricingRes] = await Promise.all([
+            window.supabase.from('motorcycles').select('*').order('id', { ascending: true }),
+            window.supabase.from('cars').select('*').order('id', { ascending: true }),
+            window.supabase.from('rental_options').select('*').order('id', { ascending: true }),
+            window.supabase.from('pricing_rules').select('*').order('id', { ascending: true })
+        ]);
+
+        if (!motoRes.error && motoRes.data && motoRes.data.length > 0) {
+            const fetched = motoRes.data.map(row => ({
+                id: row.id,
+                name: row.name,
+                type: row.type,
+                pricePerDay: row.price_per_day,
+                imageUrl: row.image_url,
+                specs: {
+                    engine: row.engine,
+                    power: row.power,
+                    seatHeight: row.seat_height,
+                    weight: row.weight
+                }
+            }));
+            MOTORCYCLES.splice(0, MOTORCYCLES.length, ...fetched);
+        }
+
+        if (!carRes.error && carRes.data && carRes.data.length > 0) {
+            const fetched = carRes.data.map(row => ({
+                id: row.id,
+                name: row.name,
+                type: row.type,
+                pricePerDay: row.price_per_day,
+                imageUrl: row.image_url,
+                specs: {
+                    engine: row.engine,
+                    drive: row.drive,
+                    seats: row.seats,
+                    fuel: row.fuel
+                }
+            }));
+            FOURXFOUR.splice(0, FOURXFOUR.length, ...fetched);
+        }
+
+        if (!optionsRes.error && optionsRes.data && optionsRes.data.length > 0) {
+            const fetched = optionsRes.data.map(row => ({
+                id: row.id,
+                name: row.name,
+                price: row.price_per_day,
+                type: row.type,
+                description: row.description
+            }));
+            RENTAL_OPTIONS.splice(0, RENTAL_OPTIONS.length, ...fetched);
+        }
+
+        if (!pricingRes.error && pricingRes.data && pricingRes.data.length > 0) {
+            const fetched = pricingRes.data.map(row => ({
+                id: row.id,
+                name: row.name,
+                type: row.type,
+                impactType: row.impact_type,
+                value: row.value,
+                start: row.start_date || '',
+                end: row.end_date || ''
+            }));
+            if (typeof PRICING_RULES !== 'undefined') {
+                PRICING_RULES.splice(0, PRICING_RULES.length, ...fetched);
+            }
+        }
+    } catch (e) {
+        console.warn('Failed to fetch fleet from Supabase, using fallback', e);
+    }
+}
+
+async function fetchPromoCodesFromSupabase() {
+    if (!window.supabase) return;
+    try {
+        const { data, error } = await window.supabase
+            .from('promo_codes')
+            .select('*');
+
+        if (error) throw error;
+
+        const promos = {};
+        if (data && data.length > 0) {
+            data.forEach(row => {
+                promos[row.code] = {
+                    discount: row.discount,
+                    description: row.description
+                };
+            });
+            localStorage.setItem('admin_promo_codes', JSON.stringify(promos));
+        }
+    } catch (e) {
+        console.warn('Failed to fetch promo codes from Supabase, using fallback', e);
+    }
+}
+
 function formatOptions(options) {
     const optionNames = {
         'helmet': 'Casque',
@@ -53,14 +152,20 @@ function formatDate(dateString) {
 }
 
 function calculateBasePrice() {
-    // Uses bookingState to compute base price (days * pricePerDay)
     const vehicle = bookingState.vehicle || bookingState.motorcycle;
     if (!vehicle || !bookingState.pickupDate || !bookingState.returnDate) {
         return 0;
     }
     const days = calculateRentalDays();
-    const pricePerDay = Number(vehicle.pricePerDay) || 0;
-    return days * pricePerDay;
+    const pickup = new Date(bookingState.pickupDate);
+    let total = 0;
+    for (let i = 0; i < days; i++) {
+        const d = new Date(pickup);
+        d.setDate(d.getDate() + i);
+        const currentDate = d.toISOString().split('T')[0];
+        total += getEffectivePrice(vehicle.pricePerDay, currentDate);
+    }
+    return total;
 }
 
 function buildEmailHTMLOption(data) {
@@ -103,7 +208,8 @@ function buildEmailHTMLOption(data) {
         `;
 
   const vehicle = data.vehicle || data.motorcycle;
-  // Final HTML
+  const bookingDate = data.pickupDate || new Date().toISOString().split('T')[0];
+    // Final HTML
   return `
         <div class="section">
             <h2 class="section-title">💰 DÉTAILS FINANCIERS</h2>
@@ -114,7 +220,7 @@ function buildEmailHTMLOption(data) {
 
                     <div class="detail-item">
                         <span class="detail-label">Location:</span>
-                        <span class="detail-value">${vehicle.pricePerDay} €</span>
+                        <span class="detail-value">${getEffectivePrice(vehicle.pricePerDay, bookingDate)} €</span>
                     </div>
 
                     ${priceHTML} 
@@ -128,6 +234,41 @@ function buildEmailHTMLOption(data) {
         </div>
     `;
 }
+
+// Supabase table expectation (create this table in your Supabase project):
+//
+// create table public.bookings (
+//   id uuid default gen_random_uuid() primary key,
+//   created_at timestamptz default now() not null,
+//   status text default 'pending',
+//   vehicle_type text,
+//   vehicle_id text,
+//   vehicle_name text,
+//   vehicle_price_per_day numeric,
+//   vehicle_image_url text,
+//   pickup_date date,
+//   return_date date,
+//   pickup_time text,
+//   return_time text,
+//   total_days integer,
+//   total_cost numeric,
+//   options jsonb,
+//   promo_code text,
+//   discount_percent numeric,
+//   original_price numeric,
+//   first_name text,
+//   last_name text,
+//   email text,
+//   phone text,
+//   country text,
+//   license_number text,
+//   agree_terms boolean,
+//   admin_note text
+// );
+//
+// IMPORTANT: Do NOT expose a privileged service role key to the browser. Use the anon key
+// with Row Level Security (RLS) policies that only allow inserts to `bookings`.
+// Alternatively, route inserts through a server endpoint that uses a service key.
 
 let bookingState = {
   vehicle: null,
@@ -169,102 +310,48 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-async function sendBookingConfirmationEmail(bookingData) {
-  const vehicle = bookingData.vehicle || bookingData.motorcycle;
-  
-  const orderEmailParams = {
-    first_name: bookingData.personalInfo["first-name"],
-    last_name: bookingData.personalInfo["last-name"],
-    email: bookingData.personalInfo.email,
-    phone: bookingData.personalInfo.phone,
-    license_number: bookingData.personalInfo["license-number"],
-    country: bookingData.personalInfo.country,
-    booking_number: generateBookingNumber(),
-    booking_date: new Date().toLocaleDateString("fr-FR"),
-    current_timestamp: new Date().toLocaleString("fr-FR"),
-    motorcycle_name: vehicle.name,
-    motorcycle_type: vehicle.type,
-    daily_price: formatCurrency(vehicle.pricePerDay),
-    pickup_date: formatDate(bookingData.pickupDate),
-    pickup_time: bookingData.pickupTime,
-    return_date: formatDate(bookingData.returnDate),
-    return_time: bookingData.returnTime,
-    rental_days: calculateRentalDays(),
-    has_options: Object.keys(bookingData.options).length > 0,
-    options: formatOrderOptions(bookingData.options),
-    base_price: formatCurrency(calculateBasePrice()),
-    promo_code: bookingData.promoCode || 'AUCUN',
-    discount_percent: bookingData.discount || 0,
-    discount_amount: formatCurrency(calculateDiscountAmount()),
-    has_promo: bookingData.promoCode ? true : false,
-    total_amount: formatCurrency(bookingData.totalCost),
-    calendar_start: formatCalendarDate(
-      bookingData.pickupDate,
-      bookingData.pickupTime
-    ),
-    calendar_end: formatCalendarDate(
-      bookingData.returnDate,
-      bookingData.returnTime
-    ),
-    options_html: buildEmailHTMLOption(bookingData),
-    original_amount: formatCurrency(bookingData.originalPrice || calculateBasePrice() + calculateOptionsTotal()),
+async function sendBookingConfirmationEmail(bookingRequest) {
+  // Format dates for email display
+  const emailData = {
+    ...bookingRequest,
+    rental: {
+      ...bookingRequest.rental,
+      pickupDate: formatDate(bookingRequest.rental.pickupDate),
+      returnDate: formatDate(bookingRequest.rental.returnDate)
+    }
   };
 
-  const clientEmailParams = {
-    first_name: bookingData.personalInfo['first-name'],
-    last_name: bookingData.personalInfo['last-name'],
-    email: bookingData.personalInfo.email,
-    phone: bookingData.personalInfo.phone,
-    booking_number: generateBookingNumber(),
-    booking_date: new Date().toLocaleDateString('fr-FR'),
-    motorcycle_name: vehicle.name,
-    motorcycle_type: vehicle.type,
-    motorcycle_engine: vehicle.specs?.engine || vehicle.specs?.drive || 'N/A',
-    motorcycle_power: vehicle.specs?.power || vehicle.specs?.seats || 'N/A',
-    motorcycle_image: vehicle.imageUrl,
-    pickup_date: formatDate(bookingData.pickupDate),
-    pickup_time: bookingData.pickupTime,
-    return_date: formatDate(bookingData.returnDate),
-    return_time: bookingData.returnTime,
-    rental_days: calculateRentalDays(),
-    has_options: Object.keys(bookingData.options).length > 0,
-    options: formatOptions(bookingData.options),
-    base_price: formatCurrency(calculateBasePrice()),
-    options_total: formatCurrency(calculateOptionsTotal()),
-    promo_code: bookingData.promoCode || 'AUCUN',
-    discount_percent: bookingData.discount || 0,
-    discount_amount: formatCurrency(calculateDiscountAmount()),
-    has_promo: bookingData.promoCode ? true : false,
-    total_amount: formatCurrency(bookingData.totalCost),
-    payment_details_html : buildEmailHTMLOption(bookingData),
-    original_amount: formatCurrency(bookingData.originalPrice || calculateBasePrice() + calculateOptionsTotal()),
+  const payload = {
+    type: "initial",
+    data: emailData
   };
-
-  const token = "qhZMIa_2FyGjlrAgM"; // Your EmailJS public key
 
   try {
-    const response = await emailjs.send(
-      "service_6meqbya", // your service ID
-      "template_rfe6jjg", // your template ID
-      orderEmailParams,
-      token
-    );
-    const response2 = await emailjs.send(
-        "service_6meqbya", // your service ID
-        "template_ys9xpw9", // your template ID
-        clientEmailParams,
-        token
-    );
+    const response = await fetch("/api/send-booking", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
-    console.log("Email sent:", response);
-    return response;
+    const result = await response.json();
+    if (result.success) {
+      console.log("Emails sent successfully via Resend");
+      return true;
+    } else {
+      console.error("Backend error:", result.error);
+      return false;
+    }
   } catch (error) {
-    console.error("Email failed:", error);
-    return null;
+    console.error("Fetch error:", error);
+    return false;
   }
 }
 
-function initBookingPage() {
+async function initBookingPage() {
+  await fetchFleetFromSupabase();
+  await fetchPromoCodesFromSupabase();
   renderMotorcycleOptions();
   renderCarOptions();
   setupVehicleTypeTabs();
@@ -389,6 +476,9 @@ function renderCarOptions() {
     const option = document.createElement('div');
     option.className = 'car-option';
     option.dataset.id = car.id;
+    if (isVehicleBlocked(car.id)) {
+      option.classList.add('blocked');
+    }
     option.innerHTML = `
       <img src="${car.imageUrl}" alt="${car.name}" class="option-image">
       <div class="option-name">${car.name}</div>
@@ -411,10 +501,17 @@ function renderCarOptions() {
           <div class="spec-value">${car.specs.fuel}</div>
         </div>
       </div>
-      <div class="option-price">${car.pricePerDay} €/day</div>
+      <div class="option-price">${getEffectivePrice(car.pricePerDay, new Date().toISOString().split('T')[0])} €/day</div>
     `;
     
     option.addEventListener('click', () => {
+      if (isVehicleBlocked(car.id)) {
+        const blockInfo = getVehicleBlockInfo(car.id);
+        if (blockInfo) {
+          showBlockPopup(car.name, blockInfo.reason, blockInfo.start, blockInfo.end);
+        }
+        return;
+      }
       // Remove selected class from all car options
       document.querySelectorAll('.car-option').forEach(opt => {
         opt.classList.remove('selected');
@@ -464,6 +561,9 @@ function renderMotorcycleOptions() {
     const option = document.createElement("div");
     option.className = "motorcycle-option";
     option.dataset.id = motorcycle.id;
+    if (isVehicleBlocked(motorcycle.id)) {
+      option.classList.add("blocked");
+    }
     option.innerHTML = `
             <img src="${motorcycle.imageUrl}" alt="${motorcycle.name}" class="option-image">
             <div class="option-name">${motorcycle.name}</div>
@@ -486,10 +586,17 @@ function renderMotorcycleOptions() {
                     <div class="spec-value">${motorcycle.specs.seatHeight}</div>
                 </div>
             </div>
-            <div class="option-price">${motorcycle.pricePerDay} €/day</div>
+            <div class="option-price">${getEffectivePrice(motorcycle.pricePerDay, new Date().toISOString().split('T')[0])} €/day</div>
         `;
 
     option.addEventListener("click", () => {
+      if (isVehicleBlocked(motorcycle.id)) {
+        const blockInfo = getVehicleBlockInfo(motorcycle.id);
+        if (blockInfo) {
+          showBlockPopup(motorcycle.name, blockInfo.reason, blockInfo.start, blockInfo.end);
+        }
+        return;
+      }
       // Remove selected class from all options
       document.querySelectorAll(".motorcycle-option").forEach((opt) => {
         opt.classList.remove("selected");
@@ -549,12 +656,14 @@ function setupDateInputs() {
   if (pickupTimeInput) {
     pickupTimeInput.addEventListener("change", function () {
       bookingState.pickupTime = this.value;
+      updateSidebarSummary();
     });
   }
 
   if (returnTimeInput) {
     returnTimeInput.addEventListener("change", function () {
       bookingState.returnTime = this.value;
+      updateSidebarSummary();
     });
   }
 
@@ -701,6 +810,15 @@ function validateStep(stepNumber) {
       else if (new Date(returnDate) < new Date(pickupDate)) {
         showNotification("Return date cannot be before pickup date", "error");
         isValid = false;
+      }
+
+      else {
+        const vehicle = bookingState.vehicle || bookingState.motorcycle;
+        const availCheck = checkVehicleAvailability(vehicle.id, pickupDate, returnDate);
+        if (!availCheck.available) {
+          showNotification(availCheck.reason, "error");
+          isValid = false;
+        }
       }
       break;
 
@@ -886,31 +1004,52 @@ function updateSidebarSummary() {
 function calculateRentalDays() {
   if (!bookingState.pickupDate || !bookingState.returnDate) return 0;
 
-  // Parse dates as local dates to avoid timezone issues
-  const pickupParts = bookingState.pickupDate.split('-');
-  const returnParts = bookingState.returnDate.split('-');
-  
-  const pickup = new Date(pickupParts[0], pickupParts[1] - 1, pickupParts[2]);
-  const returnD = new Date(returnParts[0], returnParts[1] - 1, returnParts[2]);
-  
-  const timeDiff = returnD.getTime() - pickup.getTime();
-  const days = Math.ceil(timeDiff / (1000 * 3600 * 24) + 1);
+  const pickupTime = bookingState.pickupTime || "00:00";
+  const returnTime = bookingState.returnTime || "00:00";
 
-  // If same day rental, count as 1 day; otherwise count the difference
-  return days >= 1 ? days : 1;
+  const pickup = new Date(`${bookingState.pickupDate}T${pickupTime}:00`);
+  const returnD = new Date(`${bookingState.returnDate}T${returnTime}:00`);
+
+  const timeDiff = returnD.getTime() - pickup.getTime();
+
+  if (timeDiff <= 0) {
+    return timeDiff === 0 ? 1 : 0;
+  }
+
+  return Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 }
 
 function calculateOptionsTotal() {
   let total = 0;
+  const days = calculateRentalDays();
+
+  // Get options data from global RENTAL_OPTIONS (from data.js)
+  // Fallback if not loaded
+  const optionsData = typeof RENTAL_OPTIONS !== 'undefined' ? RENTAL_OPTIONS : [];
 
   // Add option prices
-  Object.values(bookingState.options).forEach((price) => {
-    total += price;
+  Object.keys(bookingState.options).forEach((optionId) => {
+    const optionDef = optionsData.find(o => o.id === optionId);
+    const basePrice = bookingState.options[optionId];
+    
+    if (optionDef && optionDef.type === 'per_day') {
+      total += basePrice * days;
+    } else {
+      total += basePrice;
+    }
   });
 
   // Helmet is free for multi-day rentals
-  if (bookingState.options.helmet && calculateRentalDays() > 1) {
-    total -= bookingState.options.helmet;
+  if (bookingState.options.helmet && days > 1) {
+    const helmetDef = optionsData.find(o => o.id === 'helmet');
+    const helmetPrice = helmetDef ? helmetDef.price : bookingState.options.helmet;
+    
+    // If it's per_day, we subtract helmetPrice * days, else just helmetPrice
+    if (helmetDef && helmetDef.type === 'per_day') {
+        total -= helmetPrice * days;
+    } else {
+        total -= helmetPrice;
+    }
   }
 
   return total;
@@ -927,9 +1066,18 @@ function calculateTotalCost() {
   }
 
   const days = calculateRentalDays();
-  const basePrice = days * vehicle.pricePerDay;
+  const pickup = new Date(bookingState.pickupDate);
+  
+  let totalBasePrice = 0;
+  for (let i = 0; i < days; i++) {
+    const d = new Date(pickup);
+    d.setDate(d.getDate() + i);
+    const currentDate = d.toISOString().split('T')[0];
+    totalBasePrice += getEffectivePrice(vehicle.pricePerDay, currentDate);
+  }
+  
   const optionsTotal = calculateOptionsTotal();
-  const subtotal = basePrice + optionsTotal;
+  const subtotal = totalBasePrice + optionsTotal;
   
   // Store original price before discount
   if (!bookingState.originalPrice || bookingState.discount === 0) {
@@ -951,7 +1099,16 @@ function calculateDiscountAmount() {
   
   const vehicle = bookingState.vehicle || bookingState.motorcycle;
   const days = calculateRentalDays();
-  const basePrice = days * (vehicle?.pricePerDay || 0);
+  const pickup = new Date(bookingState.pickupDate);
+  
+  let basePrice = 0;
+  for (let i = 0; i < days; i++) {
+    const d = new Date(pickup);
+    d.setDate(d.getDate() + i);
+    const currentDate = d.toISOString().split('T')[0];
+    basePrice += getEffectivePrice(vehicle?.pricePerDay || 0, currentDate);
+  }
+  
   const optionsTotal = calculateOptionsTotal();
   const subtotal = basePrice + optionsTotal;
   
@@ -969,7 +1126,7 @@ function updateBookingSummary() {
     vehicleSummary.innerHTML = `
             <strong>${vehicle.name}</strong><br>
             ${vehicle.type} - ${specValue}<br>
-            ${vehicle.pricePerDay} € per day
+            ${getEffectivePrice(vehicle.pricePerDay, bookingState.pickupDate)} € per day
         `;
   }
 
@@ -1050,7 +1207,7 @@ function getOptionDisplayName(optionKey) {
   return names[optionKey] || optionKey;
 }
 
-function submitBooking() {
+async function submitBooking() {
   const submitBtn = document.querySelector(".btn-confirm");
   if (!submitBtn) return;
   
@@ -1060,27 +1217,183 @@ function submitBooking() {
   submitBtn.textContent = "Processing...";
   submitBtn.disabled = true;
 
-  // Simulate API call
-  setTimeout(() => {
-    // In a real application, you would send the booking data to a server here
-    console.log("Booking submitted:", bookingState);
-    const res = sendBookingConfirmationEmail(bookingState);
-    if (!res) {
-      showNotification(
-        "Failed to send confirmation email. Please try again later.",
-        "error"
-      );
-    } else {
-      showNotification(
-        "Booking confirmed! We have sent a confirmation email with all the details.",
-        "success"
-      );
-    }
-    // Reset form and redirect after delay
-    setTimeout(() => {
-      window.location.href = "index.html";
+  // Create booking request object for admin
+  const vehicle = bookingState.vehicle || bookingState.motorcycle;
+  const bookingRequest = 
+  {
+    id: 'BK-' + Date.now(),
+    submittedAt: new Date().toISOString(),
+    status: 'pending',
+    vehicle: {
+      type: bookingState.vehicleType,
+      id: vehicle.id,
+      name: vehicle.name,
+      pricePerDay: getEffectivePrice(vehicle.pricePerDay, bookingState.pickupDate),
+      imageUrl: vehicle.imageUrl,
+    },
+    rental: {
+      pickupDate: bookingState.pickupDate,
+      returnDate: bookingState.returnDate,
+      pickupTime: bookingState.pickupTime,
+      returnTime: bookingState.returnTime,
+      totalDays: calculateRentalDays(),
+      totalPrice: calculateBasePrice(),
+      options: bookingState.options,
+      totalCost: bookingState.totalCost,
+      originalPrice: bookingState.originalPrice,
+      discountPercent: bookingState.discount,
+      promoCode: bookingState.promoCode
+    },
+    customer: {
+      firstName: bookingState.personalInfo["first-name"],
+      lastName: bookingState.personalInfo["last-name"],
+      email: bookingState.personalInfo.email,
+      phone: bookingState.personalInfo.phone,
+      country: bookingState.personalInfo.country,
+      licenseNumber: bookingState.personalInfo["license-number"],
+    },
+    adminNote: '',
+  };
+
+  //here
+  // Save to localStorage
+  // Try to insert into Supabase `bookings` table if client is configured
+  async function insertToSupabase(br) 
+  {
+    if (!window.supabase) return { ok: false, error: new Error('Supabase client not configured') };
+
+    // Flatten payload for DB columns
+const v = br.vehicle;
+const r = br.rental;
+const c = br.customer;
+
+const dbRow = {
+  id: br.id,
+  created_at: br.submittedAt,
+  status: br.status || "pending",
+
+  vehicle_type: v?.type || "unknown",
+  vehicle_id: String(v?.id ?? ""),
+  vehicle_name: v?.name || "unknown",
+  vehicle_price_per_day: Number(v?.pricePerDay) || 0,
+  vehicle_image_url: v?.imageUrl || "",
+
+  pickup_date: r?.pickupDate || null,
+  return_date: r?.returnDate || null,
+  pickup_time: r?.pickupTime || "",
+  return_time: r?.returnTime || "",
+  total_days: Number(r?.totalDays) || 0,
+
+  options: r?.options || {},
+
+  promo_code: bookingState.promoCode || null,
+  discount_percent: Number(bookingState.discount) || 0,
+  original_price: Number(bookingState.originalPrice) || 0,
+
+  total_cost: Number(r?.totalCost || 0),
+
+  first_name: c?.firstName || "",
+  last_name: c?.lastName || "",
+  email: c?.email || "",
+  phone: c?.phone || "",
+  country: c?.country || "",
+  license_number: c?.licenseNumber || "",
+
+  agree_terms: !!document.getElementById("agree-terms")?.checked,
+
+  admin_note: br.adminNote || ""
+};
+
+try {
+  // wait only here until supabase is ready
+  await new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => {
+      clearInterval(check);
+      reject(new Error('Supabase client initialization timed out'));
     }, 3000);
-  }, 2000);
+    const check = setInterval(() => {
+      if (window.supabase?.from) {
+        clearInterval(check);
+        clearTimeout(timeout);
+        resolve();
+      }
+    }, 50);
+  });
+
+  if (!window.supabase) {
+    console.error("Supabase not ready");
+    return { ok: false, error: "Supabase not initialized" };
+  }
+
+  const res = await window.supabase
+    .from("bookings")
+    .insert(dbRow)
+    .select();
+
+  console.log("FULL SUPABASE RESPONSE:");
+  console.log(JSON.stringify(res, null, 2));
+
+  if (res.error) {
+    console.error("SUPABASE ERROR MESSAGE:", res.error.message);
+    console.error("SUPABASE ERROR DETAILS:", res.error.details);
+    console.error("SUPABASE ERROR HINT:", res.error.hint);
+    console.error("SUPABASE ERROR CODE:", res.error.code);
+  }
+  if (res.error) {
+    console.error("Supabase error:", res.error);
+    return { ok: false, error: res.error };
+  }
+
+  return { ok: true, data: res.data };
+
+} catch (err) {
+  console.log("FULL SUPABASE RESPONSE:=======================>", res);
+  return { ok: false, error: err };
+}
+  }
+
+  // Try to insert into Supabase and wait so navigation doesn't cancel it
+  let supaResult = null;
+  try {
+    supaResult = await insertToSupabase(bookingRequest);
+  } catch (err) {
+    supaResult = { ok: false, error: err };
+  }
+
+  if (!supaResult || !supaResult.ok) {
+    console.warn('Supabase insert failed or not configured:', supaResult?.error);
+    showNotification('Warning: Could not save booking to server. Saved locally instead.', 'warning');
+    // Save to localStorage as fallback
+    const existingBookings = JSON.parse(localStorage.getItem('admin_bookings') || '[]');
+    existingBookings.push(bookingRequest);
+    localStorage.setItem('admin_bookings', JSON.stringify(existingBookings));
+  } else {
+    console.log('Booking saved to Supabase:', supaResult.data);
+  }
+
+  // Send confirmation email (await so user sees correct status)
+  let emailRes = null;
+  try {
+    emailRes = await sendBookingConfirmationEmail(bookingRequest);
+  } catch (err) {
+    console.error('Email sending failed:', err);
+    emailRes = null;
+  }
+
+  if (!emailRes) {
+    showNotification('Failed to send confirmation email. Please try again later.', 'error');
+    // Re-enable button so user can retry
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
+    return;
+  }
+
+  // Success: notify user and redirect
+  showNotification('Booking confirmed! We have sent a confirmation email with all the details.', 'success');
+  // Reset form and redirect after delay
+  setTimeout(() => {
+    window.location.href = 'index.html';
+  }, 3000);
 }
 
 function showNotification(message, type) {
@@ -1124,19 +1437,33 @@ function showNotification(message, type) {
 }
 
 // Add promo code validation
-const PROMO_CODES = {
-  'XCCLOC20': { discount: 20, description: '20% discount' },
-  'XCCLOC10': { discount: 10, description: '10% discount' },
-  'XCCLOC05': { discount: 5, description: '5% discount' },
-  'SAAD7': { discount: 7, description: '7% discount' },
-  'SAAD10': { discount: 10, description: '10% discount' },
-  'SAAD20': { discount: 20, description: '20% discount' },
-  'XCCLOC15': { discount: 15, description: '15% discount' }
-};
+function getPromoCodes() {
+  const savedPromos = JSON.parse(localStorage.getItem('admin_promo_codes'));
+  if (savedPromos) return savedPromos;
+
+  return {
+    'XCCLOC20': { discount: 20, description: '20% discount' },
+    'XCCLOC10': { discount: 10, description: '10% discount' },
+    'XCCLOC05': { discount: 5, description: '5% discount' },
+    'SAAD7': { discount: 7, description: '7% discount' },
+    'SAAD10': { discount: 10, description: '10% discount' },
+    'SAAD20': { discount: 20, description: '20% discount' },
+    'XCCLOC15': { discount: 15, description: '15% discount' }
+  };
+}
+
+function getAvailability() {
+  return JSON.parse(localStorage.getItem('admin_availability') || '[]');
+}
+
+function checkVehicleAvailability(vehicleId, startDate, endDate) {
+  return { available: true };
+}
 
 function validatePromoCode(code) {
+  const promoCodes = getPromoCodes();
   const upperCode = code.toUpperCase().trim();
-  return PROMO_CODES[upperCode] || null;
+  return promoCodes[upperCode] || null;
 }
 
 function applyPromoCode() {

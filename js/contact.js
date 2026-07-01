@@ -1,7 +1,85 @@
-function initContactPage() {
+function renderContactInfo() {
+    const contactData = JSON.parse(localStorage.getItem('admin_contact'));
+    if (!contactData) return;
+
+    // Update Address
+    const addressContainer = document.querySelector('.contact-item:nth-child(1) .contact-details p');
+    if (addressContainer && contactData.address) {
+        addressContainer.innerHTML = contactData.address.replace(/\n/g, '<br>');
+    }
+
+    // Update Phone
+    const phoneContainer = document.querySelector('.contact-item:nth-child(2) .contact-details');
+    if (phoneContainer) {
+        let phoneHtml = '<h3>Phone</h3>';
+        if (contactData.phone1) phoneHtml += `<p>${contactData.phone1}</p>`;
+        if (contactData.phone2) phoneHtml += `<p>${contactData.phone2}</p>`;
+        phoneContainer.innerHTML = phoneHtml;
+    }
+
+    // Update Email
+    const emailContainer = document.querySelector('.contact-item:nth-child(3) .contact-details');
+    if (emailContainer) {
+        let emailHtml = '<h3>Email</h3>';
+        if (contactData.email1) emailHtml += `<p>${contactData.email1}</p>`;
+        if (contactData.email2) emailHtml += `<p>${contactData.email2}</p>`;
+        emailContainer.innerHTML = emailHtml;
+    }
+
+    // Update Opening Hours
+    const hoursContainer = document.querySelector('.contact-item:nth-child(4) .contact-details');
+    if (hoursContainer) {
+        let hoursHtml = '<h3>Opening Hours</h3>';
+        if (contactData.hours1) hoursHtml += `<p>${contactData.hours1}</p>`;
+        if (contactData.hours2) hoursHtml += `<p>${contactData.hours2}</p>`;
+        hoursContainer.innerHTML = hoursHtml;
+    }
+
+    // Update Social Links
+    const facebookLink = document.querySelector('.social-icons a[href*="facebook"]');
+    if (facebookLink && contactData.facebookUrl) facebookLink.href = contactData.facebookUrl;
+
+    const instagramLink = document.querySelector('.social-icons a[href*="instagram"]');
+    if (instagramLink && contactData.instagramUrl) instagramLink.href = contactData.instagramUrl;
+
+    const whatsappLink = document.querySelector('.social-icons a[href*="wa.me"]');
+    if (whatsappLink && contactData.whatsappNumber) whatsappLink.href = `https://wa.me/${contactData.whatsappNumber.replace(/\D/g, '')}`;
+}
+
+async function initContactPage() {
+    await fetchContactFromSupabase();
+    renderContactInfo();
     setupContactForm();
     setupFAQ();
     setupFormValidation();
+}
+
+async function fetchContactFromSupabase() {
+    if (!window.supabase) return;
+    try {
+        const { data, error } = await window.supabase
+            .from('contact_info')
+            .select('*')
+            .eq('id', 'main')
+            .single();
+        if (!error && data) {
+            const contactData = {
+                address: data.address,
+                phone1: data.phone1,
+                phone2: data.phone2,
+                email1: data.email1,
+                email2: data.email2,
+                hours1: data.hours1,
+                hours2: data.hours2,
+                facebookUrl: data.facebook_url,
+                instagramUrl: data.instagram_url,
+                whatsappNumber: data.whatsapp_number
+            };
+            localStorage.setItem('admin_contact', JSON.stringify(contactData));
+        }
+    } catch (e) {
+        console.warn('Failed to fetch contact info from Supabase, using fallback', e);
+    }
 }
 
 async function ReachOutEmail(formData) {

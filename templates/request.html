@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Under Review</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #f5f7fb;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        color: #1f2937;
+    }
+
+    .wrapper {
+        width: 100%;
+        padding: 40px 20px;
+        box-sizing: border-box;
+    }
+
+    .container {
+        max-width: 640px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    }
+
+    .header {
+        background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+        padding: 40px;
+        text-align: center;
+    }
+
+    .logo {
+        color: #ffffff;
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    .status-badge {
+        display: inline-block;
+        background: rgba(255,255,255,0.12);
+        color: #fbbf24;
+        border: 1px solid rgba(255,255,255,0.15);
+        padding: 8px 16px;
+        border-radius: 999px;
+        margin-top: 18px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .content {
+        padding: 50px 40px;
+    }
+
+    h1 {
+        margin: 0 0 16px;
+        font-size: 32px;
+        color: #111827;
+    }
+
+    p {
+        margin: 0 0 18px;
+        color: #6b7280;
+        line-height: 1.7;
+        font-size: 15px;
+    }
+
+    .review-box {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 24px;
+        margin: 30px 0;
+    }
+
+    .review-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 12px;
+    }
+
+    .booking-details {
+        width: 100%;
+    }
+
+    .booking-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .booking-row:last-child {
+        border-bottom: none;
+    }
+
+    .label {
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    .value {
+        color: #111827;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .timeline {
+        margin-top: 25px;
+        padding: 20px;
+        background: #eff6ff;
+        border-radius: 12px;
+        border-left: 4px solid #2563eb;
+    }
+
+    .timeline strong {
+        color: #1e40af;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 14px 28px;
+        background: #111827;
+        color: #ffffff !important;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 600;
+        margin-top: 15px;
+    }
+
+    .footer {
+        padding: 30px 40px;
+        text-align: center;
+        border-top: 1px solid #f1f5f9;
+        color: #9ca3af;
+        font-size: 13px;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .content,
+        .header,
+        .footer {
+            padding: 30px 24px;
+        }
+
+        h1 {
+            font-size: 26px;
+        }
+    }
+
+    .vehicle-section {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: #f9fafb;
+        border-radius: 14px;
+        border: 1px solid #e5e7eb;
+    }
+
+    .vehicle-section img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 8px;
+        flex-shrink: 0;
+    }
+
+    .vehicle-section .vehicle-info {
+        flex: 1;
+    }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="container">
+
+        <div class="header">
+            <div class="logo">XCC-LOC26</div>
+            <div class="status-badge">
+                ⏳ Booking Under Review
+            </div>
+        </div>
+
+        <div class="content">
+
+            <h1>We've received your booking request</h1>
+
+            <div class="vehicle-section">
+                <img src="{{vehicle_image_url}}" alt="{{vehicle_name}}" style="width:100%; max-width:200px; border-radius:8px; margin-bottom:20px;" />
+                <p style="margin-top:10px; font-size:12px; color:red; word-break:break-all;">
+                    Image URL: {{vehicle_image_url}}
+                </p>
+                <div class="vehicle-info">
+                    <p style="margin:0; font-weight:600; color:#111827;">{{vehicle_name}}</p>
+                    <p style="margin:0; color:#6b7280;">{{vehicle_type}} – {{vehicle_price_per_day}} € / day</p>
+                </div>
+            </div>
+
+            <p>
+                Thank you for choosing us. Your reservation has been successfully submitted and is currently being reviewed by our team.
+            </p>
+
+            <p>
+                We are verifying availability and reservation details to ensure everything is ready before confirming your booking.
+            </p>
+
+            <div class="review-box">
+                <div class="review-title">Booking Summary</div>
+
+                <div class="booking-details">
+                    <div class="booking-row">
+                        <span class="label">Booking Reference</span>
+                        <span class="value">{{booking_reference}}</span>
+                    </div>
+
+                    <div class="booking-row">
+                        <span class="label">Vehicle</span>
+                        <span class="value">{{vehicle_name}}</span>
+                    </div>
+
+                    <div class="booking-row">
+                        <span class="label">Pickup Date</span>
+                        <span class="value">{{pickup_date}}</span>
+                    </div>
+
+                    <div class="notice-box">
+                        <div class="notice-title">Admin Note</div>
+                        <p>{{admin_note}}</p>
+                    </div>
+
+                    <div class="booking-row">
+                        <span class="label">Return Date</span>
+                        <span class="value">{{return_date}}</span>
+                    </div>
+
+                    <div class="booking-row">
+                        <span class="label">Customer</span>
+                        <span class="value">{{customer_name}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline">
+                <strong>What happens next?</strong><br><br>
+                Our team will review your reservation and send you a confirmation email as soon as the booking is approved. This process usually takes less than 24 hours.
+            </div>
+
+            <center>
+                <a href="{{booking_url}}" class="button">
+                    View Booking
+                </a>
+            </center>
+
+        </div>
+
+        <div class="footer">
+            © {{year}} XCC-LOC26. All rights reserved.<br>
+            If you have any questions, simply reply to this email.
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
+```

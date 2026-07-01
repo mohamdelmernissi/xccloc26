@@ -1,5 +1,30 @@
-function initTripsPage() {
+async function initTripsPage() {
+    await fetchTripsFromSupabase();
     renderAllTrips();
+}
+
+async function fetchTripsFromSupabase() {
+    if (!window.supabase) return;
+    try {
+        const { data, error } = await window.supabase
+            .from('trips')
+            .select('*')
+            .order('id', { ascending: true });
+        if (!error && data && data.length > 0) {
+            const fetched = data.map(row => ({
+                id: row.id,
+                title: row.title,
+                description: row.description,
+                distance: row.distance,
+                recommendedBike: row.recommended_bike,
+                imageUrl: row.image_url,
+                state: row.state
+            }));
+            TRIPS.splice(0, TRIPS.length, ...fetched);
+        }
+    } catch (e) {
+        console.warn('Failed to fetch trips from Supabase, using fallback', e);
+    }
 }
 
 function renderAllTrips() {

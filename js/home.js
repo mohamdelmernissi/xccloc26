@@ -1,4 +1,53 @@
-function initSlider() {
+async function renderSlides() {
+    const sliderContainer = document.querySelector('.slider-container');
+    if (!sliderContainer) return;
+
+    let slides = [];
+    if (window.supabase) {
+        try {
+            const { data, error } = await window.supabase
+                .from('slides')
+                .select('*')
+                .order('id', { ascending: true });
+            if (!error && data && data.length > 0) {
+                slides = data.map(row => ({
+                    id: row.id,
+                    imageUrl: row.image_url,
+                    heading: row.heading,
+                    subtext: row.subtext,
+                    buttonText: row.button_text,
+                    buttonLink: row.button_link
+                }));
+            }
+        } catch (e) {
+            console.warn('Failed to fetch slides from Supabase, using fallback', e);
+        }
+    }
+
+    if (!slides.length) {
+        const savedSlides = JSON.parse(localStorage.getItem('admin_slides'));
+        if (!savedSlides || !savedSlides.length) return;
+        slides = savedSlides;
+    }
+
+    sliderContainer.innerHTML = '';
+    slides.forEach((slide, index) => {
+        const slideDiv = document.createElement('div');
+        slideDiv.className = `slide ${index === 0 ? 'active' : ''}`;
+        slideDiv.innerHTML = `
+            <img src="${slide.imageUrl}" alt="${slide.heading}">
+            <div class="slide-content">
+                <h1>${slide.heading}</h1>
+                <p>${slide.subtext}</p>
+                <a href="${slide.buttonLink}" class="btn">${slide.buttonText}</a>
+            </div>
+        `;
+        sliderContainer.appendChild(slideDiv);
+    });
+}
+
+async function initSlider() {
+    await renderSlides();
     const slides = document.querySelectorAll('.slide');
     const dotsContainer = document.querySelector('.slider-dots');
     const prevBtn = document.querySelector('.slider-prev');
@@ -12,6 +61,9 @@ function initSlider() {
     const SLIDE_DURATION = 3000;  // Time between slides (4 seconds)
     const TRANSITION_DURATION = 500;  // Match CSS transition duration (0.5s)
 
+    // Clear existing dots
+    dotsContainer.innerHTML = '';
+    
     // Create dots
     slides.forEach((_, index) => {
         const dot = document.createElement('button');
@@ -153,7 +205,7 @@ function renderFeaturedMotorcycles() {
                         <div class="spec-value">${motorcycle.specs.seatHeight}</div>
                     </div>
                 </div>
-                <div class="motorcycle-price">${motorcycle.pricePerDay} €/day</div>
+                <div class="motorcycle-price">${getEffectivePrice(motorcycle.pricePerDay, new Date().toISOString().split('T')[0])} €/day</div>
                 <a href="motorcycles.html" class="btn">View Details</a>
             </div>
         `;
@@ -161,29 +213,213 @@ function renderFeaturedMotorcycles() {
     });
 }
 
-function renderTestimonials() {
+async function renderTestimonials() 
+{
     const container = document.getElementById('testimonials-container');
     if (!container) return;
 
-    container.innerHTML = '';
-    TESTIMONIALS.forEach(testimonial => {
-        const card = document.createElement('div');
-        card.className = 'testimonial-card';
-        card.innerHTML = `
-            <p class="testimonial-text">${testimonial.text}</p>
-            <div class="testimonial-author">
-                <img src="${testimonial.avatarUrl}" alt="${testimonial.name}" class="author-avatar">
-                <div class="author-info">
-                    <div class="author-name">${testimonial.name}</div>
-                    <div class="author-rating">${'★'.repeat(testimonial.rating)}</div>
+    container.innerHTML = `
+        <div class="testimonials-slider-container">
+            <div class="testimonials-track-container">
+                <div class="testimonials-track"></div>
+            </div>
+            <button class="testimonials-prev">‹</button>
+            <button class="testimonials-next">›</button>
+            <div class="testimonials-dots"></div>
+        </div>
+    `;
+
+    const track = container.querySelector('.testimonials-track');
+    const dotsContainer = container.querySelector('.testimonials-dots');
+    
+    let testimonials = [];
+    if (window.supabase) {
+        try {
+            const { data, error } = await window.supabase
+                .from('testimonials')
+                .select('*')
+                .order('id', { ascending: true });
+            if (!error && data && data.length > 0) {
+                testimonials = data.map(row => ({
+                    id: row.id,
+                    name: row.author,
+                    text: row.content,
+                    avatarUrl: row.image_url,
+                    rating: row.rating || 5
+                }));
+            }
+        } catch (e) {
+            console.warn('Failed to fetch testimonials from Supabase, using fallback', e);
+        }
+    }
+    
+    if (!testimonials.length && typeof TESTIMONIALS !== 'undefined') {
+        testimonials = TESTIMONIALS;
+    }
+    
+    if (!testimonials || !testimonials.length) return;
+
+    testimonials.forEach((testimonial, index) => {
+        const slide = document.createElement('div');
+        slide.className = 'testimonial-slide';
+        slide.innerHTML = `
+            <div class="testimonial-card google-review">
+                <div class="review-header">
+                    <img src="${testimonial.avatarUrl}" alt="${testimonial.name}" class="reviewer-avatar">
+                    <div class="reviewer-info">
+                        <div class="reviewer-name-row">
+                            <span class="reviewer-name">${testimonial.name}</span>
+                            <img src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" class="google-icon" alt="Google">
+                        </div>
+                         <!--  <div class="reviewer-meta">Local Guide • ${Math.floor(Math.random() * 20) + 5} reviews</div> -->
+                        <div class="review-rating-row">
+                            <div class="stars">${'★'.repeat(testimonial.rating)}${'☆'.repeat(5 - testimonial.rating)}</div>
+                            <!-- <span class="review-time">${Math.floor(Math.random() * 11) + 1} months ago</span> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="review-content">
+                   <p class="testimonial-text">${testimonial.text.replace(/\n/g, "<br>")}</p>
+                </div>
+                <div class="review-footer">
+                    <span class="helpful-text">Helpful?</span>
+                    <div class="footer-actions">
+                        <!-- <span class="action-btn">👍 Yes</span> -->
+                        <!-- <span class="action-btn">Share</span> -->
+                    </div>
                 </div>
             </div>
         `;
-        container.appendChild(card);
+        track.appendChild(slide);
+
+        // Create dot
+        const dot = document.createElement('button');
+        dot.className = `testimonials-dot ${index === 0 ? 'active' : ''}`;
+        dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+        dotsContainer.appendChild(dot);
     });
+
+    initTestimonialsSlider();
+}
+
+function initTestimonialsSlider() {
+    const track = document.querySelector('.testimonials-track');
+    const slides = document.querySelectorAll('.testimonial-slide');
+    const nextButton = document.querySelector('.testimonials-next');
+    const prevButton = document.querySelector('.testimonials-prev');
+    const dots = document.querySelectorAll('.testimonials-dot');
+
+    if (!track || slides.length === 0) return;
+
+    let currentIdx = 0;
+    let autoSlideInterval = null;
+
+    const updateSlider = (index) => {
+        const containerWidth = track.parentElement.offsetWidth;
+        const slideWidth = slides[0].offsetWidth;
+        const slidesVisible = Math.round(containerWidth / slideWidth);
+        const maxIndex = slides.length - slidesVisible;
+        
+        let targetIndex = index;
+        if (targetIndex < 0) targetIndex = maxIndex;
+        if (targetIndex > maxIndex) targetIndex = 0;
+
+        const movePercentage = 100 / slidesVisible;
+        track.style.transform = `translateX(-${targetIndex * movePercentage}%)`;
+        
+        dots.forEach(d => d.classList.remove('active'));
+        if (dots[targetIndex]) dots[targetIndex].classList.add('active');
+        currentIdx = targetIndex;
+    };
+
+    const nextSlide = () => {
+        const containerWidth = track.parentElement.offsetWidth;
+        const slideWidth = slides[0].offsetWidth;
+        const slidesVisible = Math.round(containerWidth / slideWidth);
+        const maxIndex = slides.length - slidesVisible;
+        
+        let index = currentIdx + 1;
+        if (index > maxIndex) index = 0;
+        updateSlider(index);
+    };
+
+    const prevSlide = () => {
+        const containerWidth = track.parentElement.offsetWidth;
+        const slideWidth = slides[0].offsetWidth;
+        const slidesVisible = Math.round(containerWidth / slideWidth);
+        const maxIndex = slides.length - slidesVisible;
+
+        let index = currentIdx - 1;
+        if (index < 0) index = maxIndex;
+        updateSlider(index);
+    };
+
+    if (nextButton) nextButton.addEventListener('click', () => {
+        nextSlide();
+        resetAutoSlide();
+    });
+
+    if (prevButton) prevButton.addEventListener('click', () => {
+        prevSlide();
+        resetAutoSlide();
+    });
+
+    dots.forEach((dot, idx) => {
+        dot.addEventListener('click', () => {
+            updateSlider(idx);
+            resetAutoSlide();
+        });
+    });
+
+    const startAutoSlide = () => {
+        autoSlideInterval = setInterval(nextSlide, 5000);
+    };
+
+    const resetAutoSlide = () => {
+        clearInterval(autoSlideInterval);
+        startAutoSlide();
+    };
+
+    startAutoSlide();
 }
 
 // Initialize home page when DOM is loaded
+async function initHomePage() {
+    await fetchMotorcyclesFromSupabase();
+    await initSlider();
+    renderFeaturedMotorcycles();
+    await renderTestimonials();
+    initAdventuresGallery();
+}
+
+async function fetchMotorcyclesFromSupabase() {
+    if (!window.supabase) return;
+    try {
+        const { data, error } = await window.supabase
+            .from('motorcycles')
+            .select('*')
+            .order('id', { ascending: true });
+        if (!error && data && data.length > 0) {
+            const fetched = data.map(row => ({
+                id: row.id,
+                name: row.name,
+                type: row.type,
+                pricePerDay: row.price_per_day,
+                imageUrl: row.image_url,
+                specs: {
+                    engine: row.engine,
+                    power: row.power,
+                    seatHeight: row.seat_height,
+                    weight: row.weight
+                }
+            }));
+            MOTORCYCLES.splice(0, MOTORCYCLES.length, ...fetched);
+        }
+    } catch (e) {
+        console.warn('Failed to fetch motorcycles from Supabase, using fallback', e);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', initHomePage);
 
 function initAdventuresGallery() {
@@ -196,14 +432,6 @@ function initAdventuresGallery() {
             const description = this.querySelector('p').textContent;
             
             openAdventureModal(imgSrc, title, description);
-        });
-        
-        // Keyboard navigation
-        card.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                this.click();
-            }
         });
         
         // Make cards focusable
@@ -310,13 +538,7 @@ function openAdventureModal(imgSrc, title, description) {
     });
 }
 
-// Initialize home page when DOM is loaded
-function initHomePage() {
-    initSlider();
-    renderFeaturedMotorcycles();
-    renderTestimonials();
-    initAdventuresGallery();
-}
+
 
 
 
