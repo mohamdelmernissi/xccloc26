@@ -28,6 +28,7 @@ function getReplacements(data, origin) {
   // Calculate pricing values safely
   const basePrice = Number(data.rental?.totalPrice || data.rental?.originalPrice || 0);
   const totalCost = Number(data.rental?.totalCost || 0);
+  const totalAmount = totalCost > 0 ? totalCost : basePrice;
   const extrasValue = Math.max(0, totalCost - basePrice);
   
   const formattedPickupDate = data.rental?.pickupDate || "";
@@ -61,7 +62,7 @@ return {
   rental_cost: `${basePrice || totalCost} €`,
   extras_total: `${extrasValue} €`,
   deposit: "Refundable security deposit required at pickup",
-  total_amount: `${totalCost} €`,
+  total_amount: `${totalAmount} €`,
   customer_notes: data.adminNote || "No special requests",
   admin_booking_url: `${origin}/admin.html`,
   booking_url: `${origin}/booking.html`,

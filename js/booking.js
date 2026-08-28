@@ -1239,8 +1239,8 @@ async function submitBooking() {
       totalDays: calculateRentalDays(),
       totalPrice: calculateBasePrice(),
       options: bookingState.options,
-      totalCost: bookingState.totalCost,
-      originalPrice: bookingState.originalPrice,
+      totalCost: calculateTotalCost() || bookingState.totalCost,
+      originalPrice: bookingState.originalPrice || calculateTotalCost() || bookingState.totalCost,
       discountPercent: bookingState.discount,
       promoCode: bookingState.promoCode
     },
