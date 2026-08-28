@@ -64,7 +64,7 @@ return {
   total_amount: `${totalCost} €`,
   customer_notes: data.adminNote || "No special requests",
   admin_booking_url: `${origin}/admin.html`,
-  booking_url: `${origin}/client.html`,
+  booking_url: `${origin}/booking.html`,
   booking_reference: data.id || "N/A",
   created_at: data.submittedAt ? new Date(data.submittedAt).toLocaleString() : new Date().toLocaleString(),
   year: String(new Date().getFullYear()),
