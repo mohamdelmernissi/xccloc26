@@ -4,8 +4,8 @@ async function fetchFleetFromSupabase() {
     if (!window.supabase) return;
     try {
         const [motoRes, carRes, optionsRes, pricingRes] = await Promise.all([
-            window.supabase.from('motorcycles').select('*').order('id', { ascending: true }),
-            window.supabase.from('cars').select('*').order('id', { ascending: true }),
+            window.supabase.from('motorcycles').select('*').order('display_order', { ascending: true }),
+            window.supabase.from('cars').select('*').order('display_order', { ascending: true }),
             window.supabase.from('rental_options').select('*').order('id', { ascending: true }),
             window.supabase.from('pricing_rules').select('*').order('id', { ascending: true })
         ]);

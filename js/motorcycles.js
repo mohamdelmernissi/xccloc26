@@ -8,10 +8,10 @@ async function initMotorcyclesPage() {
 async function fetchMotorcyclesFromSupabase() {
     if (!window.supabase) return;
     try {
-        const { data, error } = await window.supabase
-            .from('motorcycles')
-            .select('*')
-            .order('id', { ascending: true });
+                const { data, error } = await window.supabase
+                    .from('motorcycles')
+                    .select('*')
+                    .order('display_order', { ascending: true });
         if (!error && data && data.length > 0) {
             const fetched = data.map(row => ({
                 id: row.id,

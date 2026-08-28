@@ -11,10 +11,10 @@ async function initAssistancePage() {
 async function fetchCarsFromSupabase() {
     if (!window.supabase) return;
     try {
-        const { data, error } = await window.supabase
-            .from('cars')
-            .select('*')
-            .order('id', { ascending: true });
+                const { data, error } = await window.supabase
+                    .from('cars')
+                    .select('*')
+                    .order('display_order', { ascending: true });
         if (!error && data && data.length > 0) {
             const fetched = data.map(row => ({
                 id: row.id,

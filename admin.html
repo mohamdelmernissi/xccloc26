@@ -4027,7 +4027,8 @@ td{
                         weight: moto.specs?.weight || '',
                         mileage: moto.condition?.mileage || '',
                         last_service: moto.condition?.lastService || '',
-                        notes: moto.condition?.notes || ''
+                        notes: moto.condition?.notes || '',
+                        display_order: moto.display_order || 0
                     });
 
                 if (error) throw error;
@@ -4069,7 +4070,8 @@ td{
                         fuel: car.specs?.fuel || '',
                         mileage: car.condition?.mileage || '',
                         last_service: car.condition?.lastService || '',
-                        notes: car.condition?.notes || ''
+                        notes: car.condition?.notes || '',
+                        display_order: car.display_order || 0
                     });
 
                 if (error) throw error;
@@ -4139,7 +4141,8 @@ td{
                         price_per_person: trip.pricePerPerson || 0,
                         distance: trip.distance || '',
                         recommended_bike: trip.recommendedBike || '',
-                        state: trip.state || ''
+                        state: trip.state || '',
+                        display_order: trip.display_order || 0
                     });
 
                 if (error) throw error;
@@ -4341,7 +4344,7 @@ td{
                 const { data, error } = await window.supabase
                     .from('motorcycles')
                     .select('*')
-                    .order('id', { ascending: true });
+                    .order('display_order', { ascending: true });
 
                 if (error) throw error;
 
@@ -4351,6 +4354,7 @@ td{
                     type: row.type,
                     pricePerDay: row.price_per_day,
                     imageUrl: row.image_url,
+                    display_order: row.display_order,
                     specs: {
                         engine: row.engine,
                         power: row.power,
@@ -4372,7 +4376,7 @@ td{
                 const { data, error } = await window.supabase
                     .from('cars')
                     .select('*')
-                    .order('id', { ascending: true });
+                    .order('display_order', { ascending: true });
 
                 if (error) throw error;
 
@@ -4382,6 +4386,7 @@ td{
                     type: row.type,
                     pricePerDay: row.price_per_day,
                     imageUrl: row.image_url,
+                    display_order: row.display_order,
                     specs: {
                         engine: row.engine,
                         drive: row.drive,
@@ -4428,7 +4433,7 @@ td{
                 const { data, error } = await window.supabase
                     .from('trips')
                     .select('*')
-                    .order('id', { ascending: true });
+                    .order('display_order', { ascending: true });
 
                 if (error) throw error;
 
@@ -4441,7 +4446,8 @@ td{
                     pricePerPerson: row.price_per_person || 0,
                     distance: row.distance || '',
                     recommendedBike: row.recommended_bike || '',
-                    state: row.state || ''
+                    state: row.state || '',
+                    display_order: row.display_order
                 }));
 
                 localStorage.setItem('admin_trips', JSON.stringify(appState.trips));
@@ -5885,19 +5891,27 @@ td{
                 animation: 150,
                 ghostClass: 'sortable-ghost',
                 chosenClass: 'sortable-chosen',
-                onEnd: function() {
+                onEnd: async function() {
                     const newOrderIds = Array.from(container.children).map(child => child.dataset.id);
                     const reorderedData = newOrderIds.map(id => data.find(item => item.id === id));
                     
-                    // Update state and save
                     if (storageKey === 'admin_motorcycles') appState.motorcycles = reorderedData;
                     else if (storageKey === 'admin_cars') appState.cars = reorderedData;
                     else if (storageKey === 'admin_trips') appState.trips = reorderedData;
                     
                     localStorage.setItem(storageKey, JSON.stringify(reorderedData));
+                    localStorage.setItem(storageKey + '_order', JSON.stringify(newOrderIds));
+                    
+                    if (storageKey === 'admin_motorcycles') {
+                        await Promise.all(reorderedData.map((item, idx) => window.supabase.from('motorcycles').update({ display_order: idx }).eq('id', item.id)));
+                    } else if (storageKey === 'admin_cars') {
+                        await Promise.all(reorderedData.map((item, idx) => window.supabase.from('cars').update({ display_order: idx }).eq('id', item.id)));
+                    } else if (storageKey === 'admin_trips') {
+                        await Promise.all(reorderedData.map((item, idx) => window.supabase.from('trips').update({ display_order: idx }).eq('id', item.id)));
+                    }
+                    
                     showToast('✅ Order updated');
                     
-                    // Refresh related tables
                     if (storageKey === 'admin_motorcycles') renderMotorcycles();
                     else if (storageKey === 'admin_cars') renderCars();
                     else if (storageKey === 'admin_trips') renderTrips();

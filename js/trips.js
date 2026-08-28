@@ -6,10 +6,10 @@ async function initTripsPage() {
 async function fetchTripsFromSupabase() {
     if (!window.supabase) return;
     try {
-        const { data, error } = await window.supabase
-            .from('trips')
-            .select('*')
-            .order('id', { ascending: true });
+                const { data, error } = await window.supabase
+                    .from('trips')
+                    .select('*')
+                    .order('display_order', { ascending: true });
         if (!error && data && data.length > 0) {
             const fetched = data.map(row => ({
                 id: row.id,
