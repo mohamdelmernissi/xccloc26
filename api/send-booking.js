@@ -36,7 +36,7 @@ function getReplacements(data, origin) {
   const returnTime = data.rental?.returnTime ? ` at ${data.rental.returnTime}` : "";
 
 // Gather vehicle‑specific fields safely
-const vehicleImageUrl = data.vehicle?.imageUrl || "";
+const vehicleImageUrl = data.vehicle?.imageUrl ? `https://xccloc26.com${data.vehicle.imageUrl}` : "";
 const vehicleType = data.vehicle?.type || "";
 const vehiclePricePerDay = data.vehicle?.pricePerDay ? `${data.vehicle.pricePerDay} €` : "N/A";
   const adminNote = data.adminNote || data.admin_note || "No notes";
