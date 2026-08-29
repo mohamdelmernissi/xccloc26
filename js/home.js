@@ -5,10 +5,10 @@ async function renderSlides() {
     let slides = [];
     if (window.supabase) {
         try {
-            const { data, error } = await window.supabase
+             const { data, error } = await window.supabase
                 .from('slides')
                 .select('*')
-                .order('id', { ascending: true });
+                .order('display_order', { ascending: true });
             if (!error && data && data.length > 0) {
                 slides = data.map(row => ({
                     id: row.id,

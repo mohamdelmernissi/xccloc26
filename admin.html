@@ -4178,7 +4178,8 @@ td{
                         heading: slide.heading || '',
                         subtext: slide.subtext || '',
                         button_text: slide.buttonText || '',
-                        button_link: slide.buttonLink || ''
+                        button_link: slide.buttonLink || '',
+                        display_order: idx !== undefined ? idx : 0
                     });
 
                 if (error) throw error;
@@ -4488,7 +4489,7 @@ td{
                 const { data, error } = await window.supabase
                     .from('slides')
                     .select('*')
-                    .order('id', { ascending: true });
+                    .order('display_order', { ascending: true });
 
                 if (error) throw error;
 
@@ -4499,7 +4500,8 @@ td{
                     heading: row.heading,
                     subtext: row.subtext || '',
                     buttonText: row.button_text,
-                    buttonLink: row.button_link
+                    buttonLink: row.button_link,
+                    displayOrder: row.display_order || 0
                 }));
 
                 localStorage.setItem('admin_slides', JSON.stringify(appState.slides));
@@ -5374,18 +5376,34 @@ td{
         function renderHome() {
             const container = document.getElementById('slides-container');
             container.innerHTML = appState.slides.map((s, idx) => `
-                <div class="stat-card" style="display: flex; flex-direction: column;">
-                    <img src="${s.imageUrl}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 1rem;">
-                    <h4>${s.heading}</h4>
-                    <p style="font-size: 0.75rem; color: var(--brand-silver); margin-bottom: 1rem; flex-grow: 1;">${s.subtext}</p>
+                <div class="draggable-card" data-id="${s.id}">
+                    <img src="${s.imageUrl}" alt="${s.heading}" onerror="this.src='https://placehold.co/400x120?text=No+Image'">
+                    <div class="card-title">${s.heading}</div>
+                    <div class="card-meta">${s.subtext}</div>
                     <div class="action-btns" style="margin-top: auto;">
                         <button class="btn-action btn-edit" onclick="editSlide(${idx})">Edit</button>
                         <button class="btn-action btn-delete" onclick="deleteSlide(${idx})">Delete</button>
-                        <button class="btn-action btn-view" onclick="moveSlide(${idx}, -1)" ${idx === 0 ? 'disabled' : ''}>↑</button>
-                        <button class="btn-action btn-view" onclick="moveSlide(${idx}, 1)" ${idx === appState.slides.length - 1 ? 'disabled' : ''}>↓</button>
                     </div>
                 </div>
             `).join('');
+
+            new Sortable(container, {
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                chosenClass: 'sortable-chosen',
+                onEnd: async function() {
+                    const newOrderIds = Array.from(container.children).map(child => child.dataset.id);
+                    const reorderedData = newOrderIds.map(id => appState.slides.find(s => s.id === id));
+                    appState.slides = reorderedData;
+                    localStorage.setItem('admin_slides', JSON.stringify(reorderedData));
+                    localStorage.setItem('admin_slides_order', JSON.stringify(newOrderIds));
+                    await Promise.all(reorderedData.map((slide, idx) =>
+                        window.supabase.from('slides').update({ display_order: idx }).eq('id', slide.id)
+                    ));
+                    showToast('✅ Order updated');
+                    renderHome();
+                }
+            });
         }
 
         document.getElementById('slide-form').addEventListener('submit', (e) => {
@@ -5400,12 +5418,13 @@ td{
                 buttonText: document.getElementById('slide-btn-text').value || 'Learn More',
                 buttonLink: document.getElementById('slide-btn-link').value || 'index.html'
             };
-            
+
             if (idx !== '') appState.slides[idx] = slide;
             else appState.slides.push(slide);
-            
+
+            const displayOrder = idx !== '' ? parseInt(idx) : appState.slides.length - 1;
             saveAndRefresh('admin_slides', appState.slides, 'slide-modal', renderHome);
-            syncSlideToSupabase(slide, idx !== '' ? parseInt(idx) : undefined);
+            syncSlideToSupabase(slide, displayOrder);
         });
 
         function editSlide(idx) {
@@ -5435,6 +5454,9 @@ td{
             appState.slides[idx] = appState.slides[target];
             appState.slides[target] = temp;
             saveAndRefresh('admin_slides', appState.slides, null, renderHome);
+            Promise.all(appState.slides.map((slide, i) =>
+                window.supabase.from('slides').update({ display_order: i }).eq('id', slide.id)
+            )).then(() => showToast('✅ Order updated'));
         }
 
         // --- SECTION: CONTACT INFO ---

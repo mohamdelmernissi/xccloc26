@@ -34,3 +34,15 @@ UPDATE public.trips
 SET display_order = numbered_trips.rn
 FROM numbered_trips
 WHERE public.trips.id = numbered_trips.id;
+
+alter table public.slides add column if not exists display_order integer not null default 0;
+
+WITH numbered_slides AS (
+  SELECT id, ROW_NUMBER() OVER (ORDER BY id) AS rn
+  FROM public.slides
+  WHERE display_order = 0
+)
+UPDATE public.slides
+SET display_order = numbered_slides.rn
+FROM numbered_slides
+WHERE public.slides.id = numbered_slides.id;
