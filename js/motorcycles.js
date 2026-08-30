@@ -55,6 +55,7 @@ function renderAllMotorcycles() {
         
         card.innerHTML = `
             <img src="${motorcycle.imageUrl}" alt="${motorcycle.name}" class="motorcycle-image">
+            ${discountBadgeHtml(motorcycle.pricePerDay, new Date().toISOString().split('T')[0], motorcycle.id)}
             <div class="motorcycle-content">
                 <h3 class="motorcycle-name">${motorcycle.name}</h3>
                 <span class="motorcycle-type">${motorcycle.type}</span>
@@ -76,7 +77,7 @@ function renderAllMotorcycles() {
                         <div class="spec-value">${motorcycle.specs.seatHeight}</div>
                     </div>
                 </div>
-                <div class="motorcycle-price">${getEffectivePrice(motorcycle.pricePerDay, new Date().toISOString().split('T')[0])} €/day</div>
+                <div class="motorcycle-price">${renderPriceTag(motorcycle.pricePerDay, new Date().toISOString().split('T')[0], motorcycle.id, '€/day')}</div>
                 <div class="motorcycle-actions">
                     <button class="btn btn-details" onclick="showMotorcycleDetails('${motorcycle.id}')">View Details</button>
                     ${blocked 
@@ -155,7 +156,7 @@ function showMotorcycleDetails(motorcycleId) {
                                     <span class="spec-value">${motorcycle.specs.seatHeight}</span>
                                 </div>
                             </div>
-                            <div class="modal-price">${getEffectivePrice(motorcycle.pricePerDay, new Date().toISOString().split('T')[0])} € per day</div>
+                            <div class="modal-price">${renderPriceTag(motorcycle.pricePerDay, new Date().toISOString().split('T')[0], motorcycle.id, '€ per day')}</div>
                             <p class="modal-description">Perfect for ${getMotorcycleDescription(motorcycle.type)} adventures in Morocco.</p>
                             <a href="booking.html" class="btn" onclick="setMotorcyclePreference('${motorcycle.id}')">Book This Motorcycle</a>
                         </div>

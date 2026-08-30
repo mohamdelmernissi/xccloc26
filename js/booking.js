@@ -63,7 +63,8 @@ async function fetchFleetFromSupabase() {
                 impactType: row.impact_type,
                 value: row.value,
                 start: row.start_date || '',
-                end: row.end_date || ''
+                end: row.end_date || '',
+                vehicleIds: row.vehicle_ids || []
             }));
             if (typeof PRICING_RULES !== 'undefined') {
                 PRICING_RULES.splice(0, PRICING_RULES.length, ...fetched);
@@ -164,7 +165,7 @@ function calculateBasePrice() {
         const d = new Date(pickup);
         d.setDate(d.getDate() + i);
         const currentDate = d.toISOString().split('T')[0];
-        total += getEffectivePrice(vehicle.pricePerDay, currentDate);
+        total += getEffectivePrice(vehicle.pricePerDay, currentDate, vehicle.id);
     }
     return total;
 }
@@ -221,7 +222,7 @@ function buildEmailHTMLOption(data) {
 
                     <div class="detail-item">
                         <span class="detail-label">Location:</span>
-                        <span class="detail-value">${getEffectivePrice(vehicle.pricePerDay, bookingDate)} €</span>
+                        <span class="detail-value">${renderPriceTag(vehicle.pricePerDay, bookingDate, vehicle.id, '€')}</span>
                     </div>
 
                     ${priceHTML} 
@@ -483,6 +484,7 @@ function renderCarOptions() {
     }
     option.innerHTML = `
       <img src="${car.imageUrl}" alt="${car.name}" class="option-image">
+      ${discountBadgeHtml(car.pricePerDay, new Date().toISOString().split('T')[0], car.id)}
       <div class="option-name">${car.name}</div>
       <span class="option-type">${car.type}</span>
       <div class="option-specs">
@@ -503,7 +505,7 @@ function renderCarOptions() {
           <div class="spec-value">${car.specs.fuel}</div>
         </div>
       </div>
-      <div class="option-price">${getEffectivePrice(car.pricePerDay, new Date().toISOString().split('T')[0])} €/day</div>
+      <div class="option-price">${renderPriceTag(car.pricePerDay, new Date().toISOString().split('T')[0], car.id, '€/day')}</div>
     `;
     
     option.addEventListener('click', () => {
@@ -568,6 +570,7 @@ function renderMotorcycleOptions() {
     }
     option.innerHTML = `
             <img src="${motorcycle.imageUrl}" alt="${motorcycle.name}" class="option-image">
+            ${discountBadgeHtml(motorcycle.pricePerDay, new Date().toISOString().split('T')[0], motorcycle.id)}
             <div class="option-name">${motorcycle.name}</div>
             <span class="option-type">${motorcycle.type}</span>
             <div class="option-specs">
@@ -588,7 +591,7 @@ function renderMotorcycleOptions() {
                     <div class="spec-value">${motorcycle.specs.seatHeight}</div>
                 </div>
             </div>
-            <div class="option-price">${getEffectivePrice(motorcycle.pricePerDay, new Date().toISOString().split('T')[0])} €/day</div>
+            <div class="option-price">${renderPriceTag(motorcycle.pricePerDay, new Date().toISOString().split('T')[0], motorcycle.id, '€/day')}</div>
         `;
 
     option.addEventListener("click", () => {
@@ -1075,7 +1078,7 @@ function calculateTotalCost() {
     const d = new Date(pickup);
     d.setDate(d.getDate() + i);
     const currentDate = d.toISOString().split('T')[0];
-    totalBasePrice += getEffectivePrice(vehicle.pricePerDay, currentDate);
+    totalBasePrice += getEffectivePrice(vehicle.pricePerDay, currentDate, vehicle.id);
   }
   
   const optionsTotal = calculateOptionsTotal();
@@ -1116,7 +1119,7 @@ function calculateDiscountAmount() {
     const d = new Date(pickup);
     d.setDate(d.getDate() + i);
     const currentDate = d.toISOString().split('T')[0];
-    basePrice += getEffectivePrice(vehicle?.pricePerDay || 0, currentDate);
+    basePrice += getEffectivePrice(vehicle?.pricePerDay || 0, currentDate, vehicle?.id);
   }
   
   const optionsTotal = calculateOptionsTotal();
@@ -1136,7 +1139,7 @@ function updateBookingSummary() {
     vehicleSummary.innerHTML = `
             <strong>${vehicle.name}</strong><br>
             ${vehicle.type} - ${specValue}<br>
-            ${getEffectivePrice(vehicle.pricePerDay, bookingState.pickupDate)} € per day
+            ${renderPriceTag(vehicle.pricePerDay, bookingState.pickupDate, vehicle.id, '€ per day')}
         `;
   }
 
@@ -1241,7 +1244,7 @@ async function submitBooking() {
       type: bookingState.vehicleType,
       id: vehicle.id,
       name: vehicle.name,
-      pricePerDay: getEffectivePrice(vehicle.pricePerDay, bookingState.pickupDate),
+      pricePerDay: getEffectivePrice(vehicle.pricePerDay, bookingState.pickupDate, vehicle.id),
       imageUrl: vehicle.imageUrl,
     },
     rental: {

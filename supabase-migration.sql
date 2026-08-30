@@ -69,5 +69,9 @@ create table if not exists public.pricing_rules (
   impact_type text not null,
   value numeric not null,
   start_date text,
-  end_date text
+  end_date text,
+  vehicle_ids text[] default '{}'
 );
+
+alter table if exists public.pricing_rules
+  add column if not exists vehicle_ids text[] default '{}';

@@ -184,6 +184,7 @@ function renderFeaturedMotorcycles() {
         card.className = 'motorcycle-card';
         card.innerHTML = `
             <img src="${motorcycle.imageUrl}" alt="${motorcycle.name}" class="motorcycle-image">
+            ${discountBadgeHtml(motorcycle.pricePerDay, new Date().toISOString().split('T')[0], motorcycle.id)}
             <div class="motorcycle-content">
                 <h3 class="motorcycle-name">${motorcycle.name}</h3>
                 <span class="motorcycle-type">${motorcycle.type}</span>
@@ -205,7 +206,7 @@ function renderFeaturedMotorcycles() {
                         <div class="spec-value">${motorcycle.specs.seatHeight}</div>
                     </div>
                 </div>
-                <div class="motorcycle-price">${getEffectivePrice(motorcycle.pricePerDay, new Date().toISOString().split('T')[0])} €/day</div>
+                <div class="motorcycle-price">${renderPriceTag(motorcycle.pricePerDay, new Date().toISOString().split('T')[0], motorcycle.id, '€/day')}</div>
                 <a href="motorcycles.html" class="btn">View Details</a>
             </div>
         `;

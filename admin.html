@@ -1425,6 +1425,45 @@ td{
     }
 }
 
+/* Pricing rule vehicle checklist */
+.vehicle-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.vehicle-checklist-group strong {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--brand-silver);
+}
+
+.vehicle-checklist-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.35rem 1rem;
+}
+
+.vehicle-checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.vehicle-checklist-item input {
+    width: auto;
+}
+
 /* Fleet tables (motorcycles, cars, rental options, trips) — grid card layout on mobile */
 @media (max-width: 812px) {
 
@@ -2258,7 +2297,7 @@ td{
                 <div class="data-table-container">
                     <div class="table-header">
                         <h3>Seasonal & Weekend Pricing Rules</h3>
-                        <button class="btn-login" style="width: auto; padding: 0.5rem 1rem;" onclick="openModal('pricing-modal')">Add Pricing Rule</button>
+                        <button class="btn-login" style="width: auto; padding: 0.5rem 1rem;" onclick="openAddPricingRule()">Add Pricing Rule</button>
                     </div>
                     <table id="pricing-table">
                         <thead>
@@ -2267,6 +2306,7 @@ td{
                                 <th>Type</th>
                                 <th>Impact</th>
                                 <th>Dates/Days</th>
+                                <th>Applies To</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -2827,6 +2867,10 @@ td{
                             <input type="date" id="rule-end" class="form-input">
                         </div>
                     </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Apply to Vehicles <small style="font-weight: normal; opacity: 0.7;">(none selected = applies to all)</small></label>
+                    <div id="rule-vehicles-checklist" class="vehicle-checklist"></div>
                 </div>
                 <button type="submit" class="btn-login">SAVE PRICING RULE</button>
             </form>
@@ -4714,7 +4758,8 @@ td{
                     impactType: row.impact_type,
                     value: row.value,
                     start: row.start_date || '',
-                    end: row.end_date || ''
+                    end: row.end_date || '',
+                    vehicleIds: row.vehicle_ids || []
                 }));
 
                 localStorage.setItem('admin_pricing_rules', JSON.stringify(appState.pricingRules));
@@ -4736,7 +4781,8 @@ td{
                         impact_type: rule.impactType,
                         value: rule.value,
                         start_date: rule.start || null,
-                        end_date: rule.end || null
+                        end_date: rule.end || null,
+                        vehicle_ids: rule.vehicleIds || []
                     });
 
                 if (error) throw error;
@@ -5615,12 +5661,17 @@ td{
         function renderPricing() {
             const tbody = document.querySelector('#pricing-table tbody');
             tbody.innerHTML = appState.pricingRules.length > 0 
-                ? appState.pricingRules.map(rule => `
+                ? appState.pricingRules.map(rule => {
+                    const appliesTo = (!rule.vehicleIds || rule.vehicleIds.length === 0)
+                        ? 'All vehicles'
+                        : rule.vehicleIds.length + ' selected';
+                    return `
                     <tr>
                         <td data-label="Name"><strong>${rule.name}</strong></td>
                         <td data-label="Type">${rule.type}</td>
                         <td data-label="Impact">${rule.impactType === 'percentage' ? rule.value + '%' : rule.value + ' €'}</td>
                         <td data-label="Dates/Days">${rule.type === 'seasonal' ? rule.start + ' to ' + rule.end : 'Fri-Sun'}</td>
+                        <td data-label="Applies To">${appliesTo}</td>
                         <td data-label="Actions">
                             <div class="action-btns">
                                 <button class="btn-action btn-edit" onclick="editPricingRule('${rule.id}')">Edit</button>
@@ -5628,8 +5679,8 @@ td{
                             </div>
                         </td>
                     </tr>
-                `).join('')
-                : '<tr><td colspan="5" style="text-align: center; padding: 2rem;">No pricing rules defined.</td></tr>';
+                `;}).join('')
+                : '<tr><td colspan="6" style="text-align: center; padding: 2rem;">No pricing rules defined.</td></tr>';
         }
 
         document.getElementById('rule-type').addEventListener('change', function() {
@@ -5639,6 +5690,7 @@ td{
         document.getElementById('pricing-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const id = document.getElementById('rule-id').value || 'RULE-' + Date.now();
+            const vehicleIds = Array.from(document.querySelectorAll('.rule-vehicle-checkbox:checked')).map(cb => cb.value);
             const rule = {
                 id: id,
                 name: document.getElementById('rule-name').value,
@@ -5646,7 +5698,8 @@ td{
                 impactType: document.getElementById('rule-impact-type').value,
                 value: parseFloat(document.getElementById('rule-value').value),
                 start: document.getElementById('rule-start').value,
-                end: document.getElementById('rule-end').value
+                end: document.getElementById('rule-end').value,
+                vehicleIds: vehicleIds
             };
             
             const index = appState.pricingRules.findIndex(r => r.id === id);
@@ -5656,6 +5709,34 @@ td{
             saveAndRefresh('admin_pricing_rules', appState.pricingRules, 'pricing-modal', renderPricing);
             syncPricingRuleToSupabase(rule);
         });
+
+        function populatePricingVehicleChecklist(selectedIds) {
+            const checklist = document.getElementById('rule-vehicles-checklist');
+            const selected = Array.isArray(selectedIds) ? selectedIds : [];
+            const groups = [
+                { title: 'Motorcycles', items: appState.motorcycles || [] },
+                { title: 'Vehicles', items: appState.cars || [] }
+            ];
+            checklist.innerHTML = groups.map(group => {
+                if (!group.items.length) return '';
+                const boxes = group.items.map(v => `
+                    <label class="vehicle-checklist-item">
+                        <input type="checkbox" class="rule-vehicle-checkbox" value="${v.id}" ${selected.includes(String(v.id)) ? 'checked' : ''}>
+                        <span>${v.name}</span>
+                    </label>
+                `).join('');
+                return `<div class="vehicle-checklist-group"><strong>${group.title}</strong><div class="vehicle-checklist-items">${boxes}</div></div>`;
+            }).join('') || '<small style="opacity:0.7;">No vehicles available.</small>';
+        }
+
+        function openAddPricingRule() {
+            document.getElementById('pricing-form').reset();
+            document.getElementById('rule-id').value = '';
+            document.getElementById('rule-dates-group').style.display = 'block';
+            document.getElementById('pricing-modal-title').textContent = 'Add Pricing Rule';
+            populatePricingVehicleChecklist([]);
+            openModal('pricing-modal');
+        }
 
         function editPricingRule(id) {
             const rule = appState.pricingRules.find(r => r.id === id);
@@ -5669,6 +5750,7 @@ td{
             
             document.getElementById('rule-dates-group').style.display = rule.type === 'seasonal' ? 'block' : 'none';
             document.getElementById('pricing-modal-title').textContent = 'Edit Pricing Rule';
+            populatePricingVehicleChecklist(rule.vehicleIds);
             openModal('pricing-modal');
         }
 

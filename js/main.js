@@ -128,14 +128,14 @@ function getPricingRules() {
     }
 }
 
-function getEffectivePrice(basePrice, dateStr) {
+function getEffectivePrice(basePrice, dateStr, vehicleId) {
     const rules = getPricingRules();
     if (!rules.length) return basePrice;
-    
+
     const d = new Date(dateStr);
     const date = d.toISOString().split('T')[0];
     const isWeekend = [0, 5, 6].includes(d.getDay());
-    
+
     let adjustment = 0;
     rules.forEach(rule => {
         let apply = false;
@@ -144,8 +144,14 @@ function getEffectivePrice(basePrice, dateStr) {
         } else if (rule.type === 'weekend' && isWeekend) {
             apply = true;
         }
-        
+
         if (apply) {
+            const ruleVehicles = rule.vehicleIds || [];
+            if (ruleVehicles.length > 0) {
+                if (vehicleId === undefined || vehicleId === null || !ruleVehicles.map(String).includes(String(vehicleId))) {
+                    return;
+                }
+            }
             if (rule.impactType === 'percentage') {
                 adjustment += (basePrice * rule.value) / 100;
             } else {
@@ -153,8 +159,80 @@ function getEffectivePrice(basePrice, dateStr) {
             }
         }
     });
-    
+
     return basePrice + adjustment;
+}
+
+function renderPriceTag(basePrice, dateStr, vehicleId, unit) {
+    const effective = getEffectivePrice(basePrice, dateStr, vehicleId);
+    const u = unit || '€/day';
+    if (effective < basePrice) {
+        return `<span class="old-price">${basePrice} ${u}</span><span class="new-price">${effective} ${u}</span>`;
+    }
+    return `${effective} ${u}`;
+}
+
+function discountBadgeHtml(basePrice, dateStr, vehicleId) {
+    const effective = getEffectivePrice(basePrice, dateStr, vehicleId);
+    if (effective >= basePrice) return '';
+    const pct = Math.round((basePrice - effective) / basePrice * 100);
+    const info = getPricingRuleInfo(dateStr, vehicleId);
+    if (!info) return `<span class="discount-badge">-${pct}%</span>`;
+    if (info.type === 'seasonal') {
+        return `<span class="discount-badge" data-countdown="${info.endMs}">-${pct}% · Reste <span class="cd"></span> (${info.endLabel})</span>`;
+    }
+    return `<span class="discount-badge">-${pct}% · ${info.label}</span>`;
+}
+
+function getPricingRuleInfo(dateStr, vehicleId) {
+    const rules = getPricingRules();
+    const d = new Date(dateStr);
+    const date = d.toISOString().split('T')[0];
+    const isWeekend = [0, 5, 6].includes(d.getDay());
+    let info = null;
+    (rules || []).forEach(rule => {
+        let apply = false;
+        if (rule.type === 'seasonal' && rule.start && rule.end && date >= rule.start && date <= rule.end) {
+            apply = true;
+        } else if (rule.type === 'weekend' && isWeekend) {
+            apply = true;
+        }
+        if (!apply) return;
+        const ruleVehicles = rule.vehicleIds || [];
+        if (ruleVehicles.length > 0 && (vehicleId === undefined || vehicleId === null || !ruleVehicles.map(String).includes(String(vehicleId)))) return;
+        if (rule.type === 'seasonal') {
+            const parts = rule.end.split('-');
+            info = {
+                type: 'seasonal',
+                endMs: new Date(rule.end + 'T23:59:59').getTime(),
+                endLabel: `${parts[2]}/${parts[1]}`
+            };
+        } else {
+            info = { type: 'weekend', label: 'Week-end' };
+        }
+    });
+    return info;
+}
+
+function formatCountdown(ms) {
+    const s = Math.floor(ms / 1000);
+    const days = Math.floor(s / 86400);
+    return days > 0 ? days + 'j' : '0j';
+}
+
+function updateCountdowns() {
+    const now = Date.now();
+    document.querySelectorAll('.discount-badge[data-countdown]').forEach(badge => {
+        const cd = badge.querySelector('.cd');
+        if (!cd) return;
+        const remaining = parseInt(badge.getAttribute('data-countdown'), 10) - now;
+        cd.textContent = remaining <= 0 ? 'Terminé' : formatCountdown(remaining);
+    });
+}
+
+function startCountdownTimer() {
+    updateCountdowns();
+    setInterval(updateCountdowns, 1000);
 }
 
 // Common functions
@@ -351,6 +429,9 @@ function initCommon() {
         btn.dataset.originalText = btn.textContent;
     });
     
+    // Live countdown timer for seasonal discount badges
+    startCountdownTimer();
+
     console.log('RideMarrakech - Common functionality initialized');
 }
 

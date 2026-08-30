@@ -308,5 +308,44 @@ footer {
     }
 }
 
+/* Discounted price: old price struck through + small, new price highlighted */
+.old-price {
+    font-size: 0.8em;
+    color: #9ca3af;
+    text-decoration: line-through;
+    text-decoration-thickness: 1.5px;
+    margin-right: 0.4rem;
+    font-weight: 400;
+}
+
+.new-price {
+    color: #10b981;
+    font-weight: 700;
+}
+
+/* Discount badge on vehicle cards (left side) */
+.motorcycle-card,
+.car-option,
+.motorcycle-option,
+.vehicle-card {
+    position: relative;
+}
+
+.discount-badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 2;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    line-height: 1.2;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    white-space: nowrap;
+}
+
 
 

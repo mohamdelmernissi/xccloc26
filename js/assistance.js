@@ -68,6 +68,7 @@ function renderAllVehicles() {
         
         card.innerHTML = `
             <img src="${vehicle.imageUrl}" alt="${vehicle.name}" class="vehicle-image">
+            ${discountBadgeHtml(vehicle.pricePerDay, new Date().toISOString().split('T')[0], vehicle.id)}
             <div class="vehicle-content">
                 <h3 class="vehicle-name">${vehicle.name}</h3>
                 <span class="vehicle-type">${vehicle.type}</span>
@@ -89,7 +90,7 @@ function renderAllVehicles() {
                         <div class="spec-value">${vehicle.specs.fuel}</div>
                     </div>
                 </div>
-                <div class="vehicle-price">${getEffectivePrice(vehicle.pricePerDay, new Date().toISOString().split('T')[0])} €/day</div>
+                <div class="vehicle-price">${renderPriceTag(vehicle.pricePerDay, new Date().toISOString().split('T')[0], vehicle.id, '€/day')}</div>
                 <div class="vehicle-actions">
                     <button class="btn btn-details" onclick="showVehicleDetails('${vehicle.id}')">View Details</button>
                     ${blocked 
@@ -168,7 +169,7 @@ function showVehicleDetails(vehicleId) {
                                     <span class="spec-value">${vehicle.specs.fuel}</span>
                                 </div>
                             </div>
-                            <div class="modal-price">${getEffectivePrice(vehicle.pricePerDay, new Date().toISOString().split('T')[0])} € per day</div>
+                            <div class="modal-price">${renderPriceTag(vehicle.pricePerDay, new Date().toISOString().split('T')[0], vehicle.id, '€ per day')}</div>
                             <p class="modal-description">Perfect for ${getVehicleDescription(vehicle.type)} adventures in Morocco.</p>
                             <a href="booking.html?step=2&vehicleId=${vehicle.id}" class="btn btn-book">Book This Vehicle</a>
                         </div>
