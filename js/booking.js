@@ -357,6 +357,7 @@ async function initBookingPage() {
   await fetchPromoCodesFromSupabase();
   renderMotorcycleOptions();
   renderCarOptions();
+  renderRentalOptions();
   setupVehicleTypeTabs();
   setupDateInputs();
   setupStepNavigation();
@@ -466,6 +467,36 @@ function setupVehicleTypeTabs() {
       });
       updateSidebarSummary();
     });
+  });
+}
+
+// Render rental options dynamically from RENTAL_OPTIONS
+function renderRentalOptions() {
+  const container = document.getElementById('options-grid');
+  if (!container) return;
+  
+  const optionsData = typeof RENTAL_OPTIONS !== 'undefined' ? RENTAL_OPTIONS : [];
+  
+  if (optionsData.length === 0) {
+    container.innerHTML = '<p class="no-options">No additional options available</p>';
+    return;
+  }
+  
+  container.innerHTML = '';
+  optionsData.forEach((option) => {
+    const priceDisplay = option.price == 0 ? 'Free' : `${option.price} €${option.type === 'per_day' ? ' / day' : ''}`;
+    const label = document.createElement('label');
+    label.className = 'option-checkbox';
+    label.innerHTML = `
+      <input type="checkbox" name="${option.id}" value="${option.price}">
+      <span class="checkmark"></span>
+      <div class="option-info">
+        <div class="option-title">${option.name}</div>
+        <div class="option-price">${priceDisplay}</div>
+        ${option.description ? `<div class="option-description">${option.description}</div>` : ''}
+      </div>
+    `;
+    container.appendChild(label);
   });
 }
 
