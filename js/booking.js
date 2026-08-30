@@ -986,14 +986,55 @@ function updateSidebarSummary() {
   
   // Discount
   const discountElement = document.getElementById("sidebar-discount");
+  const discountDetailsElement = document.getElementById("sidebar-discount-details");
   if (discountElement) {
-    const discountAmount = calculateDiscountAmount();
-    if (discountAmount > 0) {
+    const promoDiscountAmount = calculateDiscountAmount();
+    const seasonalDiscount = calculateSeasonalDiscountAmount();
+    const totalDiscountAmount = promoDiscountAmount + seasonalDiscount.amount;
+    
+    if (totalDiscountAmount > 0) {
       discountElement.style.display = 'flex';
       const valueElement = discountElement.querySelector(".value");
-      valueElement.textContent = `-${discountAmount} €`;
+      valueElement.textContent = `-${totalDiscountAmount} €`;
+      
+      // Show discount details
+      if (discountDetailsElement) {
+        discountDetailsElement.style.display = 'flex';
+        const labelEl = discountDetailsElement.querySelector(".label");
+        const valueEl = discountDetailsElement.querySelector(".value");
+        
+        // Promo code discount details
+        if (promoDiscountAmount > 0) {
+          if (bookingState.discountType === 'fixed') {
+            labelEl.textContent = 'Promo discount:';
+            valueEl.textContent = `${bookingState.discount} € (-${promoDiscountAmount} €)`;
+          } else {
+            labelEl.textContent = 'Promo discount:';
+            valueEl.textContent = `${bookingState.discount}% (-${promoDiscountAmount} €)`;
+          }
+        } else if (seasonalDiscount.amount > 0) {
+          // Seasonal/weekend discount details
+          const info = seasonalDiscount.info;
+          if (info && info.type === 'seasonal') {
+            const basePrice = (bookingState.vehicle || bookingState.motorcycle)?.pricePerDay || 0;
+            const effective = getEffectivePrice(basePrice, bookingState.pickupDate, (bookingState.vehicle || bookingState.motorcycle)?.id);
+            const pct = Math.round((basePrice - effective) / basePrice * 100);
+            labelEl.textContent = 'Seasonal offer:';
+            valueEl.textContent = `-%${pct} (-${seasonalDiscount.amount} €)`;
+          } else if (info && info.type === 'weekend') {
+            labelEl.textContent = 'Weekend offer:';
+            valueEl.textContent = `(-${seasonalDiscount.amount} €)`;
+          } else {
+            labelEl.textContent = 'Special offer:';
+            valueEl.textContent = `(-${seasonalDiscount.amount} €)`;
+          }
+        }
+      }
     } else {
       discountElement.style.display = 'none';
+      if (discountDetailsElement) {
+        discountDetailsElement.style.display = 'none';
+      }
     }
   }
 
@@ -1126,6 +1167,35 @@ function calculateDiscountAmount() {
   const subtotal = basePrice + optionsTotal;
   
   return Math.round(computeDiscountAmount(subtotal));
+}
+
+function calculateSeasonalDiscountAmount() {
+  const vehicle = bookingState.vehicle || bookingState.motorcycle;
+  if (!vehicle || !bookingState.pickupDate || !bookingState.returnDate) return { amount: 0, info: null };
+  
+  const days = calculateRentalDays();
+  const pickup = new Date(bookingState.pickupDate);
+  
+  let totalDiscount = 0;
+  let discountInfo = null;
+  
+  for (let i = 0; i < days; i++) {
+    const d = new Date(pickup);
+    d.setDate(d.getDate() + i);
+    const currentDate = d.toISOString().split('T')[0];
+    
+    const basePrice = vehicle.pricePerDay;
+    const effectivePrice = getEffectivePrice(basePrice, currentDate, vehicle.id);
+    
+    if (effectivePrice < basePrice) {
+      totalDiscount += (basePrice - effectivePrice);
+      if (!discountInfo) {
+        discountInfo = getPricingRuleInfo(currentDate, vehicle.id);
+      }
+    }
+  }
+  
+  return { amount: Math.round(totalDiscount), info: discountInfo };
 }
 
 function updateBookingSummary() {

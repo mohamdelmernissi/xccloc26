@@ -605,6 +605,18 @@
     text-align: right;
 }
 
+.summary-item.discount-details {
+    padding-top: 0.25rem;
+    font-size: 0.85rem;
+    color: #9ca3af;
+    border-bottom: none;
+}
+
+.summary-item.discount-details .value {
+    color: #ef4444;
+    font-weight: 500;
+}
+
 .summary-total {
     display: flex;
     justify-content: space-between;
