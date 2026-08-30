@@ -67,3 +67,19 @@ INSERT INTO public.testimonials (id, author, content, image_url, rating) VALUES
   ('2', 'Maria Garcia',  'My partner and I rented a Vespa to explore Marrakech. It was so much fun and super easy to get around the city. The staff were friendly and gave us great tips. Highly recommended!',         'https://picsum.photos/seed/maria/100/100', 5),
   ('3', 'Sam Chen',      'The whole experience was seamless, from booking online to returning the bike. The Honda Africa Twin handled everything we threw at it. Will definitely be back for another adventure.',         'https://picsum.photos/seed/sam/100/100',  5)
 ON CONFLICT (id) DO NOTHING;
+
+
+-- ============================================================
+-- 6. PROMO CODES
+-- ============================================================
+INSERT INTO public.promo_codes (code, discount, discount_type, description) VALUES
+  ('XCCLOC20', 20, 'percentage', '20% discount'),
+  ('XCCLOC10', 10, 'percentage', '10% discount'),
+  ('SAAD7',    7,  'percentage', '7% discount')
+ON CONFLICT (code) DO NOTHING;
+
+
+-- ============================================================
+-- 7. PRICING RULES
+-- (No default rules — managed via admin panel)
+-- ============================================================

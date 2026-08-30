@@ -2028,7 +2028,7 @@ td{
                                     <span>🏍️</span>
                                     <small>Add Bike</small>
                                 </button>
-                                <button class="btn-quick" onclick="openModal('promo-modal')">
+                                <button class="btn-quick" onclick="openAddPromo()">
                                     <span>🎟️</span>
                                     <small>New Promo</small>
                                 </button>
@@ -2237,7 +2237,7 @@ td{
                 <div class="data-table-container">
                     <div class="table-header">
                         <h3>Manage Promo Codes</h3>
-                        <button class="btn-login" style="width: auto; padding: 0.5rem 1rem;" onclick="openModal('promo-modal')">Add Promo Code</button>
+                        <button class="btn-login" style="width: auto; padding: 0.5rem 1rem;" onclick="openAddPromo()">Add Promo Code</button>
                     </div>
                     <table id="promo-table">
                         <thead>
@@ -2767,7 +2767,14 @@ td{
                     <input type="text" id="promo-code-val" class="form-input" required style="text-transform: uppercase;">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Discount Percentage (%)</label>
+                    <label class="form-label">Discount Type</label>
+                    <select id="promo-discount-type" class="form-input">
+                        <option value="percentage">Percentage (%)</option>
+                        <option value="fixed">Fixed Amount (€)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" id="promo-discount-label">Discount Percentage (%)</label>
                     <input type="number" id="promo-discount" class="form-input" required min="1" max="100">
                 </div>
                 <div class="form-group">
@@ -4557,6 +4564,7 @@ td{
                     data.forEach(row => {
                         promos[row.code] = {
                             discount: row.discount,
+                            discountType: row.discount_type || 'percentage',
                             description: row.description
                         };
                     });
@@ -4582,6 +4590,7 @@ td{
                     .upsert({
                         code: promoData.code,
                         discount: promoData.discount,
+                        discount_type: promoData.discountType,
                         description: promoData.description
                     });
 
@@ -5498,7 +5507,7 @@ td{
             tbody.innerHTML = Object.keys(appState.promos).map(code => `
                 <tr>
                     <td><strong>${code}</strong></td>
-                    <td>${appState.promos[code].discount}%</td>
+                    <td>${appState.promos[code].discount}${appState.promos[code].discountType === 'fixed' ? ' €' : '%'}</td>
                     <td>${appState.promos[code].description}</td>
                     <td>
                         <div class="action-btns">
@@ -5523,13 +5532,16 @@ td{
                 
                 const discountValue = parseInt(document.getElementById('promo-discount').value);
                 if (isNaN(discountValue)) {
-                    showToast('Please enter a valid discount percentage', 'error');
+                    showToast('Please enter a valid discount value', 'error');
                     return;
                 }
+                
+                const discountType = document.getElementById('promo-discount-type').value;
                 
                 const promoData = {
                     code: newCode,
                     discount: discountValue,
+                    discountType: discountType,
                     description: document.getElementById('promo-desc').value
                 };
                 
@@ -5559,10 +5571,37 @@ td{
             document.getElementById('promo-id').value = code;
             document.getElementById('promo-code-val').value = code;
             document.getElementById('promo-discount').value = p.discount;
+            document.getElementById('promo-discount-type').value = p.discountType || 'percentage';
             document.getElementById('promo-desc').value = p.description;
             document.getElementById('promo-modal-title').textContent = 'Edit Promo Code';
+            updatePromoDiscountInput();
             openModal('promo-modal');
         }
+
+        function openAddPromo() {
+            document.getElementById('promo-form').reset();
+            document.getElementById('promo-id').value = '';
+            document.getElementById('promo-modal-title').textContent = 'Add Promo Code';
+            updatePromoDiscountInput();
+            openModal('promo-modal');
+        }
+
+        function updatePromoDiscountInput() {
+            const type = document.getElementById('promo-discount-type').value;
+            const label = document.getElementById('promo-discount-label');
+            const input = document.getElementById('promo-discount');
+            if (type === 'fixed') {
+                label.textContent = 'Discount Amount (€)';
+                input.removeAttribute('max');
+                input.min = '0';
+            } else {
+                label.textContent = 'Discount Percentage (%)';
+                input.max = '100';
+                input.min = '1';
+            }
+        }
+
+        document.getElementById('promo-discount-type').addEventListener('change', updatePromoDiscountInput);
 
         function deletePromo(code) {
             if (confirm(`Are you sure you want to delete promo code ${code}?`)) {

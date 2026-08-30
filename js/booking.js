@@ -88,6 +88,7 @@ async function fetchPromoCodesFromSupabase() {
             data.forEach(row => {
                 promos[row.code] = {
                     discount: row.discount,
+                    discountType: row.discount_type || 'percentage',
                     description: row.description
                 };
             });
@@ -282,6 +283,7 @@ let bookingState = {
   totalCost: 0,
   promoCode: null,
   discount: 0,
+  discountType: 'percentage',
   originalPrice: 0,
 };
 
@@ -1085,11 +1087,19 @@ function calculateTotalCost() {
   }
   
   // Apply discount if promo code is active
-  const discountAmount = bookingState.discount > 0 
-    ? (subtotal * bookingState.discount) / 100 
-    : 0;
+  const discountAmount = computeDiscountAmount(subtotal);
   
   return Math.round(subtotal - discountAmount);
+}
+
+function computeDiscountAmount(subtotal) {
+  if (!bookingState.discount || bookingState.discount === 0) {
+    return 0;
+  }
+  if (bookingState.discountType === 'fixed') {
+    return Math.min(bookingState.discount, subtotal);
+  }
+  return (subtotal * bookingState.discount) / 100;
 }
 
 function calculateDiscountAmount() {
@@ -1112,7 +1122,7 @@ function calculateDiscountAmount() {
   const optionsTotal = calculateOptionsTotal();
   const subtotal = basePrice + optionsTotal;
   
-  return Math.round((subtotal * bookingState.discount) / 100);
+  return Math.round(computeDiscountAmount(subtotal));
 }
 
 function updateBookingSummary() {
@@ -1179,9 +1189,12 @@ function updateBookingSummary() {
   if (promoSummary) {
     if (bookingState.promoCode && bookingState.discount > 0) {
       const discountAmount = calculateDiscountAmount();
+      const discountLabel = bookingState.discountType === 'fixed'
+        ? `${bookingState.discount} € (-${discountAmount} €)`
+        : `${bookingState.discount}% (-${discountAmount} €)`;
       promoSummary.innerHTML = `
         <strong>Promo Code: ${bookingState.promoCode}</strong><br>
-        Discount: ${bookingState.discount}% (-${discountAmount} €)
+        Discount: ${discountLabel}
       `;
       promoSummary.style.display = 'block';
     } else {
@@ -1442,13 +1455,13 @@ function getPromoCodes() {
   if (savedPromos) return savedPromos;
 
   return {
-    'XCCLOC20': { discount: 20, description: '20% discount' },
-    'XCCLOC10': { discount: 10, description: '10% discount' },
-    'XCCLOC05': { discount: 5, description: '5% discount' },
-    'SAAD7': { discount: 7, description: '7% discount' },
-    'SAAD10': { discount: 10, description: '10% discount' },
-    'SAAD20': { discount: 20, description: '20% discount' },
-    'XCCLOC15': { discount: 15, description: '15% discount' }
+    'XCCLOC20': { discount: 20, discountType: 'percentage', description: '20% discount' },
+    'XCCLOC10': { discount: 10, discountType: 'percentage', description: '10% discount' },
+    'XCCLOC05': { discount: 5, discountType: 'percentage', description: '5% discount' },
+    'SAAD7': { discount: 7, discountType: 'percentage', description: '7% discount' },
+    'SAAD10': { discount: 10, discountType: 'percentage', description: '10% discount' },
+    'SAAD20': { discount: 20, discountType: 'percentage', description: '20% discount' },
+    'XCCLOC15': { discount: 15, discountType: 'percentage', description: '15% discount' }
   };
 }
 
@@ -1481,6 +1494,7 @@ function applyPromoCode() {
   if (promoData) {
     bookingState.promoCode = promoInput.value.toUpperCase().trim();
     bookingState.discount = promoData.discount;
+    bookingState.discountType = promoData.discountType || 'percentage';
     
     // Disable input and apply button, show remove button
     promoInput.disabled = true;
@@ -1507,6 +1521,7 @@ function removePromoCode() {
   
   bookingState.promoCode = null;
   bookingState.discount = 0;
+  bookingState.discountType = 'percentage';
   bookingState.originalPrice = 0;
   
   if (promoInput) {
