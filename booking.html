@@ -108,6 +108,15 @@
                         <!-- Step 2: Rental Details -->
                         <div class="form-step" data-step="2">
                             <h2>Rental Details</h2>
+                            <div class="form-group">
+                                <label class="form-label">Number of vehicles *</label>
+                                <div class="quantity-selector">
+                                    <button type="button" class="qty-btn" id="qty-decrease" aria-label="Decrease quantity">−</button>
+                                    <input type="number" id="vehicle-quantity" class="qty-input" value="1" min="1" max="20" />
+                                    <button type="button" class="qty-btn" id="qty-increase" aria-label="Increase quantity">+</button>
+                                </div>
+                                <p class="qty-hint">Reserve multiple units of the same vehicle (e.g. 2 of the same motorcycle for a group).</p>
+                            </div>
                             <div class="form-grid">
                                 <div class="form-group">
                                     <label for="pickup-date" class="form-label">Pickup Date *</label>

@@ -273,7 +273,7 @@
             <div class="vehicle-section">
                 <img src="{{vehicle_image_url}}" alt="{{vehicle_name}}" />
                 <div class="vehicle-info">
-                    <p style="margin:0; font-weight:600; color:#111827; font-size:14px;">{{vehicle_name}}</p>
+                    <p style="margin:0; font-weight:600; color:#111827; font-size:14px;">{{vehicle_name_with_qty}}</p>
                     <p style="margin:4px 0 0; color:#6b7280; font-size:13px;">{{vehicle_type}} – {{vehicle_price_per_day}} € / day</p>
                 </div>
             </div>
@@ -316,7 +316,11 @@
                 <div class="card">
                     <div class="row">
                         <span class="label">Vehicle</span>
-                        <span class="value">{{vehicle_name}}</span>
+                        <span class="value">{{vehicle_name_with_qty}}</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Quantity</span>
+                        <span class="value">{{vehicle_quantity}}</span>
                     </div>
 
                     <div class="row">

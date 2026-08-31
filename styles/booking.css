@@ -873,3 +873,60 @@ body:has(#Information-policy-terms[style*="display: block"])::after {
     cursor: pointer;
 }
 
+/* Quantity selector */
+.quantity-selector {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(17, 24, 39, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.375rem;
+    padding: 0.25rem;
+}
+
+.qty-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--brand-red);
+    color: #fff;
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    line-height: 1;
+}
+
+.qty-btn:hover {
+    background: #b91c1c;
+}
+
+.qty-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.qty-input {
+    width: 4rem;
+    text-align: center;
+    background: transparent;
+    border: none;
+    color: var(--brand-light);
+    font-size: 1.1rem;
+    font-weight: 600;
+    -moz-appearance: textfield;
+}
+
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.qty-hint {
+    color: var(--brand-silver);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+}
+

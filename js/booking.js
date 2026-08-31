@@ -160,6 +160,7 @@ function calculateBasePrice() {
     }
     const days = calculateRentalDays();
     const pickup = new Date(bookingState.pickupDate);
+    const qty = Math.max(1, parseInt(bookingState.vehicleQuantity, 10) || 1);
     let total = 0;
     for (let i = 0; i < days; i++) {
         const d = new Date(pickup);
@@ -167,7 +168,7 @@ function calculateBasePrice() {
         const currentDate = d.toISOString().split('T')[0];
         total += getEffectivePrice(vehicle.pricePerDay, currentDate, vehicle.id);
     }
-    return total;
+    return total * qty;
 }
 
 function buildEmailHTMLOption(data) {
@@ -248,6 +249,7 @@ function buildEmailHTMLOption(data) {
 //   vehicle_name text,
 //   vehicle_price_per_day numeric,
 //   vehicle_image_url text,
+//   vehicle_quantity integer default 1,
 //   pickup_date date,
 //   return_date date,
 //   pickup_time text,
@@ -275,6 +277,7 @@ function buildEmailHTMLOption(data) {
 let bookingState = {
   vehicle: null,
   vehicleType: 'motorcycle', // 'motorcycle' or 'car'
+  vehicleQuantity: 1,
   pickupDate: "",
   returnDate: "",
   pickupTime: "",
@@ -360,6 +363,7 @@ async function initBookingPage() {
   renderRentalOptions();
   setupVehicleTypeTabs();
   setupDateInputs();
+  setupQuantitySelector();
   setupStepNavigation();
   setupFormValidation();
   updateSidebarSummary();
@@ -742,6 +746,37 @@ function setupDateInputs() {
   }
 }
 
+function setupQuantitySelector() {
+  const qtyInput = document.getElementById('vehicle-quantity');
+  const decBtn = document.getElementById('qty-decrease');
+  const incBtn = document.getElementById('qty-increase');
+  if (!qtyInput || !decBtn || !incBtn) return;
+
+  const clamp = (val) => {
+    let n = parseInt(val, 10);
+    if (isNaN(n) || n < 1) n = 1;
+    if (n > 20) n = 20;
+    return n;
+  };
+
+  const update = (val) => {
+    const n = clamp(val);
+    qtyInput.value = n;
+    bookingState.vehicleQuantity = n;
+    decBtn.disabled = n <= 1;
+    incBtn.disabled = n >= 20;
+    updateSidebarSummary();
+  };
+
+  decBtn.addEventListener('click', () => update(parseInt(qtyInput.value, 10) - 1));
+  incBtn.addEventListener('click', () => update(parseInt(qtyInput.value, 10) + 1));
+  qtyInput.addEventListener('input', () => update(qtyInput.value));
+  qtyInput.addEventListener('blur', () => update(qtyInput.value));
+
+  // Initial state
+  update(bookingState.vehicleQuantity || 1);
+}
+
 function setupStepNavigation() {
   // Next buttons
   const nextButtons = document.querySelectorAll(".btn-next");
@@ -977,12 +1012,15 @@ function isValidEmail(email) {
 
 function updateSidebarSummary() {
   const vehicle = bookingState.vehicle || bookingState.motorcycle;
+  const qty = Math.max(1, parseInt(bookingState.vehicleQuantity, 10) || 1);
   
   // Vehicle
   const vehicleElement = document.getElementById("sidebar-motorcycle");
   if (vehicleElement) {
     const valueElement = vehicleElement.querySelector(".value");
-    valueElement.textContent = vehicle ? vehicle.name : "Not selected";
+    valueElement.textContent = vehicle
+      ? (qty > 1 ? `${vehicle.name} × ${qty}` : vehicle.name)
+      : "Not selected";
   }
 
   // Duration
@@ -1002,7 +1040,7 @@ function updateSidebarSummary() {
     bookingState.returnDate
   ) {
     const days = calculateRentalDays();
-    const basePrice = days * vehicle.pricePerDay;
+    const basePrice = days * vehicle.pricePerDay * qty;
     const valueElement = basePriceElement.querySelector(".value");
     valueElement.textContent = `${basePrice} €`;
   }
@@ -1010,7 +1048,7 @@ function updateSidebarSummary() {
   // Options
   const optionsElement = document.getElementById("sidebar-options");
   if (optionsElement) {
-    const optionsTotal = calculateOptionsTotal();
+    const optionsTotal = calculateOptionsTotal() * qty;
     const valueElement = optionsElement.querySelector(".value");
     valueElement.textContent = `${optionsTotal} €`;
   }
@@ -1144,6 +1182,7 @@ function calculateTotalCost() {
 
   const days = calculateRentalDays();
   const pickup = new Date(bookingState.pickupDate);
+  const qty = Math.max(1, parseInt(bookingState.vehicleQuantity, 10) || 1);
   
   let totalBasePrice = 0;
   for (let i = 0; i < days; i++) {
@@ -1152,8 +1191,9 @@ function calculateTotalCost() {
     const currentDate = d.toISOString().split('T')[0];
     totalBasePrice += getEffectivePrice(vehicle.pricePerDay, currentDate, vehicle.id);
   }
+  totalBasePrice *= qty;
   
-  const optionsTotal = calculateOptionsTotal();
+  const optionsTotal = calculateOptionsTotal() * qty;
   const subtotal = totalBasePrice + optionsTotal;
   
   // Store original price before discount
@@ -1185,6 +1225,7 @@ function calculateDiscountAmount() {
   const vehicle = bookingState.vehicle || bookingState.motorcycle;
   const days = calculateRentalDays();
   const pickup = new Date(bookingState.pickupDate);
+  const qty = Math.max(1, parseInt(bookingState.vehicleQuantity, 10) || 1);
   
   let basePrice = 0;
   for (let i = 0; i < days; i++) {
@@ -1193,8 +1234,9 @@ function calculateDiscountAmount() {
     const currentDate = d.toISOString().split('T')[0];
     basePrice += getEffectivePrice(vehicle?.pricePerDay || 0, currentDate, vehicle?.id);
   }
+  basePrice *= qty;
   
-  const optionsTotal = calculateOptionsTotal();
+  const optionsTotal = calculateOptionsTotal() * qty;
   const subtotal = basePrice + optionsTotal;
   
   return Math.round(computeDiscountAmount(subtotal));
@@ -1206,6 +1248,7 @@ function calculateSeasonalDiscountAmount() {
   
   const days = calculateRentalDays();
   const pickup = new Date(bookingState.pickupDate);
+  const qty = Math.max(1, parseInt(bookingState.vehicleQuantity, 10) || 1);
   
   let totalDiscount = 0;
   let discountInfo = null;
@@ -1226,19 +1269,21 @@ function calculateSeasonalDiscountAmount() {
     }
   }
   
-  return { amount: Math.round(totalDiscount), info: discountInfo };
+  return { amount: Math.round(totalDiscount * qty), info: discountInfo };
 }
 
 function updateBookingSummary() {
   const vehicle = bookingState.vehicle || bookingState.motorcycle;
+  const qty = Math.max(1, parseInt(bookingState.vehicleQuantity, 10) || 1);
   
   // Vehicle summary
   const vehicleSummary = document.getElementById("summary-motorcycle");
   if (vehicleSummary && vehicle) {
     const specs = vehicle.specs;
     const specValue = specs?.engine || specs?.drive || 'N/A';
+    const qtyLabel = qty > 1 ? ` × ${qty}` : '';
     vehicleSummary.innerHTML = `
-            <strong>${vehicle.name}</strong><br>
+            <strong>${vehicle.name}${qtyLabel}</strong><br>
             ${vehicle.type} - ${specValue}<br>
             ${renderPriceTag(vehicle.pricePerDay, bookingState.pickupDate, vehicle.id, '€ per day')}
         `;
@@ -1347,6 +1392,7 @@ async function submitBooking() {
       name: vehicle.name,
       pricePerDay: getEffectivePrice(vehicle.pricePerDay, bookingState.pickupDate, vehicle.id),
       imageUrl: vehicle.imageUrl,
+      quantity: Math.max(1, parseInt(bookingState.vehicleQuantity, 10) || 1),
     },
     rental: {
       pickupDate: bookingState.pickupDate,
@@ -1394,6 +1440,7 @@ const dbRow = {
   vehicle_name: v?.name || "unknown",
   vehicle_price_per_day: Number(v?.pricePerDay) || 0,
   vehicle_image_url: v?.imageUrl || "",
+  vehicle_quantity: Number(v?.quantity) || 1,
 
   pickup_date: r?.pickupDate || null,
   return_date: r?.returnDate || null,

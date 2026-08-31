@@ -40,12 +40,18 @@ function getReplacements(data, origin) {
 const vehicleImageUrl = data.vehicle?.imageUrl ? `https://xccloc26.com${data.vehicle.imageUrl}` : "";
 const vehicleType = data.vehicle?.type || "";
 const vehiclePricePerDay = data.vehicle?.pricePerDay ? `${data.vehicle.pricePerDay} €` : "N/A";
+const vehicleQuantity = Math.max(1, parseInt(data.vehicle?.quantity, 10) || 1);
+const vehicleNameWithQty = vehicleQuantity > 1
+  ? `${data.vehicle?.name || "Vehicle"} × ${vehicleQuantity}`
+  : (data.vehicle?.name || "Vehicle");
   const adminNote = data.adminNote || data.admin_note || "No notes";
 
 return {
   vehicle_image_url: vehicleImageUrl,
   vehicle_type: vehicleType,
   vehicle_price_per_day: vehiclePricePerDay,
+  vehicle_quantity: String(vehicleQuantity),
+  vehicle_name_with_qty: vehicleNameWithQty,
   admin_note: adminNote,
   customer_name: customerName,
   customer_email: data.customer?.email || "",

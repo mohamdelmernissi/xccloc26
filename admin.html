@@ -3917,7 +3917,8 @@ td{
                         name: row.vehicle_name,
                         type: row.vehicle_type,
                         pricePerDay: row.vehicle_price_per_day,
-                        imageUrl: row.vehicle_image_url
+                        imageUrl: row.vehicle_image_url,
+                        quantity: row.vehicle_quantity || 1
                     },
                     rental: {
                         pickupDate: row.pickup_date,
@@ -3999,6 +4000,7 @@ td{
                     vehicle_name: v.name,
                     vehicle_price_per_day: Number(v.pricePerDay) || 0,
                     vehicle_image_url: v.imageUrl || "",
+                    vehicle_quantity: Number(v.quantity) || 1,
                     pickup_date: r.pickupDate,
                     return_date: r.returnDate,
                     pickup_time: r.pickupTime || "",
@@ -6085,7 +6087,7 @@ td{
                     <td class="col-id"><small>${b.id}</small></td>
                     <td class="col-submitted">${new Date(b.submittedAt).toLocaleDateString()}</td>
                     <td class="col-customer">${b.customer.firstName} ${b.customer.lastName}</td>
-                    <td class="col-vehicle">${b.vehicle.name}</td>
+                    <td class="col-vehicle">${b.vehicle.name}${b.vehicle.quantity && b.vehicle.quantity > 1 ? ` <span style="background: var(--brand-red); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700;">× ${b.vehicle.quantity}</span>` : ''}</td>
                     <td class="col-period">${new Date(b.rental.pickupDate).toLocaleDateString()} → ${new Date(b.rental.returnDate).toLocaleDateString()}</td>
                     <td class="col-total"><strong>${b.rental.totalPrice} €</strong></td>
                     <td class="col-status"><span class="badge badge-${b.status}">${b.status}</span></td>
@@ -6282,7 +6284,7 @@ td{
                     </div>
                     <div>
                         <h4 style="color: var(--brand-red); margin-bottom: 1rem;">Vehicle & Rental</h4>
-                        <p><strong>Vehicle:</strong> ${b.vehicle.name} (${b.vehicle.type})</p>
+                        <p><strong>Vehicle:</strong> ${b.vehicle.name} (${b.vehicle.type})${b.vehicle.quantity && b.vehicle.quantity > 1 ? ` <span style="background: var(--brand-red); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700;">× ${b.vehicle.quantity}</span>` : ''}</p>
                         <p><strong>Period:</strong> ${b.rental.pickupDate} to ${b.rental.returnDate}</p>
                         <p><strong>Times:</strong> ${b.rental.pickupTime} / ${b.rental.returnTime}</p>
                         <p><strong>Duration:</strong> ${b.rental.totalDays} days</p>
