@@ -347,5 +347,36 @@ footer {
     white-space: nowrap;
 }
 
+/* Coming Soon badge on vehicle/trip cards (right side) */
+.coming-soon-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    left: auto;
+    z-index: 2;
+    background: var(--brand-red);
+    color: #ffffff;
+    font-size: 0.875rem;
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+}
+
+.motorcycle-card.coming-soon,
+.trip-card.coming-soon,
+.vehicle-card.coming-soon {
+    opacity: 0.6;
+    filter: grayscale(100%);
+}
+
+.coming-soon-btn {
+    background: var(--brand-silver);
+    color: var(--brand-dark);
+    cursor: not-allowed;
+}
+
 
 

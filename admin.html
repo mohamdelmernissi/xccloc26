@@ -2104,6 +2104,7 @@ td{
                             <tr>
                                 <th>Name</th>
                                 <th>Type</th>
+                                <th>Status</th>
                                 <th>Price/Day</th>
                                 <th>Engine</th>
                                 <th>Actions</th>
@@ -2124,11 +2125,12 @@ td{
                    <table id="cars-table">
                        <thead>
                            <tr>
-                               <th>Name</th>
-                               <th>Type</th>
-                               <th>Price/Day</th>
-                               <th>Drive</th>
-                               <th>Actions</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Price/Day</th>
+                                <th>Drive</th>
+                                <th>Actions</th>
                            </tr>
                        </thead>
                        <tbody></tbody>
@@ -2537,6 +2539,13 @@ td{
                         <input type="text" id="moto-weight" class="form-input">
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select id="moto-state" class="form-input">
+                        <option value="Available">Available</option>
+                        <option value="Coming Soon">Coming Soon</option>
+                    </select>
+                </div>
                 <div class="modal-header" style="margin-top: 2rem; margin-bottom: 1rem;">
                     <h3>Condition Log</h3>
                 </div>
@@ -2619,6 +2628,13 @@ td{
                             <option value="Electric">Electric</option>
                         </select>
                     </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select id="car-state" class="form-input">
+                        <option value="Available">Available</option>
+                        <option value="Coming Soon">Coming Soon</option>
+                    </select>
                 </div>
                 <div class="modal-header" style="margin-top: 2rem; margin-bottom: 1rem;">
                     <h3>Condition Log</h3>
@@ -4072,8 +4088,9 @@ td{
                         type: moto.type,
                         brand: moto.brand || '',
                         price_per_day: moto.pricePerDay,
-                        image_url: moto.imageUrl,
-                        description: moto.description || '',
+                         image_url: moto.imageUrl,
+                         state: moto.state || 'Available',
+                         description: moto.description || '',
                         engine: moto.specs?.engine || '',
                         power: moto.specs?.power || '',
                         seat_height: moto.specs?.seatHeight || '',
@@ -4114,9 +4131,10 @@ td{
                         name: car.name,
                         type: car.type,
                         brand: car.brand || '',
-                        price_per_day: car.pricePerDay,
-                        image_url: car.imageUrl,
-                        description: car.description || '',
+                         price_per_day: car.pricePerDay,
+                         image_url: car.imageUrl,
+                         state: car.state || 'Available',
+                         description: car.description || '',
                         engine: car.specs?.engine || '',
                         drive: car.specs?.drive || '',
                         seats: car.specs?.seats || '',
@@ -4408,6 +4426,7 @@ td{
                     type: row.type,
                     pricePerDay: row.price_per_day,
                     imageUrl: row.image_url,
+                    state: row.state || 'Available',
                     display_order: row.display_order,
                     specs: {
                         engine: row.engine,
@@ -4440,6 +4459,7 @@ td{
                     type: row.type,
                     pricePerDay: row.price_per_day,
                     imageUrl: row.image_url,
+                    state: row.state || 'Available',
                     display_order: row.display_order,
                     specs: {
                         engine: row.engine,
@@ -5100,6 +5120,7 @@ td{
                         <small style="color: var(--brand-silver)">${m.condition?.mileage || 0} km | Last: ${m.condition?.lastService || 'Never'}</small>
                     </td>
                     <td data-label="Type">${m.type}</td>
+                    <td data-label="Status">${m.state || 'Available'}</td>
                     <td data-label="Price/Day">${m.pricePerDay} €</td>
                     <td data-label="Engine">${m.specs?.engine || '-'}</td>
                     <td data-label="Actions">
@@ -5121,6 +5142,7 @@ td{
                 type: document.getElementById('moto-type').value,
                 pricePerDay: parseFloat(document.getElementById('moto-price').value),
                 imageUrl: document.getElementById('moto-image').value,
+                state: document.getElementById('moto-state').value || 'Available',
                 specs: {
                     engine: document.getElementById('moto-engine').value,
                     power: document.getElementById('moto-power').value,
@@ -5149,6 +5171,7 @@ td{
             document.getElementById('moto-type').value = m.type;
             document.getElementById('moto-price').value = m.pricePerDay;
             document.getElementById('moto-image').value = m.imageUrl;
+            document.getElementById('moto-state').value = m.state || 'Available';
             document.getElementById('moto-engine').value = m.specs?.engine || '';
             document.getElementById('moto-power').value = m.specs?.power || '';
             document.getElementById('moto-seat').value = m.specs?.seatHeight || '';
@@ -5181,6 +5204,7 @@ td{
                         <small style="color: var(--brand-silver)">${c.condition?.mileage || 0} km | Last: ${c.condition?.lastService || 'Never'}</small>
                     </td>
                     <td data-label="Type">${c.type}</td>
+                    <td data-label="Status">${c.state || 'Available'}</td>
                     <td data-label="Price/Day">${c.pricePerDay} €</td>
                     <td data-label="Drive">${c.specs?.drive || '-'}</td>
                     <td data-label="Actions">
@@ -5202,6 +5226,7 @@ td{
                 type: document.getElementById('car-type').value,
                 pricePerDay: parseFloat(document.getElementById('car-price').value),
                 imageUrl: document.getElementById('car-image').value,
+                state: document.getElementById('car-state').value || 'Available',
                 specs: {
                     engine: document.getElementById('car-engine').value,
                     drive: document.getElementById('car-drive').value,
@@ -5230,6 +5255,7 @@ td{
             document.getElementById('car-type').value = c.type;
             document.getElementById('car-price').value = c.pricePerDay;
             document.getElementById('car-image').value = c.imageUrl;
+            document.getElementById('car-state').value = c.state || 'Available';
             document.getElementById('car-engine').value = c.specs?.engine || '';
             document.getElementById('car-drive').value = c.specs?.drive || 'FWD';
             document.getElementById('car-seats').value = c.specs?.seats || 5;

@@ -96,12 +96,15 @@ function showBlockPopup(vehicleName, reason, start, end) {
     const overlay = document.createElement('div');
     overlay.id = 'vehicle-block-popup';
     overlay.className = 'block-popup-overlay';
+    const dateLine = start || end
+        ? `<p>Blocked from <strong>${start || ''}</strong> to <strong>${end || ''}</strong>.</p>`
+        : '';
     overlay.innerHTML = `
         <div class="block-popup">
             <button class="block-popup-close" onclick="this.closest('.block-popup-overlay').remove()">&times;</button>
             <h3>Vehicle Unavailable</h3>
             <p><strong>${vehicleName}</strong> is currently under <strong>${reason}</strong>.</p>
-            <p>Blocked from <strong>${start}</strong> to <strong>${end}</strong>.</p>
+            ${dateLine}
             <p>Please select another vehicle.</p>
         </div>
     `;

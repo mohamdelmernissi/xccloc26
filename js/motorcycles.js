@@ -20,6 +20,7 @@ async function fetchMotorcyclesFromSupabase() {
                 type: row.type,
                 pricePerDay: row.price_per_day,
                 imageUrl: row.image_url,
+                state: row.state || 'Available',
                 specs: {
                     engine: row.engine,
                     power: row.power,
@@ -47,16 +48,20 @@ function renderAllMotorcycles() {
         const card = document.createElement('div');
         card.className = 'motorcycle-card';
         card.dataset.type = motorcycle.type;
-        const blocked = isVehicleBlocked(motorcycle.id);
+        const comingSoon = (motorcycle.state || 'Available') === 'Coming Soon';
+        const blocked = !comingSoon && isVehicleBlocked(motorcycle.id);
         if (blocked) {
             card.classList.add('blocked');
+        }
+        if (comingSoon) {
+            card.classList.add('coming-soon');
         }
         
         const blockInfo = blocked ? getVehicleBlockInfo(motorcycle.id) : null;
         
         card.innerHTML = `
             <img src="${motorcycle.imageUrl}" alt="${motorcycle.name}" class="motorcycle-image">
-            ${discountBadgeHtml(motorcycle.pricePerDay, new Date().toISOString().split('T')[0], motorcycle.id)}
+            ${comingSoon ? `<span class="coming-soon-badge">Coming Soon</span>` : discountBadgeHtml(motorcycle.pricePerDay, new Date().toISOString().split('T')[0], motorcycle.id)}
             <div class="motorcycle-content">
                 <h3 class="motorcycle-name">${motorcycle.name}</h3>
                 <span class="motorcycle-type">${motorcycle.type}</span>
@@ -81,9 +86,11 @@ function renderAllMotorcycles() {
                 <div class="motorcycle-price">${renderPriceTag(motorcycle.pricePerDay, new Date().toISOString().split('T')[0], motorcycle.id, '€/day')}</div>
                 <div class="motorcycle-actions">
                     <button class="btn btn-details" onclick="showMotorcycleDetails('${motorcycle.id}')">View Details</button>
-                    ${blocked 
-                        ? `<button class="btn btn-book book-blocked" data-name="${motorcycle.name}" data-reason="${blockInfo.reason}" data-start="${blockInfo.start}" data-end="${blockInfo.end}">Book Now</button>`
-                        : `<a href="booking.html" class="btn btn-book" onclick="setMotorcyclePreference('${motorcycle.id}')">Book Now</a>`
+                    ${comingSoon
+                        ? `<button class="btn btn-book coming-soon-btn" disabled>Coming Soon</button>`
+                        : blocked 
+                            ? `<button class="btn btn-book book-blocked" data-name="${motorcycle.name}" data-reason="${blockInfo.reason}" data-start="${blockInfo.start}" data-end="${blockInfo.end}">Book Now</button>`
+                            : `<a href="booking.html" class="btn btn-book" onclick="setMotorcyclePreference('${motorcycle.id}')">Book Now</a>`
                     }
                 </div>
             </div>
@@ -129,8 +136,10 @@ function setupFiltering() {
 
 function showMotorcycleDetails(motorcycleId) {
     const motorcycle = MOTORCYCLES.find(m => m.id === motorcycleId);
-    if (motorcycle) {
-        const modalHtml = `
+    if (!motorcycle) return;
+
+    const comingSoon = (motorcycle.state || 'Available') === 'Coming Soon';
+    const modalHtml = `
             <div class="modal-overlay">
                 <div class="modal-content">
                     <button class="modal-close">&times;</button>
@@ -138,6 +147,7 @@ function showMotorcycleDetails(motorcycleId) {
                         <img src="${motorcycle.imageUrl}" alt="${motorcycle.name}" class="modal-image">
                         <div class="modal-details">
                             <h2>${motorcycle.name}</h2>
+                            ${comingSoon ? `<span class="coming-soon-badge">Coming Soon</span>` : ''}
                             <span class="motorcycle-type">${motorcycle.type}</span>
                             <div class="modal-specs">
                                 <div class="spec-row">
@@ -159,7 +169,10 @@ function showMotorcycleDetails(motorcycleId) {
                             </div>
                             <div class="modal-price">${renderPriceTag(motorcycle.pricePerDay, new Date().toISOString().split('T')[0], motorcycle.id, '€ per day')}</div>
                             <p class="modal-description">Perfect for ${getMotorcycleDescription(motorcycle.type)} adventures in Morocco.</p>
-                            <a href="booking.html" class="btn" onclick="setMotorcyclePreference('${motorcycle.id}')">Book This Motorcycle</a>
+                            ${comingSoon
+                                ? `<button class="btn coming-soon-btn" disabled>Coming Soon</button>`
+                                : `<a href="booking.html" class="btn" onclick="setMotorcyclePreference('${motorcycle.id}')">Book This Motorcycle</a>`
+                            }
                         </div>
                     </div>
                 </div>
@@ -265,7 +278,6 @@ function showMotorcycleDetails(motorcycleId) {
                 style.remove();
             }
         });
-    }
 }
 
 function getMotorcycleDescription(type) {

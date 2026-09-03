@@ -23,6 +23,7 @@ async function fetchCarsFromSupabase() {
                 type: row.type,
                 pricePerDay: row.price_per_day,
                 imageUrl: row.image_url,
+                state: row.state || 'Available',
                 specs: {
                     engine: row.engine,
                     drive: row.drive,
@@ -60,16 +61,20 @@ function renderAllVehicles() {
         const card = document.createElement('div');
         card.className = 'vehicle-card';
         card.dataset.type = vehicle.type;
-        const blocked = isVehicleBlocked(vehicle.id);
+        const comingSoon = (vehicle.state || 'Available') === 'Coming Soon';
+        const blocked = !comingSoon && isVehicleBlocked(vehicle.id);
         if (blocked) {
             card.classList.add('blocked');
+        }
+        if (comingSoon) {
+            card.classList.add('coming-soon');
         }
         
         const blockInfo = blocked ? getVehicleBlockInfo(vehicle.id) : null;
         
         card.innerHTML = `
             <img src="${vehicle.imageUrl}" alt="${vehicle.name}" class="vehicle-image">
-            ${discountBadgeHtml(vehicle.pricePerDay, new Date().toISOString().split('T')[0], vehicle.id)}
+            ${comingSoon ? `<span class="coming-soon-badge">Coming Soon</span>` : discountBadgeHtml(vehicle.pricePerDay, new Date().toISOString().split('T')[0], vehicle.id)}
             <div class="vehicle-content">
                 <h3 class="vehicle-name">${vehicle.name}</h3>
                 <span class="vehicle-type">${vehicle.type}</span>
@@ -94,9 +99,11 @@ function renderAllVehicles() {
                 <div class="vehicle-price">${renderPriceTag(vehicle.pricePerDay, new Date().toISOString().split('T')[0], vehicle.id, '€/day')}</div>
                 <div class="vehicle-actions">
                     <button class="btn btn-details" onclick="showVehicleDetails('${vehicle.id}')">View Details</button>
-                    ${blocked 
-                        ? `<button class="btn btn-book book-blocked" data-name="${vehicle.name}" data-reason="${blockInfo.reason}" data-start="${blockInfo.start}" data-end="${blockInfo.end}">Book Now</button>`
-                        : `<a href="booking.html?step=2&vehicleId=${vehicle.id}" class="btn btn-book">Book Now</a>`
+                    ${comingSoon
+                        ? `<button class="btn btn-book coming-soon-btn" disabled>Coming Soon</button>`
+                        : blocked 
+                            ? `<button class="btn btn-book book-blocked" data-name="${vehicle.name}" data-reason="${blockInfo.reason}" data-start="${blockInfo.start}" data-end="${blockInfo.end}">Book Now</button>`
+                            : `<a href="booking.html?step=2&vehicleId=${vehicle.id}" class="btn btn-book">Book Now</a>`
                     }
                 </div>
             </div>
@@ -142,8 +149,10 @@ function setupFiltering() {
 
 function showVehicleDetails(vehicleId) {
     const vehicle = FOURXFOUR.find(v => v.id === vehicleId);
-    if (vehicle) {
-        const modalHtml = `
+    if (!vehicle) return;
+
+    const comingSoon = (vehicle.state || 'Available') === 'Coming Soon';
+    const modalHtml = `
             <div class="modal-overlay">
                 <div class="modal-content">
                     <button class="modal-close">&times;</button>
@@ -151,6 +160,7 @@ function showVehicleDetails(vehicleId) {
                         <img src="${vehicle.imageUrl}" alt="${vehicle.name}" class="modal-image">
                         <div class="modal-details">
                             <h2>${vehicle.name}</h2>
+                            ${comingSoon ? `<span class="coming-soon-badge">Coming Soon</span>` : ''}
                             <span class="vehicle-type">${vehicle.type}</span>
                             <div class="modal-specs">
                                 <div class="spec-row">
@@ -172,7 +182,10 @@ function showVehicleDetails(vehicleId) {
                             </div>
                             <div class="modal-price">${renderPriceTag(vehicle.pricePerDay, new Date().toISOString().split('T')[0], vehicle.id, '€ per day')}</div>
                             <p class="modal-description">Perfect for ${getVehicleDescription(vehicle.type)} adventures in Morocco.</p>
-                            <a href="booking.html?step=2&vehicleId=${vehicle.id}" class="btn btn-book">Book This Vehicle</a>
+                            ${comingSoon
+                                ? `<button class="btn coming-soon-btn" disabled>Coming Soon</button>`
+                                : `<a href="booking.html?step=2&vehicleId=${vehicle.id}" class="btn btn-book">Book This Vehicle</a>`
+                            }
                         </div>
                     </div>
                 </div>
@@ -278,7 +291,6 @@ function showVehicleDetails(vehicleId) {
                 style.remove();
             }
         });
-    }
 }
 
 function getVehicleDescription(type) {

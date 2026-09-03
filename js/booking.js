@@ -17,6 +17,7 @@ async function fetchFleetFromSupabase() {
                 type: row.type,
                 pricePerDay: row.price_per_day,
                 imageUrl: row.image_url,
+                state: row.state || 'Available',
                 specs: {
                     engine: row.engine,
                     power: row.power,
@@ -34,6 +35,7 @@ async function fetchFleetFromSupabase() {
                 type: row.type,
                 pricePerDay: row.price_per_day,
                 imageUrl: row.image_url,
+                state: row.state || 'Available',
                 specs: {
                     engine: row.engine,
                     drive: row.drive,
@@ -511,15 +513,19 @@ function renderCarOptions() {
   
   container.innerHTML = '';
   FOURXFOUR.forEach((car) => {
+    const comingSoon = (car.state || 'Available') === 'Coming Soon';
     const option = document.createElement('div');
     option.className = 'car-option';
     option.dataset.id = car.id;
-    if (isVehicleBlocked(car.id)) {
+    if (isVehicleBlocked(car.id) || comingSoon) {
       option.classList.add('blocked');
+    }
+    if (comingSoon) {
+      option.classList.add('coming-soon');
     }
     option.innerHTML = `
       <img src="${car.imageUrl}" alt="${car.name}" class="option-image">
-      ${discountBadgeHtml(car.pricePerDay, new Date().toISOString().split('T')[0], car.id)}
+      ${comingSoon ? `<span class="coming-soon-badge">Coming Soon</span>` : discountBadgeHtml(car.pricePerDay, new Date().toISOString().split('T')[0], car.id)}
       <div class="option-name">${car.name}</div>
       <span class="option-type">${car.type}</span>
       <div class="option-specs">
@@ -549,6 +555,10 @@ function renderCarOptions() {
         if (blockInfo) {
           showBlockPopup(car.name, blockInfo.reason, blockInfo.start, blockInfo.end);
         }
+        return;
+      }
+      if (comingSoon) {
+        showBlockPopup(car.name, 'Coming Soon', '', '');
         return;
       }
       // Remove selected class from all car options
@@ -597,15 +607,19 @@ function renderMotorcycleOptions() {
 
   container.innerHTML = "";
   MOTORCYCLES.forEach((motorcycle) => {
+    const comingSoon = (motorcycle.state || 'Available') === 'Coming Soon';
     const option = document.createElement("div");
     option.className = "motorcycle-option";
     option.dataset.id = motorcycle.id;
-    if (isVehicleBlocked(motorcycle.id)) {
+    if (isVehicleBlocked(motorcycle.id) || comingSoon) {
       option.classList.add("blocked");
+    }
+    if (comingSoon) {
+      option.classList.add("coming-soon");
     }
     option.innerHTML = `
             <img src="${motorcycle.imageUrl}" alt="${motorcycle.name}" class="option-image">
-            ${discountBadgeHtml(motorcycle.pricePerDay, new Date().toISOString().split('T')[0], motorcycle.id)}
+            ${comingSoon ? `<span class="coming-soon-badge">Coming Soon</span>` : discountBadgeHtml(motorcycle.pricePerDay, new Date().toISOString().split('T')[0], motorcycle.id)}
             <div class="option-name">${motorcycle.name}</div>
             <span class="option-type">${motorcycle.type}</span>
             <div class="option-specs">
@@ -635,6 +649,10 @@ function renderMotorcycleOptions() {
         if (blockInfo) {
           showBlockPopup(motorcycle.name, blockInfo.reason, blockInfo.start, blockInfo.end);
         }
+        return;
+      }
+      if (comingSoon) {
+        showBlockPopup(motorcycle.name, 'Coming Soon', '', '');
         return;
       }
       // Remove selected class from all options

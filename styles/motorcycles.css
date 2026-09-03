@@ -53,6 +53,7 @@
     overflow: hidden;
     transition: all 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
 }
 
 .motorcycle-card:hover {
@@ -61,8 +62,9 @@
     box-shadow: 0 10px 30px rgba(220, 38, 38, 0.2);
 }
 
-.motorcycle-card.blocked {
-    opacity: 0.5;
+.motorcycle-card.blocked,
+.motorcycle-card.coming-soon {
+    opacity: 0.6;
     filter: grayscale(100%);
 }
 

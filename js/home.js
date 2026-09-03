@@ -180,11 +180,12 @@ function renderFeaturedMotorcycles() {
     
     container.innerHTML = '';
     featuredMotorcycles.forEach(motorcycle => {
+        const comingSoon = (motorcycle.state || 'Available') === 'Coming Soon';
         const card = document.createElement('div');
         card.className = 'motorcycle-card';
         card.innerHTML = `
             <img src="${motorcycle.imageUrl}" alt="${motorcycle.name}" class="motorcycle-image">
-            ${discountBadgeHtml(motorcycle.pricePerDay, new Date().toISOString().split('T')[0], motorcycle.id)}
+            ${comingSoon ? `<span class="coming-soon-badge">Coming Soon</span>` : discountBadgeHtml(motorcycle.pricePerDay, new Date().toISOString().split('T')[0], motorcycle.id)}
             <div class="motorcycle-content">
                 <h3 class="motorcycle-name">${motorcycle.name}</h3>
                 <span class="motorcycle-type">${motorcycle.type}</span>
@@ -408,6 +409,7 @@ async function fetchMotorcyclesFromSupabase() {
                 type: row.type,
                 pricePerDay: row.price_per_day,
                 imageUrl: row.image_url,
+                state: row.state || 'Available',
                 specs: {
                     engine: row.engine,
                     power: row.power,

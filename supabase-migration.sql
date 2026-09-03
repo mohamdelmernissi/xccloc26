@@ -2,7 +2,9 @@
 -- Run ONLY the statements below in Supabase SQL Editor
 
 alter table public.motorcycles add column if not exists display_order integer not null default 0;
+alter table public.motorcycles add column if not exists state text not null default 'Available';
 alter table public.cars add column if not exists display_order integer not null default 0;
+alter table public.cars add column if not exists state text not null default 'Available';
 alter table public.trips add column if not exists display_order integer not null default 0;
 
 WITH numbered_motorcycles AS (
