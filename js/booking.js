@@ -517,11 +517,8 @@ function renderCarOptions() {
     const option = document.createElement('div');
     option.className = 'car-option';
     option.dataset.id = car.id;
-    if (isVehicleBlocked(car.id) || comingSoon) {
+    if (isVehicleBlocked(car.id)) {
       option.classList.add('blocked');
-    }
-    if (comingSoon) {
-      option.classList.add('coming-soon');
     }
     option.innerHTML = `
       <img src="${car.imageUrl}" alt="${car.name}" class="option-image">
@@ -555,10 +552,6 @@ function renderCarOptions() {
         if (blockInfo) {
           showBlockPopup(car.name, blockInfo.reason, blockInfo.start, blockInfo.end);
         }
-        return;
-      }
-      if (comingSoon) {
-        showBlockPopup(car.name, 'Coming Soon', '', '');
         return;
       }
       // Remove selected class from all car options
@@ -611,11 +604,8 @@ function renderMotorcycleOptions() {
     const option = document.createElement("div");
     option.className = "motorcycle-option";
     option.dataset.id = motorcycle.id;
-    if (isVehicleBlocked(motorcycle.id) || comingSoon) {
+    if (isVehicleBlocked(motorcycle.id)) {
       option.classList.add("blocked");
-    }
-    if (comingSoon) {
-      option.classList.add("coming-soon");
     }
     option.innerHTML = `
             <img src="${motorcycle.imageUrl}" alt="${motorcycle.name}" class="option-image">
@@ -649,10 +639,6 @@ function renderMotorcycleOptions() {
         if (blockInfo) {
           showBlockPopup(motorcycle.name, blockInfo.reason, blockInfo.start, blockInfo.end);
         }
-        return;
-      }
-      if (comingSoon) {
-        showBlockPopup(motorcycle.name, 'Coming Soon', '', '');
         return;
       }
       // Remove selected class from all options

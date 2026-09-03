@@ -62,12 +62,9 @@ function renderAllVehicles() {
         card.className = 'vehicle-card';
         card.dataset.type = vehicle.type;
         const comingSoon = (vehicle.state || 'Available') === 'Coming Soon';
-        const blocked = !comingSoon && isVehicleBlocked(vehicle.id);
+        const blocked = isVehicleBlocked(vehicle.id);
         if (blocked) {
             card.classList.add('blocked');
-        }
-        if (comingSoon) {
-            card.classList.add('coming-soon');
         }
         
         const blockInfo = blocked ? getVehicleBlockInfo(vehicle.id) : null;
@@ -99,11 +96,9 @@ function renderAllVehicles() {
                 <div class="vehicle-price">${renderPriceTag(vehicle.pricePerDay, new Date().toISOString().split('T')[0], vehicle.id, '€/day')}</div>
                 <div class="vehicle-actions">
                     <button class="btn btn-details" onclick="showVehicleDetails('${vehicle.id}')">View Details</button>
-                    ${comingSoon
-                        ? `<button class="btn btn-book coming-soon-btn" disabled>Coming Soon</button>`
-                        : blocked 
-                            ? `<button class="btn btn-book book-blocked" data-name="${vehicle.name}" data-reason="${blockInfo.reason}" data-start="${blockInfo.start}" data-end="${blockInfo.end}">Book Now</button>`
-                            : `<a href="booking.html?step=2&vehicleId=${vehicle.id}" class="btn btn-book">Book Now</a>`
+                    ${blocked 
+                        ? `<button class="btn btn-book book-blocked" data-name="${vehicle.name}" data-reason="${blockInfo.reason}" data-start="${blockInfo.start}" data-end="${blockInfo.end}">Book Now</button>`
+                        : `<a href="booking.html?step=2&vehicleId=${vehicle.id}" class="btn btn-book">Book Now</a>`
                     }
                 </div>
             </div>
@@ -182,10 +177,7 @@ function showVehicleDetails(vehicleId) {
                             </div>
                             <div class="modal-price">${renderPriceTag(vehicle.pricePerDay, new Date().toISOString().split('T')[0], vehicle.id, '€ per day')}</div>
                             <p class="modal-description">Perfect for ${getVehicleDescription(vehicle.type)} adventures in Morocco.</p>
-                            ${comingSoon
-                                ? `<button class="btn coming-soon-btn" disabled>Coming Soon</button>`
-                                : `<a href="booking.html?step=2&vehicleId=${vehicle.id}" class="btn btn-book">Book This Vehicle</a>`
-                            }
+                            <a href="booking.html?step=2&vehicleId=${vehicle.id}" class="btn btn-book">Book This Vehicle</a>
                         </div>
                     </div>
                 </div>

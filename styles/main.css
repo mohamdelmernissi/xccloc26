@@ -365,13 +365,6 @@ footer {
     white-space: nowrap;
 }
 
-.motorcycle-card.coming-soon,
-.trip-card.coming-soon,
-.vehicle-card.coming-soon {
-    opacity: 0.6;
-    filter: grayscale(100%);
-}
-
 .coming-soon-btn {
     background: var(--brand-silver);
     color: var(--brand-dark);

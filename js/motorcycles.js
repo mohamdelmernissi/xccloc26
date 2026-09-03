@@ -49,12 +49,9 @@ function renderAllMotorcycles() {
         card.className = 'motorcycle-card';
         card.dataset.type = motorcycle.type;
         const comingSoon = (motorcycle.state || 'Available') === 'Coming Soon';
-        const blocked = !comingSoon && isVehicleBlocked(motorcycle.id);
+        const blocked = isVehicleBlocked(motorcycle.id);
         if (blocked) {
             card.classList.add('blocked');
-        }
-        if (comingSoon) {
-            card.classList.add('coming-soon');
         }
         
         const blockInfo = blocked ? getVehicleBlockInfo(motorcycle.id) : null;
@@ -86,11 +83,9 @@ function renderAllMotorcycles() {
                 <div class="motorcycle-price">${renderPriceTag(motorcycle.pricePerDay, new Date().toISOString().split('T')[0], motorcycle.id, '€/day')}</div>
                 <div class="motorcycle-actions">
                     <button class="btn btn-details" onclick="showMotorcycleDetails('${motorcycle.id}')">View Details</button>
-                    ${comingSoon
-                        ? `<button class="btn btn-book coming-soon-btn" disabled>Coming Soon</button>`
-                        : blocked 
-                            ? `<button class="btn btn-book book-blocked" data-name="${motorcycle.name}" data-reason="${blockInfo.reason}" data-start="${blockInfo.start}" data-end="${blockInfo.end}">Book Now</button>`
-                            : `<a href="booking.html" class="btn btn-book" onclick="setMotorcyclePreference('${motorcycle.id}')">Book Now</a>`
+                    ${blocked 
+                        ? `<button class="btn btn-book book-blocked" data-name="${motorcycle.name}" data-reason="${blockInfo.reason}" data-start="${blockInfo.start}" data-end="${blockInfo.end}">Book Now</button>`
+                        : `<a href="booking.html" class="btn btn-book" onclick="setMotorcyclePreference('${motorcycle.id}')">Book Now</a>`
                     }
                 </div>
             </div>
@@ -169,10 +164,7 @@ function showMotorcycleDetails(motorcycleId) {
                             </div>
                             <div class="modal-price">${renderPriceTag(motorcycle.pricePerDay, new Date().toISOString().split('T')[0], motorcycle.id, '€ per day')}</div>
                             <p class="modal-description">Perfect for ${getMotorcycleDescription(motorcycle.type)} adventures in Morocco.</p>
-                            ${comingSoon
-                                ? `<button class="btn coming-soon-btn" disabled>Coming Soon</button>`
-                                : `<a href="booking.html" class="btn" onclick="setMotorcyclePreference('${motorcycle.id}')">Book This Motorcycle</a>`
-                            }
+                            <a href="booking.html" class="btn" onclick="setMotorcyclePreference('${motorcycle.id}')">Book This Motorcycle</a>
                         </div>
                     </div>
                 </div>

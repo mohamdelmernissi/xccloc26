@@ -77,3 +77,8 @@ create table if not exists public.pricing_rules (
 
 alter table if exists public.pricing_rules
   add column if not exists vehicle_ids text[] default '{}';
+
+alter table if exists public.invoices
+  add column if not exists booking_id text;
+
+NOTIFY pgrst, 'reload schema';

@@ -3144,6 +3144,7 @@ td{
                     <form id="doc-editor-form">
                         <input type="hidden" id="doc-id">
                         <input type="hidden" id="doc-type">
+                        <input type="hidden" id="doc-booking-id">
                         
                         <div class="form-grid">
                             <div class="form-group">
@@ -3379,6 +3380,7 @@ td{
                 const doc = appState.invoices.find(d => d.id === docId);
                 document.getElementById('doc-id').value = doc.id;
                 document.getElementById('doc-type').value = doc.type;
+                document.getElementById('doc-booking-id').value = doc.bookingId || '';
                 document.getElementById('editor-title').textContent = `Edit ${doc.type === 'invoice' ? 'Invoice' : 'Quote'}`;
                 document.getElementById('editor-doc-number').textContent = doc.number;
                 
@@ -3401,6 +3403,7 @@ td{
                 
                 document.getElementById('doc-id').value = newId;
                 document.getElementById('doc-type').value = type;
+                document.getElementById('doc-booking-id').value = '';
                 document.getElementById('editor-title').textContent = `New ${type === 'invoice' ? 'Invoice' : 'Quote'}`;
                 document.getElementById('editor-doc-number').textContent = newNumber;
                 document.getElementById('doc-date').value = new Date().toISOString().split('T')[0];
@@ -3479,12 +3482,20 @@ td{
             
             let totalVAT = Object.values(vatTotals).reduce((a, b) => a + b, 0);
             let totalTTC = subtotalHT + totalVAT;
+            let droitDeTimbre = 0;
+            
+            const paymentMethod = document.getElementById('doc-payment-method')?.value;
+            if (paymentMethod === 'Cash') {
+                droitDeTimbre = totalTTC * 0.0025;
+                totalTTC += droitDeTimbre;
+            }
             
             return {
                 subtotalHT,
                 vatTotals,
                 totalVAT,
                 totalTTC,
+                droitDeTimbre,
                 currency: appState.company.currency
             };
         }
@@ -3579,6 +3590,12 @@ td{
                                 <td style="text-align: right;">${totals.vatTotals[rate].toFixed(2)} ${totals.currency}</td>
                             </tr>
                         `).join('')}
+                        ${totals.droitDeTimbre > 0 ? `
+                            <tr>
+                                <td>Droit de timbre (0.25%):</td>
+                                <td style="text-align: right;">${totals.droitDeTimbre.toFixed(2)} ${totals.currency}</td>
+                            </tr>
+                        ` : ''}
                         <tr class="grand-total">
                             <td>TOTAL TTC:</td>
                             <td style="text-align: right;">${totals.totalTTC.toFixed(2)} ${totals.currency}</td>
@@ -3638,6 +3655,7 @@ td{
                 })),
                 
                 totals: totals,
+                bookingId: document.getElementById('doc-booking-id').value || null,
                 payment: {
                     method: document.getElementById('doc-payment-method').value
                 },
@@ -3766,6 +3784,7 @@ td{
             document.getElementById('doc-cust-email').value = b.customer.email;
             document.getElementById('doc-cust-phone').value = b.customer.phone;
             document.getElementById('doc-cust-address').value = b.customer.country || '';
+            document.getElementById('doc-booking-id').value = bookingId;
             
             // Clear items and add booking items
             document.getElementById('line-items-body').innerHTML = '';
@@ -4352,6 +4371,7 @@ td{
                         customer: doc.customer,
                         items: doc.items,
                         totals: doc.totals,
+                        booking_id: doc.bookingId || null,
                         payment: doc.payment,
                         notes: doc.notes || ''
                     });
@@ -4730,6 +4750,7 @@ td{
                     customer: row.customer,
                     items: row.items,
                     totals: row.totals,
+                    bookingId: row.booking_id || null,
                     payment: row.payment,
                     notes: row.notes || ''
                 }));
@@ -6414,9 +6435,21 @@ td{
             window.open(url, '_blank');
         }
 
-        function generateInvoice(id) {
-            applyImport(id);
+        function generateInvoice(bookingId) {
+            const existingInvoice = appState.invoices.find(inv => inv.bookingId === bookingId);
+            if (existingInvoice) {
+                downloadPDF(existingInvoice.id);
+                return;
+            }
+            
             openInvoiceEditor('invoice');
+            applyImport(bookingId);
+            saveDocument();
+            
+            const newInvoice = appState.invoices.find(inv => inv.bookingId === bookingId);
+            if (newInvoice) {
+                downloadPDF(newInvoice.id);
+            }
         }
 
         // Global Save & Refresh
