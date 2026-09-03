@@ -1,4 +1,5 @@
 async function initTripsPage() {
+    await fetchPricingRulesFromSupabase();
     await fetchTripsFromSupabase();
     renderAllTrips();
 }

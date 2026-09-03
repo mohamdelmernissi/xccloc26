@@ -128,6 +128,36 @@ function getPricingRules() {
     }
 }
 
+async function fetchPricingRulesFromSupabase() {
+    if (!window.supabase) return;
+    try {
+        const { data, error } = await window.supabase
+            .from('pricing_rules')
+            .select('*')
+            .order('id', { ascending: true });
+
+        if (error) throw error;
+
+        const fetched = (data || []).map(row => ({
+            id: row.id,
+            name: row.name,
+            type: row.type,
+            impactType: row.impact_type,
+            value: row.value,
+            start: row.start_date || '',
+            end: row.end_date || '',
+            vehicleIds: row.vehicle_ids || []
+        }));
+
+        if (typeof PRICING_RULES !== 'undefined') {
+            PRICING_RULES.splice(0, PRICING_RULES.length, ...fetched);
+        }
+        localStorage.setItem('admin_pricing_rules', JSON.stringify(fetched));
+    } catch (e) {
+        console.warn('Failed to fetch pricing rules from Supabase, using fallback', e);
+    }
+}
+
 function getEffectivePrice(basePrice, dateStr, vehicleId) {
     const rules = getPricingRules();
     if (!rules.length) return basePrice;

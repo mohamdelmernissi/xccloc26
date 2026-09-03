@@ -1,5 +1,6 @@
 async function initAssistancePage() {
     console.log('Initializing assistance page...');
+    await fetchPricingRulesFromSupabase();
     await fetchCarsFromSupabase();
     await fetchAvailabilityBlocks();
     console.log('FOURXFOUR:', FOURXFOUR);

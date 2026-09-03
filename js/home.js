@@ -386,6 +386,7 @@ function initTestimonialsSlider() {
 
 // Initialize home page when DOM is loaded
 async function initHomePage() {
+    await fetchPricingRulesFromSupabase();
     await fetchMotorcyclesFromSupabase();
     await initSlider();
     renderFeaturedMotorcycles();

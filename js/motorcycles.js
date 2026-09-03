@@ -1,4 +1,5 @@
 async function initMotorcyclesPage() {
+    await fetchPricingRulesFromSupabase();
     await fetchMotorcyclesFromSupabase();
     await fetchAvailabilityBlocks();
     renderAllMotorcycles();
